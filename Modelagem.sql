@@ -6,11 +6,13 @@ BEGIN
     DROP DATABASE pingaDB;
 END
 
-CREATE DATABASE imobiliaria ON (NAME = 'pingaDB', FILENAME = 'C:\Users\Martinelli\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
-LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\Martinelli\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
+CREATE DATABASE pingaDB ON (NAME = 'pingaDB', FILENAME = 'C:\Users\Martinelli\Documents\GitHub\Pinga\DB\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
+LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\Martinelli\Documents\GitHub\Pinga\DB\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
 COLLATE Latin1_General_CS_AI;
 GO
 
+USE pingaDB;
+GO
 
 CREATE SCHEMA Pinga;
 GO
@@ -261,3 +263,6 @@ juros DECIMAL(8,5) NULL,
 
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 );
+
+DROP TABLE students;
+
