@@ -168,10 +168,12 @@ END
 CREATE TABLE Pinga.qnt_minima (
 idqnt_minima UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 valor INT NOT NULL,
+produto UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL,
 modified DATETIME NULL,
 
-CONSTRAINT pk_qnt_minima PRIMARY KEY NONCLUSTERED (idqnt_minima)
+CONSTRAINT pk_qnt_minima PRIMARY KEY NONCLUSTERED (idqnt_minima),
+FOREIGN KEY (produto) REFERENCES Pinga.produto(idproduto)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'idqnt_maxima')
@@ -182,10 +184,12 @@ END
 CREATE TABLE Pinga.idqnt_maxima (
 idqnt_maxima UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 valor INT NOT NULL,
+produto UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL,
 modified DATETIME NULL,
 
-CONSTRAINT pk_qnt_maxima PRIMARY KEY NONCLUSTERED (idqnt_maxima)
+CONSTRAINT pk_qnt_maxima PRIMARY KEY NONCLUSTERED (idqnt_maxima),
+FOREIGN KEY (produto) REFERENCES Pinga.produto(idproduto)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro')
@@ -220,6 +224,8 @@ valor DECIMAL (9,2) NOT NULL,
 cliente UNIQUEIDENTIFIER NOT NULL,
 fase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL,
+modified DATETIME NULL,
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro),
@@ -241,6 +247,8 @@ entrada UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 produto UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 quantidade INT NOT NULL,
 valor_saida DECIMAL(9,2) NOT NULL,
+created DATETIME NOT NULL,
+modified DATETIME NULL,
 
 CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
 FOREIGN KEY (saida) REFERENCES Pinga.saida(idsaida),
@@ -260,9 +268,30 @@ data_pagamento DATE NOT NULL,
 data_vencimento DATE NOT NULL,
 parcelas INT NOT NULL,
 juros DECIMAL(8,5) NULL,
+created DATETIME NOT NULL,
+modified DATETIME NULL,
 
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 );
 
 DROP TABLE students;
+GO
 
+CREATE SCHEMA adm;
+GO
+
+CREATE TABLE adm.login(
+idlogin UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+lgn VARCHAR(30) NOT NULL,
+pwd VARCHAR(65) NOT NULL,
+ativo BIT NOT NULL DEFAULT 0,
+
+CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
+)
+
+INSERT INTO adm.login (lgn,pwd,ativo) VALUES ('123', '123', 1);
+SELECT * FROM adm.login;
+
+UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlogin = '6405AD59-4304-4B5B-B8E0-5BE35B95192C';
+
+exec sp_tables;
