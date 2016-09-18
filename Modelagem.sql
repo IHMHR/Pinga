@@ -285,6 +285,8 @@ idlogin UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 lgn VARCHAR(30) NOT NULL,
 pwd VARCHAR(65) NOT NULL,
 ativo BIT NOT NULL DEFAULT 0,
+created DATETIME NOT NULL,
+modified DATETIME NULL,
 
 CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
 )
@@ -295,3 +297,11 @@ SELECT * FROM adm.login;
 UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlogin = '6405AD59-4304-4B5B-B8E0-5BE35B95192C';
 
 exec sp_tables;
+
+SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',
+CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf,
+c.idcliente, e.idendereco, s.cliente AS 'Vnd'
+FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco
+LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente
+
+

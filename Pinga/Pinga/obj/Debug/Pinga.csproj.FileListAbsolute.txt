@@ -1,0 +1,11 @@
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\bin\Debug\Pinga.exe.config
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\bin\Debug\Pinga.exe
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\bin\Debug\Pinga.pdb
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.csprojResolveAssemblyReference.cache
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.Properties.Resources.resources
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.csproj.GenerateResource.Cache
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.exe
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.pdb
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.FrmLogin.resources
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.FrmMain.resources
+c:\users\martinelli\documents\visual studio 2013\Projects\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmCliente.resources
