@@ -61,7 +61,18 @@ namespace Pinga
 
         private void vendaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.FrmVenda))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
 
+            Form newForm = new Telas.FrmVenda();
+            newForm.MdiParent = this;
+            newForm.Show();
         }
 
         private void parceiroToolStripMenuItem_Click(object sender, EventArgs e)
@@ -76,6 +87,38 @@ namespace Pinga
             }
 
             Form newForm = new Telas.FrmParceiro();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void formaDePagamentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.FrmFormaPagamento))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.FrmFormaPagamento();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void unidadeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.FrmTipoLitragem))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.FrmTipoLitragem();
             newForm.MdiParent = this;
             newForm.Show();
         }

@@ -54,6 +54,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.txtIdParceiro = new System.Windows.Forms.TextBox();
+            this.txtIdEndereco = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.Endereço.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -251,6 +253,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtIdEndereco);
+            this.groupBox2.Controls.Add(this.txtIdParceiro);
             this.groupBox2.Controls.Add(this.dataGridView1);
             this.groupBox2.Location = new System.Drawing.Point(2, 106);
             this.groupBox2.Name = "groupBox2";
@@ -310,6 +314,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // txtIdParceiro
+            // 
+            this.txtIdParceiro.Location = new System.Drawing.Point(363, 109);
+            this.txtIdParceiro.Name = "txtIdParceiro";
+            this.txtIdParceiro.Size = new System.Drawing.Size(30, 20);
+            this.txtIdParceiro.TabIndex = 16;
+            this.txtIdParceiro.Visible = false;
+            // 
+            // txtIdEndereco
+            // 
+            this.txtIdEndereco.Location = new System.Drawing.Point(402, 109);
+            this.txtIdEndereco.Name = "txtIdEndereco";
+            this.txtIdEndereco.Size = new System.Drawing.Size(30, 20);
+            this.txtIdEndereco.TabIndex = 17;
+            this.txtIdEndereco.Visible = false;
+            // 
             // FrmParceiro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -328,6 +348,7 @@
             this.Endereço.ResumeLayout(false);
             this.Endereço.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -361,6 +382,8 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox txtIdEndereco;
+        private System.Windows.Forms.TextBox txtIdParceiro;
 
     }
 }

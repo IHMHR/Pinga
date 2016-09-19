@@ -23,3 +23,6 @@ C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.csproj.Ge
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmEstoque.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmParceiro.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmUsuarios.resources
+C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmFormaPagamento.resources
+C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmVenda.resources
+C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmTipoLitragem.resources

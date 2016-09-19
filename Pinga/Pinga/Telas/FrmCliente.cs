@@ -65,19 +65,21 @@ namespace Pinga.Telas
                     using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
                     {
                         SqlCommand com = new SqlCommand();
-                        com.CommandText = "UPDATE Pinga.endereco SET logradouro = @rua, numero = @num, complemento = @compl, bairro = @bairro, cidade = @cidade, modified = GETDATE();";
+                        com.CommandText = "UPDATE Pinga.endereco SET logradouro = @rua, numero = @num, complemento = @compl, bairro = @bairro, cidade = @cidade, modified = GETDATE() WHERE idendereco = @end;";
                         com.Parameters.AddWithValue("@rua", txtRua.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@num", txtNum.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@compl", txtCompl.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@bairro", txtBairro.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@cidade", txtCidade.Text.Trim().Replace("'", "\'"));
+                        com.Parameters.AddWithValue("@end", txtIdEndereco.Text);
                         com.Connection = con;
                         con.Open();
                         com.ExecuteNonQuery();
 
-                        com.CommandText = "UPDATE Pinga.cliente SET nome = @nome, visitado = @visitado, modified = GETDATE();";
+                        com.CommandText = "UPDATE Pinga.cliente SET nome = @nome, visitado = @visitado, modified = GETDATE() WHERE idcliente = @cli;";
                         com.Parameters.AddWithValue("@nome", txtNome.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@visitado", checkVisitado.Checked == true ? "1" : "0");
+                        com.Parameters.AddWithValue("@cli", txtIdCliente.Text);
                         com.Connection = con;
                         com.ExecuteNonQuery();
                         con.Close();

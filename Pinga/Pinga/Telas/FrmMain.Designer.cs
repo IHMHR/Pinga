@@ -36,6 +36,8 @@
             this.estoqueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vendaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.parceiroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.formaDePagamentoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.unidadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -72,7 +74,9 @@
             this.clienteToolStripMenuItem,
             this.estoqueToolStripMenuItem,
             this.vendaToolStripMenuItem,
-            this.parceiroToolStripMenuItem});
+            this.parceiroToolStripMenuItem,
+            this.formaDePagamentoToolStripMenuItem,
+            this.unidadeToolStripMenuItem});
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.Red;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(66, 20);
@@ -110,6 +114,22 @@
             this.parceiroToolStripMenuItem.Text = "Parceiro";
             this.parceiroToolStripMenuItem.Click += new System.EventHandler(this.parceiroToolStripMenuItem_Click);
             // 
+            // formaDePagamentoToolStripMenuItem
+            // 
+            this.formaDePagamentoToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
+            this.formaDePagamentoToolStripMenuItem.Name = "formaDePagamentoToolStripMenuItem";
+            this.formaDePagamentoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.formaDePagamentoToolStripMenuItem.Text = "Forma de Pagamento";
+            this.formaDePagamentoToolStripMenuItem.Click += new System.EventHandler(this.formaDePagamentoToolStripMenuItem_Click);
+            // 
+            // unidadeToolStripMenuItem
+            // 
+            this.unidadeToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
+            this.unidadeToolStripMenuItem.Name = "unidadeToolStripMenuItem";
+            this.unidadeToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.unidadeToolStripMenuItem.Text = "Unidade";
+            this.unidadeToolStripMenuItem.Click += new System.EventHandler(this.unidadeToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -143,5 +163,7 @@
         private System.Windows.Forms.ToolStripMenuItem estoqueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem vendaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem parceiroToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem formaDePagamentoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem unidadeToolStripMenuItem;
     }
 }

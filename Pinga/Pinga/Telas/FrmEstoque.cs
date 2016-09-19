@@ -38,7 +38,7 @@ namespace Pinga.Telas
                         com.CommandText = "INSERT INTO Pinga.entrada VALUES (NEWID(), @dt, @litragem, @tipo_litragem, @valor, GETDATE(), NULL)";
                         com.Parameters.AddWithValue("@dt", DateTime.Parse(dtpData.Text).ToString("yyyy-MM-dd"));
                         com.Parameters.AddWithValue("@litragem",txtLitragem.Text.Trim());
-                        com.Parameters.AddWithValue("@tipo_litragem",cmbUnidade.SelectedIndex.ToString());
+                        com.Parameters.AddWithValue("@tipo_litragem",cmbUnidade.SelectedValue.ToString());
                         com.Parameters.AddWithValue("@valor",txtValor.Text.Trim().Replace(",","."));
                         com.Connection = con;
                         con.Open();
@@ -96,7 +96,7 @@ namespace Pinga.Telas
             {
                 using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
                 {
-                    string sql = "SELECT";
+                    string sql = "SELECT * FROM Pinga.entrada";
                     SqlDataAdapter da = new SqlDataAdapter(sql, con);
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -161,7 +161,7 @@ namespace Pinga.Telas
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("Erro desconhecido ao apagar cliente.", "Apagar cliente", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Erro desconhecido ao apagar estoque.", "Apagar estoque", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

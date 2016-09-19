@@ -90,6 +90,7 @@
             // checkCompra
             // 
             this.checkCompra.AutoSize = true;
+            this.checkCompra.Enabled = false;
             this.checkCompra.Location = new System.Drawing.Point(14, 68);
             this.checkCompra.Name = "checkCompra";
             this.checkCompra.Size = new System.Drawing.Size(15, 14);

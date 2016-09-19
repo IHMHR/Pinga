@@ -58,6 +58,12 @@
     <Compile Include="Telas\FrmEstoque.Designer.cs">
       <DependentUpon>FrmEstoque.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\FrmFormaPagamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\FrmFormaPagamento.Designer.cs">
+      <DependentUpon>FrmFormaPagamento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,17 +84,32 @@
     <Compile Include="Telas\FrmParceiro.Designer.cs">
       <DependentUpon>FrmParceiro.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\FrmTipoLitragem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\FrmTipoLitragem.Designer.cs">
+      <DependentUpon>FrmTipoLitragem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\FrmUsuarios.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Telas\FrmUsuarios.Designer.cs">
       <DependentUpon>FrmUsuarios.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\FrmVenda.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\FrmVenda.Designer.cs">
+      <DependentUpon>FrmVenda.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Telas\FrmCliente.resx">
       <DependentUpon>FrmCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\FrmEstoque.resx">
       <DependentUpon>FrmEstoque.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\FrmFormaPagamento.resx">
+      <DependentUpon>FrmFormaPagamento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
@@ -108,8 +129,14 @@
     <EmbeddedResource Include="Telas\FrmParceiro.resx">
       <DependentUpon>FrmParceiro.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Telas\FrmTipoLitragem.resx">
+      <DependentUpon>FrmTipoLitragem.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Telas\FrmUsuarios.resx">
       <DependentUpon>FrmUsuarios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\FrmVenda.resx">
+      <DependentUpon>FrmVenda.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

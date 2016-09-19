@@ -25,5 +25,27 @@ namespace Pinga.Classes
                 throw new Exception(x.Message);
             }
         }
+
+        public static System.Data.DataTable PopularGrid(string sql)
+        {
+            if (!string.IsNullOrWhiteSpace(sql))
+            {
+                try
+                {
+                    using (System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
+                    {
+                        System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(sql, con);
+                        System.Data.DataTable dt = new System.Data.DataTable();
+                        da.Fill(dt);
+                        return dt;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Erro desconhecido ao listar");
+                }
+            }
+            return null;
+        }
     }
 }

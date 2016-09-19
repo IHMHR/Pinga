@@ -84,19 +84,21 @@ namespace Pinga.Telas
                     using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
                     {
                         SqlCommand com = new SqlCommand();
-                        com.CommandText = "UPDATE Pinga.endereco SET logradouro = @rua, numero = @num, complemento = @compl, bairro = @bairro, cidade = @cidade, modified = GETDATE()";
+                        com.CommandText = "UPDATE Pinga.endereco SET logradouro = @rua, numero = @num, complemento = @compl, bairro = @bairro, cidade = @cidade, modified = GETDATE() WHERE idendereco = @end";
                         com.Parameters.AddWithValue("@rua", txtRua.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@num", txtNum.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@compl", txtCompl.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@bairro", txtBairro.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@cidade", txtCidade.Text.Trim().Replace("'", "\'"));
+                        com.Parameters.AddWithValue("@end", txtIdEndereco.Text);
                         com.Connection = con;
                         con.Open();
                         com.ExecuteNonQuery();
 
-                        com.CommandText = "UPDATE Pinga.parceiro SET nome = @nome, ativo = @ativo, modified = GETDATE()";
+                        com.CommandText = "UPDATE Pinga.parceiro SET nome = @nome, ativo = @ativo, modified = GETDATE() WHERE idparceiro = @par";
                         com.Parameters.AddWithValue("@nome", txtNome.Text.Trim());
                         com.Parameters.AddWithValue("@ativo", checkAtivo.Checked == true ? "1" : "0");
+                        com.Parameters.AddWithValue("@par", txtIdParceiro.Text);
                         com.Connection = con;
                         com.ExecuteNonQuery();
                         con.Close();
@@ -126,13 +128,15 @@ namespace Pinga.Telas
             {
                 using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
                 {
-                    string sql = "SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro";
+                    string sql = "SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro, e.idendereco, p.idparceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro";
                     SqlDataAdapter da = new SqlDataAdapter(sql, con);
                     DataTable dt = new DataTable();
                     da.Fill(dt);
                     dataGridView1.DataSource = dt;
                     dataGridView1.Columns[1].Visible = false;
                     dataGridView1.Columns[10].Visible = false;
+                    dataGridView1.Columns[11].Visible = false;
+                    dataGridView1.Columns[12].Visible = false;
                 }
             }
             catch (Exception)
@@ -172,6 +176,8 @@ namespace Pinga.Telas
                         checkCompra.Checked = true;
                     }
                     txtUF.Text = "MG";
+                    txtIdEndereco.Text = dataGridView1.Rows[e.RowIndex].Cells["idendereco"].Value.ToString();
+                    txtIdParceiro.Text = dataGridView1.Rows[e.RowIndex].Cells["idparceiro"].Value.ToString();
                 }
                 else
                 {

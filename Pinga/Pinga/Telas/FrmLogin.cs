@@ -27,10 +27,9 @@ namespace Pinga
                     using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
                     {
                         SqlCommand com = new SqlCommand();
-                        //com.CommandText = "SELECT 1 FROM adm.login WHERE lgn = @login AND pwd = @pwd AND ativo = 1;";
-                        com.CommandText = "SELECT 1 FROM adm.login WHERE lgn = @login AND pwd = @pwd AND ativo = 1 OR 1=1;";
+                        com.CommandText = "SELECT 1 FROM adm.login WHERE lgn = @login AND pwd = @pwd AND ativo = 1;";
+                        //com.CommandText = "SELECT 1 FROM adm.login WHERE lgn = @login AND pwd = @pwd AND ativo = 1 OR 1=1;";
                         com.Parameters.AddWithValue("@login", txtUser.Text.Trim().Replace("'", "\'"));
-                        //com.Parameters.AddWithValue("@pwd", txtPwd.Text.Trim().Replace("'", "\'"));
                         com.Parameters.AddWithValue("@pwd", Classes.ClsGlobal.CalculateSHA1(txtPwd.Text.Trim().Replace("'", "\'")));
                         con.Open();
                         com.Connection = con;
