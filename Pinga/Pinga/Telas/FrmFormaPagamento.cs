@@ -36,7 +36,7 @@ namespace Pinga.Telas
 
                         textBox1.Clear();
 
-                        PopularGrid();
+                        FillDataGridView();
                     }
                 }
                 catch (Exception)
@@ -61,7 +61,7 @@ namespace Pinga.Telas
 
                         textBox1.Clear();
 
-                        PopularGrid();
+                        FillDataGridView();
 
                         button1.Text = "Salvar";
                     }
@@ -77,23 +77,16 @@ namespace Pinga.Telas
             }
         }
 
-        private void PopularGrid()
+        private void FillDataGridView()
         {
             try
             {
-                using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
-                {
-                    string sql = "SELECT descricao, idforma_pagamento FROM Pinga.forma_pagamento";
-                    SqlDataAdapter da = new SqlDataAdapter(sql, con);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dataGridView1.DataSource = dt;
-                    dataGridView1.Columns[2].Visible = false;
-                }
+                dataGridView1.DataSource = Classes.ClsGlobal.PopularGrid("SELECT descricao, idforma_pagamento FROM Pinga.forma_pagamento");
+                dataGridView1.Columns[2].Visible = false;
             }
             catch (Exception)
             {
-                MessageBox.Show("Erro desconhecido ao listar forma de pagamento.", "Listar forma de pagamento", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro desconhecido ao listar tipo litragem.", "Listar tipo litragem", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -119,7 +112,7 @@ namespace Pinga.Telas
                             com.ExecuteNonQuery();
                             con.Close();
 
-                            PopularGrid();
+                            FillDataGridView();
                         }
                     }
                     catch (Exception)
@@ -134,7 +127,7 @@ namespace Pinga.Telas
 
         private void FrmFormaPagamento_Shown(object sender, EventArgs e)
         {
-            PopularGrid();
+            FillDataGridView();
         }
     }
 }

@@ -67,7 +67,7 @@ namespace Pinga.Telas
 
                         button2_Click(this, new EventArgs());
 
-                        PopularGrid();
+                        FillDataGridView();
                     }
                 }
                 catch (Exception)
@@ -108,7 +108,7 @@ namespace Pinga.Telas
 
                         button2_Click(this, new EventArgs());
 
-                        PopularGrid();
+                        FillDataGridView();
                     }
                 }
                 catch (Exception)
@@ -122,22 +122,15 @@ namespace Pinga.Telas
             }
         }
 
-        private void PopularGrid()
+        private void FillDataGridView()
         {
             try
             {
-                using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
-                {
-                    string sql = "SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro, e.idendereco, p.idparceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro";
-                    SqlDataAdapter da = new SqlDataAdapter(sql, con);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dataGridView1.DataSource = dt;
-                    dataGridView1.Columns[1].Visible = false;
-                    dataGridView1.Columns[10].Visible = false;
-                    dataGridView1.Columns[11].Visible = false;
-                    dataGridView1.Columns[12].Visible = false;
-                }
+                dataGridView1.DataSource = Classes.ClsGlobal.PopularGrid("SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro, e.idendereco, p.idparceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro");
+                dataGridView1.Columns[1].Visible = false;
+                dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[12].Visible = false;
             }
             catch (Exception)
             {
@@ -190,7 +183,7 @@ namespace Pinga.Telas
                             com.ExecuteNonQuery();
                             con.Close();
 
-                            PopularGrid();
+                            FillDataGridView();
                         }
                     }
                     catch (Exception)
@@ -205,7 +198,7 @@ namespace Pinga.Telas
 
         private void FrmParceiro_Shown(object sender, EventArgs e)
         {
-            PopularGrid();
+            FillDataGridView();
         }
     }
 }

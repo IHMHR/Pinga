@@ -30,7 +30,7 @@ namespace Pinga.Telas
 
                         textBox1.Clear();
 
-                        PopularGrid();
+                        FillDataGridView();
                     }
                 }
                 catch (Exception)
@@ -55,7 +55,7 @@ namespace Pinga.Telas
 
                         textBox1.Clear();
 
-                        PopularGrid();
+                        FillDataGridView();
 
                         button1.Text = "Salvar";
                     }
@@ -71,19 +71,12 @@ namespace Pinga.Telas
             }
         }
 
-        private void PopularGrid()
+        private void FillDataGridView()
         {
             try
             {
-                using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
-                {
-                    string sql = "SELECT descricao, idtipo_litragem FROM Pinga.tipo_litragem";
-                    SqlDataAdapter da = new SqlDataAdapter(sql, con);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dataGridView1.DataSource = dt;
-                    dataGridView1.Columns[2].Visible = false;
-                }
+                dataGridView1.DataSource = Classes.ClsGlobal.PopularGrid("SELECT descricao, idtipo_litragem FROM Pinga.tipo_litragem");
+                dataGridView1.Columns[2].Visible = false;
             }
             catch (Exception)
             {
@@ -93,7 +86,7 @@ namespace Pinga.Telas
 
         private void FrmTipoLitragem_Shown(object sender, EventArgs e)
         {
-            PopularGrid();
+            FillDataGridView();
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -118,7 +111,7 @@ namespace Pinga.Telas
                             com.ExecuteNonQuery();
                             con.Close();
 
-                            PopularGrid();
+                            FillDataGridView();
                         }
                     }
                     catch (Exception)

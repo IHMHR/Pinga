@@ -181,10 +181,17 @@ namespace Pinga.Telas
 
         private void FillDataGridView()
         {
-            dataGridView1.DataSource = Classes.ClsGlobal.PopularGrid("SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, c.idcliente, e.idendereco, s.cliente AS 'Vnd' FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente");
-            dataGridView1.Columns[10].Visible = false;
-            dataGridView1.Columns[11].Visible = false;
-            dataGridView1.Columns[12].Visible = false;
+            try
+            {
+                dataGridView1.DataSource = Classes.ClsGlobal.PopularGrid("SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, c.idcliente, e.idendereco, s.cliente AS 'Vnd' FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente");
+                dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[11].Visible = false;
+                dataGridView1.Columns[12].Visible = false;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Erro desconhecido ao listar tipo litragem.", "Listar tipo litragem", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
