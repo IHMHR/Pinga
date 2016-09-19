@@ -45,12 +45,39 @@ namespace Pinga
 
         private void estoqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.FrmEstoque))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
 
+            Form newForm = new Telas.FrmEstoque();
+            newForm.MdiParent = this;
+            newForm.Show();
         }
 
         private void vendaToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void parceiroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.FrmParceiro))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.FrmParceiro();
+            newForm.MdiParent = this;
+            newForm.Show();
         }
     }
 }

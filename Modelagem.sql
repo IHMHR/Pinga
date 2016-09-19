@@ -31,7 +31,7 @@ bairro VARCHAR(100) NOT NULL,
 cidade VARCHAR(80) NOT NULL,
 uf CHAR(2) NOT NULL,
 pais VARCHAR(50) NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco)
@@ -61,7 +61,7 @@ litragem INT NULL,
 tipo_litragem UNIQUEIDENTIFIER NOT NULL,
 vendendo BIT NOT NULL DEFAULT 0,
 valor_unitario DECIMAL(9,2) NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
@@ -80,6 +80,8 @@ data DATE NOT NULL DEFAULT GETDATE(),
 litragem INT NOT NULL,
 tipo_litragem UNIQUEIDENTIFIER NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
 
 CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
 FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem)
@@ -109,7 +111,7 @@ CREATE TABLE Pinga.custo (
 idcusto UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 descricao VARCHAR(60) NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_custo PRIMARY KEY NONCLUSTERED (idcusto)
@@ -123,7 +125,7 @@ END
 CREATE TABLE Pinga.fase (
 idfase UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 descricao VARCHAR(60) NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_fase PRIMARY KEY NONCLUSTERED (idfase)
@@ -137,7 +139,7 @@ END
 CREATE TABLE Pinga.forma_pagamento (
 idforma_pagamento UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 descricao VARCHAR(60) NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento)
@@ -153,7 +155,7 @@ idcliente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(60) NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
 visitado BIT NOT NULL DEFAULT 0,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_cliente PRIMARY KEY NONCLUSTERED (idcliente),
@@ -169,7 +171,7 @@ CREATE TABLE Pinga.qnt_minima (
 idqnt_minima UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 valor INT NOT NULL,
 produto UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_qnt_minima PRIMARY KEY NONCLUSTERED (idqnt_minima),
@@ -185,7 +187,7 @@ CREATE TABLE Pinga.idqnt_maxima (
 idqnt_maxima UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 valor INT NOT NULL,
 produto UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_qnt_maxima PRIMARY KEY NONCLUSTERED (idqnt_maxima),
@@ -202,7 +204,7 @@ idparceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(60) NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
 ativo BIT NOT NULL DEFAULT 0,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_parceiro PRIMARY KEY NONCLUSTERED (idparceiro),
@@ -218,18 +220,18 @@ CREATE TABLE Pinga.saida (
 idsaida UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 data DATETIME2 NOT NULL DEFAULT GETDATE(),
 parceiro UNIQUEIDENTIFIER NOT NULL,
-litragem INT NOT NULL,
+/*litragem INT NOT NULL,
 tipo_litragem UNIQUEIDENTIFIER NOT NULL,
-valor DECIMAL (9,2) NOT NULL,
+valor DECIMAL (9,2) NOT NULL,*/
 cliente UNIQUEIDENTIFIER NOT NULL,
 fase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro),
-FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
+/*FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),*/
 FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (fase) REFERENCES Pinga.fase(idfase),
 FOREIGN KEY (forma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
@@ -247,7 +249,7 @@ entrada UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 produto UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 quantidade INT NOT NULL,
 valor_saida DECIMAL(9,2) NOT NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
@@ -268,7 +270,7 @@ data_pagamento DATE NOT NULL,
 data_vencimento DATE NOT NULL,
 parcelas INT NOT NULL,
 juros DECIMAL(8,5) NULL,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
@@ -285,7 +287,7 @@ idlogin UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 lgn VARCHAR(30) NOT NULL,
 pwd VARCHAR(65) NOT NULL,
 ativo BIT NOT NULL DEFAULT 0,
-created DATETIME NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
@@ -305,3 +307,18 @@ FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco =
 LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente
 
 
+SELECT * FROM pingaDB.Pinga.entrada
+
+
+/*18/09/2016 00:00:00
+2016-09-18*/
+
+SELECT p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE '5Não', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro
+FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco
+LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro
+
+INSERT INTO pingaDB.Pinga.tipo_litragem VALUES (NEWID(), 'Meiotinha'),(NEWID(), 'Litro');
+
+SELECT * FROM pingaDB.Pinga.saida
+
+SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;

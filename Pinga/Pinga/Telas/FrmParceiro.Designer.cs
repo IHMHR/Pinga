@@ -1,6 +1,6 @@
 ﻿namespace Pinga.Telas
 {
-    partial class FrmCliente
+    partial class FrmParceiro
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.checkCompra = new System.Windows.Forms.CheckBox();
-            this.checkVisitado = new System.Windows.Forms.CheckBox();
+            this.checkAtivo = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.Endereço = new System.Windows.Forms.GroupBox();
             this.txtUF = new System.Windows.Forms.TextBox();
@@ -49,13 +49,11 @@
             this.txtNome = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtIdEndereco = new System.Windows.Forms.TextBox();
-            this.txtIdCliente = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ApagarColumn = new System.Windows.Forms.DataGridViewImageColumn();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.Endereço.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -66,15 +64,15 @@
             // 
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.checkCompra);
-            this.groupBox1.Controls.Add(this.checkVisitado);
+            this.groupBox1.Controls.Add(this.checkAtivo);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.Endereço);
             this.groupBox1.Controls.Add(this.txtNome);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Location = new System.Drawing.Point(2, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(506, 99);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Dados cadastrais";
             // 
@@ -83,36 +81,37 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(49, 68);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(105, 13);
+            this.label3.Size = new System.Drawing.Size(112, 13);
             this.label3.TabIndex = 11;
-            this.label3.Text = "Cliente já fez compra";
+            this.label3.Text = "Parceiro já fez compra";
             // 
             // checkCompra
             // 
             this.checkCompra.AutoSize = true;
+            this.checkCompra.Enabled = false;
             this.checkCompra.Location = new System.Drawing.Point(14, 68);
             this.checkCompra.Name = "checkCompra";
             this.checkCompra.Size = new System.Drawing.Size(15, 14);
             this.checkCompra.TabIndex = 10;
             this.checkCompra.UseVisualStyleBackColor = true;
             // 
-            // checkVisitado
+            // checkAtivo
             // 
-            this.checkVisitado.AutoSize = true;
-            this.checkVisitado.Location = new System.Drawing.Point(14, 46);
-            this.checkVisitado.Name = "checkVisitado";
-            this.checkVisitado.Size = new System.Drawing.Size(15, 14);
-            this.checkVisitado.TabIndex = 9;
-            this.checkVisitado.UseVisualStyleBackColor = true;
+            this.checkAtivo.AutoSize = true;
+            this.checkAtivo.Location = new System.Drawing.Point(14, 46);
+            this.checkAtivo.Name = "checkAtivo";
+            this.checkAtivo.Size = new System.Drawing.Size(15, 14);
+            this.checkAtivo.TabIndex = 9;
+            this.checkAtivo.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(49, 46);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.Size = new System.Drawing.Size(72, 13);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Já foi visitado";
+            this.label2.Text = "Parceria ativa";
             // 
             // Endereço
             // 
@@ -252,31 +251,13 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.txtIdEndereco);
-            this.groupBox2.Controls.Add(this.txtIdCliente);
             this.groupBox2.Controls.Add(this.dataGridView1);
-            this.groupBox2.Location = new System.Drawing.Point(0, 98);
+            this.groupBox2.Location = new System.Drawing.Point(2, 106);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(506, 153);
-            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clientes Cadastrados";
-            // 
-            // txtIdEndereco
-            // 
-            this.txtIdEndereco.Location = new System.Drawing.Point(449, 28);
-            this.txtIdEndereco.Name = "txtIdEndereco";
-            this.txtIdEndereco.Size = new System.Drawing.Size(45, 20);
-            this.txtIdEndereco.TabIndex = 5;
-            this.txtIdEndereco.Visible = false;
-            // 
-            // txtIdCliente
-            // 
-            this.txtIdCliente.Location = new System.Drawing.Point(402, 28);
-            this.txtIdCliente.Name = "txtIdCliente";
-            this.txtIdCliente.Size = new System.Drawing.Size(45, 20);
-            this.txtIdCliente.TabIndex = 6;
-            this.txtIdCliente.Visible = false;
             // 
             // dataGridView1
             // 
@@ -299,56 +280,54 @@
             this.ApagarColumn.Name = "ApagarColumn";
             this.ApagarColumn.ReadOnly = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(12, 257);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Salvar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(206, 257);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Limpar Tela";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(431, 257);
+            this.button3.Location = new System.Drawing.Point(425, 262);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 4;
+            this.button3.TabIndex = 15;
             this.button3.Text = "Fechar";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // FrmCliente
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(200, 262);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 14;
+            this.button2.Text = "Limpar Tela";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 262);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Salvar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // FrmParceiro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 284);
+            this.ClientSize = new System.Drawing.Size(515, 290);
             this.Controls.Add(this.button3);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "FrmCliente";
-            this.Text = "Clientes";
-            this.Shown += new System.EventHandler(this.FrmCliente_Shown);
+            this.Name = "FrmParceiro";
+            this.Text = "FrmParceiro";
+            this.Shown += new System.EventHandler(this.FrmParceiro_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.Endereço.ResumeLayout(false);
             this.Endereço.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -357,16 +336,11 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox checkCompra;
-        private System.Windows.Forms.CheckBox checkVisitado;
+        private System.Windows.Forms.CheckBox checkAtivo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox Endereço;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TextBox txtUF;
         private System.Windows.Forms.TextBox txtCidade;
         private System.Windows.Forms.Label label9;
@@ -381,8 +355,12 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtNome;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtIdEndereco;
-        private System.Windows.Forms.TextBox txtIdCliente;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn ApagarColumn;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+
     }
 }
