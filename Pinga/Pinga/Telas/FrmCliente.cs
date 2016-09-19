@@ -48,7 +48,7 @@ namespace Pinga.Telas
 
                         button2_Click(this, new EventArgs());
 
-                        PopularGrid();
+                        FillDataGridView();
                     }
                 }
                 catch (Exception)
@@ -87,7 +87,7 @@ namespace Pinga.Telas
 
                         button2_Click(this, new EventArgs());
 
-                        PopularGrid();
+                        FillDataGridView();
 
                         button1.Text = "Salvar";
                     }
@@ -118,29 +118,7 @@ namespace Pinga.Telas
 
         private void FrmCliente_Shown(object sender, EventArgs e)
         {
-            PopularGrid();
-        }
-
-        private void PopularGrid()
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
-                {
-                    string sql = "SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, c.idcliente, e.idendereco, s.cliente AS 'Vnd' FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente";
-                    SqlDataAdapter da = new SqlDataAdapter(sql, con);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dataGridView1.DataSource = dt;
-                    dataGridView1.Columns[10].Visible = false;
-                    dataGridView1.Columns[11].Visible = false;
-                    dataGridView1.Columns[12].Visible = false;
-                }
-            }
-            catch(Exception)
-            {
-                MessageBox.Show("Erro desconhecido ao listar clientes.", "Listar clientes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            FillDataGridView();
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -188,7 +166,7 @@ namespace Pinga.Telas
                             com.ExecuteNonQuery();
                             con.Close();
 
-                            PopularGrid();
+                            FillDataGridView();
                         }
                     }
                     catch (Exception)
@@ -199,6 +177,14 @@ namespace Pinga.Telas
             }
             catch(Exception)
             { }
+        }
+
+        private void FillDataGridView()
+        {
+            dataGridView1.DataSource = Classes.ClsGlobal.PopularGrid("SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, c.idcliente, e.idendereco, s.cliente AS 'Vnd' FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente");
+            dataGridView1.Columns[10].Visible = false;
+            dataGridView1.Columns[11].Visible = false;
+            dataGridView1.Columns[12].Visible = false;
         }
     }
 }

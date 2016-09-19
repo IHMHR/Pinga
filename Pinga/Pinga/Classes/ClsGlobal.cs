@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Pinga.Classes
 {
@@ -26,16 +25,16 @@ namespace Pinga.Classes
             }
         }
 
-        public static System.Data.DataTable PopularGrid(string sql)
+        public static DataTable PopularGrid(string sql)
         {
             if (!string.IsNullOrWhiteSpace(sql))
             {
                 try
                 {
-                    using (System.Data.SqlClient.SqlConnection con = new System.Data.SqlClient.SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
+                    using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
                     {
-                        System.Data.SqlClient.SqlDataAdapter da = new System.Data.SqlClient.SqlDataAdapter(sql, con);
-                        System.Data.DataTable dt = new System.Data.DataTable();
+                        SqlDataAdapter da = new SqlDataAdapter(sql, con);
+                        DataTable dt = new DataTable();
                         da.Fill(dt);
                         return dt;
                     }
