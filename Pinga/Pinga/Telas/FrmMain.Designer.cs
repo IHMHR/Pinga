@@ -38,6 +38,7 @@
             this.parceiroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formaDePagamentoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unidadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.proutoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +77,8 @@
             this.vendaToolStripMenuItem,
             this.parceiroToolStripMenuItem,
             this.formaDePagamentoToolStripMenuItem,
-            this.unidadeToolStripMenuItem});
+            this.unidadeToolStripMenuItem,
+            this.proutoToolStripMenuItem});
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.Red;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(66, 20);
@@ -86,7 +88,7 @@
             // 
             this.clienteToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
             this.clienteToolStripMenuItem.Name = "clienteToolStripMenuItem";
-            this.clienteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clienteToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.clienteToolStripMenuItem.Text = "Cliente";
             this.clienteToolStripMenuItem.Click += new System.EventHandler(this.clienteToolStripMenuItem_Click);
             // 
@@ -94,7 +96,7 @@
             // 
             this.estoqueToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
             this.estoqueToolStripMenuItem.Name = "estoqueToolStripMenuItem";
-            this.estoqueToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.estoqueToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.estoqueToolStripMenuItem.Text = "Estoque";
             this.estoqueToolStripMenuItem.Click += new System.EventHandler(this.estoqueToolStripMenuItem_Click);
             // 
@@ -102,7 +104,7 @@
             // 
             this.vendaToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
             this.vendaToolStripMenuItem.Name = "vendaToolStripMenuItem";
-            this.vendaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.vendaToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.vendaToolStripMenuItem.Text = "Venda";
             this.vendaToolStripMenuItem.Click += new System.EventHandler(this.vendaToolStripMenuItem_Click);
             // 
@@ -110,7 +112,7 @@
             // 
             this.parceiroToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
             this.parceiroToolStripMenuItem.Name = "parceiroToolStripMenuItem";
-            this.parceiroToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.parceiroToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.parceiroToolStripMenuItem.Text = "Parceiro";
             this.parceiroToolStripMenuItem.Click += new System.EventHandler(this.parceiroToolStripMenuItem_Click);
             // 
@@ -129,6 +131,14 @@
             this.unidadeToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.unidadeToolStripMenuItem.Text = "Unidade";
             this.unidadeToolStripMenuItem.Click += new System.EventHandler(this.unidadeToolStripMenuItem_Click);
+            // 
+            // proutoToolStripMenuItem
+            // 
+            this.proutoToolStripMenuItem.ForeColor = System.Drawing.Color.Red;
+            this.proutoToolStripMenuItem.Name = "proutoToolStripMenuItem";
+            this.proutoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.proutoToolStripMenuItem.Text = "Produto";
+            this.proutoToolStripMenuItem.Click += new System.EventHandler(this.proutoToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -165,5 +175,6 @@
         private System.Windows.Forms.ToolStripMenuItem parceiroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem formaDePagamentoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unidadeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem proutoToolStripMenuItem;
     }
 }

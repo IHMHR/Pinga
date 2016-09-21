@@ -8,6 +8,7 @@ C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.FrmLogin.
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.FrmMain.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Properties.Resources.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmParceiro.resources
+C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmProduto.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmTipoLitragem.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmUsuarios.resources
 C:\Users\Martinelli\Documents\GitHub\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmVenda.resources

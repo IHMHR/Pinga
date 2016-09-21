@@ -44,6 +44,7 @@
             this.cmbUnidade = new System.Windows.Forms.ComboBox();
             this.Apagar = new System.Windows.Forms.DataGridViewImageColumn();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -51,6 +52,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.cmbUnidade);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.dtpData);
@@ -61,7 +63,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(676, 46);
+            this.groupBox1.Size = new System.Drawing.Size(782, 46);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Cadastro Estoque";
@@ -72,14 +74,14 @@
             this.groupBox2.Controls.Add(this.dataGridView1);
             this.groupBox2.Location = new System.Drawing.Point(0, 52);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(676, 160);
+            this.groupBox2.Size = new System.Drawing.Size(782, 160);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Itens em estoque";
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(591, 218);
+            this.button3.Location = new System.Drawing.Point(699, 218);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 7;
@@ -89,7 +91,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(297, 218);
+            this.button2.Location = new System.Drawing.Point(395, 218);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 6;
@@ -118,7 +120,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(3, 16);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(663, 138);
+            this.dataGridView1.Size = new System.Drawing.Size(773, 138);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -134,7 +136,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(200, 17);
+            this.label2.Location = new System.Drawing.Point(192, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(47, 13);
             this.label2.TabIndex = 9;
@@ -143,7 +145,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(530, 17);
+            this.label3.Location = new System.Drawing.Point(496, 17);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(30, 13);
             this.label3.TabIndex = 10;
@@ -151,7 +153,7 @@
             // 
             // txtLitragem
             // 
-            this.txtLitragem.Location = new System.Drawing.Point(253, 14);
+            this.txtLitragem.Location = new System.Drawing.Point(242, 14);
             this.txtLitragem.Name = "txtLitragem";
             this.txtLitragem.Size = new System.Drawing.Size(100, 20);
             this.txtLitragem.TabIndex = 11;
@@ -166,7 +168,7 @@
             // 
             // txtValor
             // 
-            this.txtValor.Location = new System.Drawing.Point(566, 14);
+            this.txtValor.Location = new System.Drawing.Point(532, 14);
             this.txtValor.Name = "txtValor";
             this.txtValor.Size = new System.Drawing.Size(100, 20);
             this.txtValor.TabIndex = 12;
@@ -174,7 +176,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(369, 17);
+            this.label4.Location = new System.Drawing.Point(347, 17);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(47, 13);
             this.label4.TabIndex = 14;
@@ -184,7 +186,7 @@
             // 
             this.cmbUnidade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbUnidade.FormattingEnabled = true;
-            this.cmbUnidade.Location = new System.Drawing.Point(422, 13);
+            this.cmbUnidade.Location = new System.Drawing.Point(395, 13);
             this.cmbUnidade.Name = "cmbUnidade";
             this.cmbUnidade.Size = new System.Drawing.Size(95, 21);
             this.cmbUnidade.TabIndex = 15;
@@ -201,17 +203,26 @@
             this.label5.BackColor = System.Drawing.Color.Yellow;
             this.label5.Font = new System.Drawing.Font("Microsoft YaHei", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(73, 74);
+            this.label5.Location = new System.Drawing.Point(151, 77);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(550, 27);
             this.label5.TabIndex = 1;
             this.label5.Text = "Em desenvolvimento o relatorio de produto em estoque";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(638, 17);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(44, 13);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Produto";
+            // 
             // FrmEstoque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(683, 247);
+            this.ClientSize = new System.Drawing.Size(786, 247);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -248,5 +259,6 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Apagar;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }

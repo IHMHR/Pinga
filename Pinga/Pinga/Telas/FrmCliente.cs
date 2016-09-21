@@ -111,7 +111,7 @@ namespace Pinga.Telas
             txtNome.Clear();
             txtNum.Clear();
             txtRua.Clear();
-            txtUF.Clear();
+            //txtUF.Clear();
             checkCompra.Checked = false;
             checkVisitado.Checked = false;
         }

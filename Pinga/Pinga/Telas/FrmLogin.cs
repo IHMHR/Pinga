@@ -76,5 +76,11 @@ namespace Pinga
             Telas.FrmUsuarios f = new Telas.FrmUsuarios();
             f.Show();
         }
+
+        private void label1_DoubleClick(object sender, EventArgs e)
+        {
+            // Gestao Logins
+            throw new NotImplementedException();
+        }
     }
 }

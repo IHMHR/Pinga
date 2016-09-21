@@ -122,5 +122,21 @@ namespace Pinga
             newForm.MdiParent = this;
             newForm.Show();
         }
+
+        private void proutoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.FrmProduto))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.FrmProduto();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }

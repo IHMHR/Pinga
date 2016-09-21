@@ -296,7 +296,7 @@ CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
 INSERT INTO adm.login (lgn,pwd,ativo) VALUES ('123', '123', 1);
 SELECT * FROM adm.login;
 
-UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlogin = '6405AD59-4304-4B5B-B8E0-5BE35B95192C';
+UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlogin = 'C42F99A9-8CEF-4E64-A48D-4B3F94CBFE7B';
 
 exec sp_tables;
 
@@ -313,12 +313,109 @@ SELECT * FROM pingaDB.Pinga.entrada
 /*18/09/2016 00:00:00
 2016-09-18*/
 
-SELECT p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE '5Não', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro
+/*SELECT p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro
 FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco
-LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro
+LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro*/
 
 INSERT INTO pingaDB.Pinga.tipo_litragem VALUES (NEWID(), 'Meiotinha'),(NEWID(), 'Litro');
 
 SELECT * FROM pingaDB.Pinga.saida
 
 SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
+
+SELECT data, parceiro, cliente, fase, forma_pagamento
+FROM pingaDB.Pinga.saida
+
+
+SELECT * FROM pingaDB.Pinga.produto
+SELECT descricao FROM Pinga.forma_pagamento;
+
+SELECT * FROM pingaDB.Pinga.saida
+
+SELECT * FROM pingaDB.Pinga.produto
+
+SELECT idproduto, p.descricao, litragem, tl.descricao, CASE WHEN p.vendendo = 1 THEN 'Vendendo' ELSE 'Fora do mercado' END AS Vendendo, p.valor_unitario
+FROM Pinga.produto p
+INNER JOIN Pinga.tipo_litragem tl ON p.tipo_litragem = tl.idtipo_litragem
+
+CREATE TABLE Pinga.estoque
+(
+produto UNIQUEIDENTIFIER NOT NULL,
+quantidade INT NOT NULL,
+
+FOREIGN KEY (produto) REFERENCES Pinga.produto(idproduto)
+);
+GO
+
+/*CREATE TRIGGER Pinga.trg_estoque
+ON Pinga.entrada AFTER INSERT
+AS
+	INSERT INTO estoque VALUES ();
+GO*/
+
+SELECT * FROM pingaDB.Pinga.cliente
+
+
+SELECT produto, quantidade, (p.descricao + N' - ' + quantidade) AS item FROM Pinga.estoque e INNER JOIN Pinga.produto p ON p.idproduto = e.produto
+
+
+CREATE TABLE Pinga.telefone
+(
+idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+telefone VARCHAR(11) NOT NULL,
+celular VARCHAR(11) NULL,
+extra VARCHAR(10) NULL,
+ramal VARCHAR(6) NULL
+);
+
+ALTER TABLE Pinga.cliente ADD telefone UNIQUEIDENTIFIER NOT NULL;
+ALTER TABLE Pinga.parceiro ADD telefone UNIQUEIDENTIFIER NOT NULL;
+ALTER TABLE Pinga.fornecedor ADD telefone UNIQUEIDENTIFIER NOT NULL;
+
+CREATE TABLE Pinga.cliente_has_parceiro (
+idcliente_has_parceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cliente UNIQUEIDENTIFIER NOT NULL,
+parceiro UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL
+);
+
+CREATE TABLE Pinga.representante (
+idrepresentante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+nome VARCHAR(50) NOT NULL,
+telefone UNIQUEIDENTIFIER NOT NULL,
+email VARCHAR(50) NULL,
+cargo VARCHAR(25) NOT NULL,
+);
+
+CREATE TABLE Pinga.cliente_has_representante (
+idcliente_has_representante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cliente UNIQUEIDENTIFIER NOT NULL,
+representante UNIQUEIDENTIFIER NOT NULL,
+);
+
+CREATE TABLE Pinga.visita (
+idvisita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cliente UNIQUEIDENTIFIER NOT NULL,
+data DATETIME NOT NULL,
+endereco UNIQUEIDENTIFIER NOT NULL,
+comecou TIME NULL,
+terminou TIME NULL
+);
+
+CREATE TABLE Pinga.parceiro_has_visita (
+idparceiro_has_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+parceiro UNIQUEIDENTIFIER NOT NULL,
+visita UNIQUEIDENTIFIER NOT NULL
+);
+
+CREATE TABLE Pinga.feedback_visita (
+idfeedback_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+visita UNIQUEIDENTIFIER NOT NULL,
+comentario VARCHAR(100) NULL,
+nota TINYINT NOT NULL,
+venda_realizada BIT NOT NULL,
+reagendar_visita BIT NOT NULL --criar uma nova visita
+);
+
+
+

@@ -96,6 +96,7 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Usuário";
             this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
             // 
             // label2
             // 
