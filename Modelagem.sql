@@ -139,7 +139,7 @@ END
 
 CREATE TABLE Pinga.forma_pagamento (
 idforma_pagamento UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(60) NOT NULL,
+descricao VARCHAR(45) NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
@@ -153,6 +153,7 @@ END
 
 CREATE TABLE Pinga.cliente (
 idcliente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cpf_cnpj VARCHAR(14) NOT NULL,
 razao_social VARCHAR(60) NOT NULL,
 nome_fantasia VARCHAR(60) NOT NULL,
 inscricao_municipal CHAR(14) NULL,
@@ -364,6 +365,12 @@ SELECT * FROM pingaDB.Pinga.cliente
 SELECT produto, quantidade, (p.descricao + N' - ' + quantidade) AS item FROM Pinga.estoque e INNER JOIN Pinga.produto p ON p.idproduto = e.produto
 
 
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
+BEGIN
+    DROP TABLE Pinga.telefone;
+END
+
 CREATE TABLE Pinga.telefone (
 idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 operadora VARCHAR(20) NOT NULL,
@@ -377,12 +384,23 @@ ALTER TABLE Pinga.cliente ADD telefone UNIQUEIDENTIFIER NOT NULL;
 ALTER TABLE Pinga.parceiro ADD telefone UNIQUEIDENTIFIER NOT NULL;
 ALTER TABLE Pinga.fornecedor ADD telefone UNIQUEIDENTIFIER NOT NULL;
 
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente_has_parceiro')
+BEGIN
+    DROP TABLE Pinga.cliente_has_parceiro;
+END
+
 CREATE TABLE Pinga.cliente_has_parceiro (
 idcliente_has_parceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cliente UNIQUEIDENTIFIER NOT NULL,
 parceiro UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL
 );
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'representante')
+BEGIN
+    DROP TABLE Pinga.representante;
+END
 
 CREATE TABLE Pinga.representante (
 idrepresentante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
@@ -396,12 +414,22 @@ status BIT NOT NULL DEFAULT 0,
 FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente_has_representante')
+BEGIN
+    DROP TABLE Pinga.cliente_has_representante;
+END
+
 CREATE TABLE Pinga.cliente_has_representante (
 idcliente_has_representante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cliente UNIQUEIDENTIFIER NOT NULL,
 representante UNIQUEIDENTIFIER NOT NULL,
 responsavel_contrato BIT NOT NULL DEFAULT 0
 );
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'visita')
+BEGIN
+    DROP TABLE Pinga.visita;
+END
 
 CREATE TABLE Pinga.visita (
 idvisita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
@@ -415,11 +443,21 @@ FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro_has_visita')
+BEGIN
+    DROP TABLE Pinga.parceiro_has_visita;
+END
+
 CREATE TABLE Pinga.parceiro_has_visita (
 idparceiro_has_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 parceiro UNIQUEIDENTIFIER NOT NULL,
 visita UNIQUEIDENTIFIER NOT NULL
 );
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'feedback_visita')
+BEGIN
+    DROP TABLE Pinga.feedback_visita;
+END
 
 CREATE TABLE Pinga.feedback_visita (
 idfeedback_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
@@ -432,5 +470,39 @@ visita_reagendada BIT NOT NULL, -- criar uma nova visita
 FOREIGN KEY (visita) REFERENCES Pinga.visita(idvisita)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato')
+BEGIN
+    DROP TABLE Pinga.contrato;
+END
 
+CREATE TABLE Pinga.contrato (
+idcontrato UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cliente UNIQUEIDENTIFIER NOT NULL,
+data_entrada_vigor DATE NOT NULL,
+data_expiracao DATE NOT NULL,
+data_assinatura DATE NULL,
+prorrogavel BIT NOT NULL DEFALUT 0,
+status BIT NOT NULL DEFAULT 0,
+forma_pagamento UNIQUEIDENTIFIER NOT NULL,
+multa_quebra DECIMAL (9,2) NOT NULL,
+
+FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (forma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'testemunha')
+BEGIN
+    DROP TABLE Pinga.testemunha;
+END
+
+CREATE TABLE Pinga.testemunha (
+idtestemunha UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+primeiro_nome VARCHAR(20) NOT NULL,
+nome_meio VARCHAR(40) NULL,
+sobrenome VARCHAR(25) NOT NULL,
+cpf CHAR(11) NOT NULL,
+contrato UNIQUEIDENTIFIER NOT NULL,
+
+FOREIGN KEY (contrato) REFERENCES Pinga.contrato(idcontrato)
+);
 
