@@ -152,7 +152,11 @@ END
 
 CREATE TABLE Pinga.cliente (
 idcliente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-nome VARCHAR(60) NOT NULL,
+razao_social VARCHAR(60) NOT NULL,
+nome_fantasia VARCHAR(60) NOT NULL,
+inscricao_municipal CHAR(14) NULL,
+inscricao_estadual CHAR(14) NULL,
+data_fundacao DATE NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
 visitado BIT NOT NULL DEFAULT 0,
 created DATETIME NOT NULL DEFAULT GETDATE(),
@@ -300,7 +304,7 @@ UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlo
 
 exec sp_tables;
 
-SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',
+SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'NÃ£o' END AS 'Cliente Visitado',
 CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf,
 c.idcliente, e.idendereco, s.cliente AS 'Vnd'
 FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco
@@ -313,7 +317,7 @@ SELECT * FROM pingaDB.Pinga.entrada
 /*18/09/2016 00:00:00
 2016-09-18*/
 
-/*SELECT p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro
+/*SELECT p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'NÃ£o', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro
 FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco
 LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro*/
 
@@ -321,7 +325,7 @@ INSERT INTO pingaDB.Pinga.tipo_litragem VALUES (NEWID(), 'Meiotinha'),(NEWID(), 
 
 SELECT * FROM pingaDB.Pinga.saida
 
-SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
+SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'NÃ£o' AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
 
 SELECT data, parceiro, cliente, fase, forma_pagamento
 FROM pingaDB.Pinga.saida
