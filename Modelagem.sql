@@ -391,7 +391,9 @@ telefone UNIQUEIDENTIFIER NOT NULL,
 email VARCHAR(50) NULL,
 departamento VARCHAR(30) NULL,
 cargo VARCHAR(25) NOT NULL,
-status BIT NOT NULL DEFAULT 0
+status BIT NOT NULL DEFAULT 0,
+
+FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
 CREATE TABLE Pinga.cliente_has_representante (
@@ -407,7 +409,10 @@ cliente UNIQUEIDENTIFIER NOT NULL,
 data DATETIME NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
 comecou TIME NULL,
-terminou TIME NULL
+terminou TIME NULL,
+
+FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
 );
 
 CREATE TABLE Pinga.parceiro_has_visita (
@@ -422,7 +427,9 @@ visita UNIQUEIDENTIFIER NOT NULL,
 comentario VARCHAR(100) NULL,
 nota TINYINT NOT NULL,
 venda_realizada BIT NOT NULL,
-reagendar_visita BIT NOT NULL --criar uma nova visita
+visita_reagendada BIT NOT NULL, -- criar uma nova visita
+
+FOREIGN KEY (visita) REFERENCES Pinga.visita(idvisita)
 );
 
 
