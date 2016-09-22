@@ -344,11 +344,12 @@ SELECT idproduto, p.descricao, litragem, tl.descricao, CASE WHEN p.vendendo = 1 
 FROM Pinga.produto p
 INNER JOIN Pinga.tipo_litragem tl ON p.tipo_litragem = tl.idtipo_litragem
 
-CREATE TABLE Pinga.estoque
-(
+CREATE TABLE Pinga.estoque (
+idestoque UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 produto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
 
+CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
 FOREIGN KEY (produto) REFERENCES Pinga.produto(idproduto)
 );
 GO
@@ -377,7 +378,9 @@ operadora VARCHAR(20) NOT NULL,
 telefone VARCHAR(11) NOT NULL,
 celular VARCHAR(11) NULL,
 extra VARCHAR(10) NULL,
-ramal VARCHAR(6) NULL
+ramal VARCHAR(6) NULL,
+
+CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone)
 );
 
 ALTER TABLE Pinga.cliente ADD telefone UNIQUEIDENTIFIER NOT NULL;
@@ -394,7 +397,7 @@ CREATE TABLE Pinga.cliente_has_parceiro (
 idcliente_has_parceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cliente UNIQUEIDENTIFIER NOT NULL,
 parceiro UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL
+created DATETIME NOT NULL DEFAULT GETDATE()
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'representante')
@@ -411,6 +414,7 @@ departamento VARCHAR(30) NULL,
 cargo VARCHAR(25) NOT NULL,
 status BIT NOT NULL DEFAULT 0,
 
+CONSTRAINT pk_representante PRIMARY KEY NONCLUSTERED (idrepresentante),
 FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
@@ -439,6 +443,7 @@ endereco UNIQUEIDENTIFIER NOT NULL,
 comecou TIME NULL,
 terminou TIME NULL,
 
+CONSTRAINT pk_visita PRIMARY KEY NONCLUSTERED (idvisita),
 FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
 );
@@ -467,6 +472,7 @@ nota TINYINT NOT NULL,
 venda_realizada BIT NOT NULL,
 visita_reagendada BIT NOT NULL, -- criar uma nova visita
 
+CONSTRAINT pk_feedback_visita PRIMARY KEY NONCLUSTERED (idfeedback_visita),
 FOREIGN KEY (visita) REFERENCES Pinga.visita(idvisita)
 );
 
@@ -481,11 +487,12 @@ cliente UNIQUEIDENTIFIER NOT NULL,
 data_entrada_vigor DATE NOT NULL,
 data_expiracao DATE NOT NULL,
 data_assinatura DATE NULL,
-prorrogavel BIT NOT NULL DEFALUT 0,
+prorrogavel BIT NOT NULL DEFAULT 0,
 status BIT NOT NULL DEFAULT 0,
 forma_pagamento UNIQUEIDENTIFIER NOT NULL,
 multa_quebra DECIMAL (9,2) NOT NULL,
 
+CONSTRAINT pk_contrato PRIMARY KEY NONCLUSTERED (idcontrato),
 FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (forma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
 );
@@ -503,6 +510,7 @@ sobrenome VARCHAR(25) NOT NULL,
 cpf CHAR(11) NOT NULL,
 contrato UNIQUEIDENTIFIER NOT NULL,
 
+CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
 FOREIGN KEY (contrato) REFERENCES Pinga.contrato(idcontrato)
 );
 
