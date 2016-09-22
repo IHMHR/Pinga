@@ -27,6 +27,7 @@ idendereco UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 logradouro VARCHAR(100) NOT NULL,
 numero INT NULL,
 complemento VARCHAR(30) NULL,
+ponto_referencia VARCHAR(45) NULL,
 bairro VARCHAR(100) NOT NULL,
 cidade VARCHAR(80) NOT NULL,
 uf CHAR(2) NOT NULL,
@@ -363,9 +364,9 @@ SELECT * FROM pingaDB.Pinga.cliente
 SELECT produto, quantidade, (p.descricao + N' - ' + quantidade) AS item FROM Pinga.estoque e INNER JOIN Pinga.produto p ON p.idproduto = e.produto
 
 
-CREATE TABLE Pinga.telefone
-(
+CREATE TABLE Pinga.telefone (
 idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+operadora VARCHAR(20) NOT NULL,
 telefone VARCHAR(11) NOT NULL,
 celular VARCHAR(11) NULL,
 extra VARCHAR(10) NULL,
@@ -388,13 +389,16 @@ idrepresentante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(50) NOT NULL,
 telefone UNIQUEIDENTIFIER NOT NULL,
 email VARCHAR(50) NULL,
+departamento VARCHAR(30) NULL,
 cargo VARCHAR(25) NOT NULL,
+status BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Pinga.cliente_has_representante (
 idcliente_has_representante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cliente UNIQUEIDENTIFIER NOT NULL,
 representante UNIQUEIDENTIFIER NOT NULL,
+responsavel_contrato BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Pinga.visita (
