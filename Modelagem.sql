@@ -38,6 +38,22 @@ modified DATETIME NULL,
 CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
+BEGIN
+    DROP TABLE Pinga.telefone;
+END
+
+CREATE TABLE Pinga.telefone (
+idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+operadora VARCHAR(20) NOT NULL,
+telefone VARCHAR(11) NOT NULL,
+celular VARCHAR(11) NULL,
+extra VARCHAR(10) NULL,
+ramal VARCHAR(6) NULL,
+
+CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone)
+);
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_litragem')
 BEGIN
     DROP TABLE Pinga.tipo_litragem;
@@ -97,10 +113,11 @@ CREATE TABLE Pinga.fornecedor (
 idfornecedor UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(60) NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
-
+telefone UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_fornecedor PRIMARY KEY NONCLUSTERED (idfornecedor),
-FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
+FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco),
+FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'custo')
@@ -161,11 +178,13 @@ inscricao_estadual CHAR(14) NULL,
 data_fundacao DATE NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
 visitado BIT NOT NULL DEFAULT 0,
+telefone UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_cliente PRIMARY KEY NONCLUSTERED (idcliente),
-FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
+FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco),
+FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'qnt_minima')
@@ -210,11 +229,13 @@ idparceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(60) NOT NULL,
 endereco UNIQUEIDENTIFIER NOT NULL,
 ativo BIT NOT NULL DEFAULT 0,
+telefone UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_parceiro PRIMARY KEY NONCLUSTERED (idparceiro),
-FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
+FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco),
+FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'saida')
@@ -282,7 +303,10 @@ modified DATETIME NULL,
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 );
 
-DROP TABLE students;
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'students')
+BEGIN
+    DROP TABLE students;
+END
 GO
 
 CREATE SCHEMA adm;
@@ -306,14 +330,14 @@ UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlo
 
 exec sp_tables;
 
-SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',
+/*SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',
 CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf,
 c.idcliente, e.idendereco, s.cliente AS 'Vnd'
 FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco
-LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente
+LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente*/
 
 
-SELECT * FROM pingaDB.Pinga.entrada
+SELECT * FROM pingaDB.Pinga.entrada;
 
 
 /*18/09/2016 00:00:00
@@ -327,7 +351,7 @@ INSERT INTO pingaDB.Pinga.tipo_litragem VALUES (NEWID(), 'Meiotinha'),(NEWID(), 
 
 SELECT * FROM pingaDB.Pinga.saida
 
-SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
+SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
 
 SELECT data, parceiro, cliente, fase, forma_pagamento
 FROM pingaDB.Pinga.saida
@@ -360,32 +384,11 @@ AS
 	INSERT INTO estoque VALUES ();
 GO*/
 
-SELECT * FROM pingaDB.Pinga.cliente
+SELECT * FROM pingaDB.Pinga.cliente;
 
 
-SELECT produto, quantidade, (p.descricao + N' - ' + quantidade) AS item FROM Pinga.estoque e INNER JOIN Pinga.produto p ON p.idproduto = e.produto
+SELECT produto, quantidade, (p.descricao + N' - ' + quantidade) AS item FROM Pinga.estoque e INNER JOIN Pinga.produto p ON p.idproduto = e.produto;
 
-
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
-BEGIN
-    DROP TABLE Pinga.telefone;
-END
-
-CREATE TABLE Pinga.telefone (
-idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-operadora VARCHAR(20) NOT NULL,
-telefone VARCHAR(11) NOT NULL,
-celular VARCHAR(11) NULL,
-extra VARCHAR(10) NULL,
-ramal VARCHAR(6) NULL,
-
-CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone)
-);
-
-ALTER TABLE Pinga.cliente ADD telefone UNIQUEIDENTIFIER NOT NULL;
-ALTER TABLE Pinga.parceiro ADD telefone UNIQUEIDENTIFIER NOT NULL;
-ALTER TABLE Pinga.fornecedor ADD telefone UNIQUEIDENTIFIER NOT NULL;
 
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente_has_parceiro')
@@ -398,6 +401,9 @@ idcliente_has_parceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cliente UNIQUEIDENTIFIER NOT NULL,
 parceiro UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE()
+
+FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'representante')
@@ -428,6 +434,9 @@ idcliente_has_representante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cliente UNIQUEIDENTIFIER NOT NULL,
 representante UNIQUEIDENTIFIER NOT NULL,
 responsavel_contrato BIT NOT NULL DEFAULT 0
+
+FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (representante) REFERENCES Pinga.representante(idrepresentante)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'visita')
@@ -457,6 +466,9 @@ CREATE TABLE Pinga.parceiro_has_visita (
 idparceiro_has_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 parceiro UNIQUEIDENTIFIER NOT NULL,
 visita UNIQUEIDENTIFIER NOT NULL
+
+FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro),
+FOREIGN KEY (visita) REFERENCES Pinga.visita(idvisita),
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'feedback_visita')
