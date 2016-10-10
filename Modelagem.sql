@@ -38,6 +38,46 @@ modified DATETIME NULL,
 CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_pais')
+BEGIN
+    DROP TABLE Pinga.telefone_pais;
+END
+
+CREATE TABLE Pinga.telefone_pais (
+idtelefone_pais UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+ddi VARCHAR(4) NOT NULL,
+pais_sigla CHAR(3) NOT NULL,
+
+CONSTRAINT pk_telefone_pais PRIMARY KEY NONCLUSTERED (idtelefone_pais)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_regiao')
+BEGIN
+    DROP TABLE Pinga.telefone_regiao;
+END
+
+CREATE TABLE Pinga.telefone_regiao (
+idtelefone_regiao UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+ddd VARCHAR(4) NOT NULL,
+regiao_sigla CHAR(2) NOT NULL,
+telefone_pais_ddi UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_telefone_regiao PRIMARY KEY NONCLUSTERED (idtelefone_regiao),
+FOREIGN KEY (telefone_pais_ddi) REFERENCES Pinga.telefone_pais(idtelefone_pais)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_tipo')
+BEGIN
+    DROP TABLE Pinga.telefone_tipo;
+END
+
+CREATE TABLE Pinga.telefone_tipo (
+idtelefone_tipo UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+descricao VARCHAR(20) NOT NULL,
+
+CONSTRAINT pk_telefone_tipo PRIMARY KEY NONCLUSTERED (idtelefone_tipo)
+);
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
 BEGIN
     DROP TABLE Pinga.telefone;
@@ -45,13 +85,15 @@ END
 
 CREATE TABLE Pinga.telefone (
 idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-operadora VARCHAR(20) NOT NULL,
 telefone VARCHAR(11) NOT NULL,
-celular VARCHAR(11) NULL,
-extra VARCHAR(10) NULL,
-ramal VARCHAR(6) NULL,
+telefone_regiao UNIQUEIDENTIFIER NOT NULL,
+telefone_tipo UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
 
-CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone)
+CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone),
+FOREIGN KEY (telefone_regiao) REFERENCES Pinga.telefone_regiao(idtelefone_regiao),
+FOREIGN KEY (telefone_tipo) REFERENCES Pinga.telefone_pais(idtelefone_tipo)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_litragem')
@@ -84,7 +126,6 @@ modified DATETIME NULL,
 CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
 FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem)
 );
-
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
 BEGIN
