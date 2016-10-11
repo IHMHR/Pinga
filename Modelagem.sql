@@ -17,6 +17,122 @@ GO
 CREATE SCHEMA Pinga;
 GO
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_continente')
+BEGIN
+    DROP TABLE Pinga.tipo_continente;
+END
+
+CREATE TABLE Pinga.tipo_continente (
+idtipo_continente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+tipo_continente VARCHAR(20) NOT NULL,
+ativo BIT NOT NULL DEFAULT 0, -- Validar na aplicação que somente 1 possa ser verdadeiro
+
+CONSTRAINT pk_tipo_continente PRIMARY KEY NONCLUSTERED (idtipo_continente)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'continente')
+BEGIN
+    DROP TABLE Pinga.continente;
+END
+
+CREATE TABLE Pinga.continente (
+idcontinente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+continente VARCHAR(20) NOT NULL,
+tipo_continente UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_continente PRIMARY KEY NONCLUSTERED (idcontinente),
+FOREIGN KEY (tipo_continente) REFERENCES Pinga.tipo_continente(idtipo_continente)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'pais')
+BEGIN
+    DROP TABLE Pinga.pais;
+END
+
+CREATE TABLE Pinga.pais (
+idpais UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+pais VARCHAR(40) NOT NULL,
+idioma VARCHAR(40) NOT NULL,
+colacao VARCHAR(55) NULL,
+DDI VARCHAR(4) NOT NULL,
+sigla VARCHAR(3) NOT NULL,
+fuso_horario CHAR(9) NULL, -- UTC+02:00
+continente UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_pais PRIMARY KEY NONCLUSTERED (idpais),
+FOREIGN KEY (continente) REFERENCES Pinga.continente(idcontinente)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estado')
+BEGIN
+    DROP TABLE Pinga.estado;
+END
+
+CREATE TABLE Pinga.estado (
+idestado UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+estado VARCHAR(50) NOT NULL,
+uf CHAR(2) NOT NULL,
+pais UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_estado PRIMARY KEY NONCLUSTERED (idestado),
+FOREIGN KEY (pais) REFERENCES Pinga.pais(idpais)
+);
+
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cidade')
+BEGIN
+    DROP TABLE Pinga.cidade;
+END
+
+CREATE TABLE Pinga.cidade (
+idcidade UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cidade VARCHAR(50) NOT NULL,
+DDD CHAR(3) NOT NULL,
+capital BIT NOT NULL DEFAULT 0,
+estado UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_cidade PRIMARY KEY NONCLUSTERED (idcidade),
+FOREIGN KEY (estado) REFERENCES Pinga.estado(idestado)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'bairro')
+BEGIN
+    DROP TABLE Pinga.bairro;
+END
+
+CREATE TABLE Pinga.bairro (
+idbairro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+bairro VARCHAR(50) NOT NULL,
+cidade UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_bairro PRIMARY KEY NONCLUSTERED (idbairro),
+FOREIGN KEY (cidade) REFERENCES Pinga.cidade(idcidade)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_logradouro')
+BEGIN
+    DROP TABLE Pinga.tipo_logradouro;
+END
+
+CREATE TABLE Pinga.tipo_logradouro (
+idtipo_logradouro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+tipo_logradouro VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_tipo_logradouro PRIMARY KEY NONCLUSTERED (idtipo_logradouro)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_complemento')
+BEGIN
+    DROP TABLE Pinga.tipo_complemento;
+END
+
+CREATE TABLE Pinga.tipo_complemento (
+idtipo_complemento UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+tipo_complemento VARCHAR(35) NOT NULL,
+
+CONSTRAINT pk_tipo_complemento PRIMARY KEY NONCLUSTERED (idtipo_complemento)
+);
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'endereco')
 BEGIN
     DROP TABLE Pinga.endereco;
@@ -24,46 +140,21 @@ END
 
 CREATE TABLE Pinga.endereco (
 idendereco UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+tipo_logradouro UNIQUEIDENTIFIER NOT NULL,
 logradouro VARCHAR(100) NOT NULL,
 numero INT NULL,
+tipo_complemento UNIQUEIDENTIFIER NOT NULL,
 complemento VARCHAR(30) NULL,
+CEP CHAR(8) NOT NULL,
 ponto_referencia VARCHAR(45) NULL,
-bairro VARCHAR(100) NOT NULL,
-cidade VARCHAR(80) NOT NULL,
-uf CHAR(2) NOT NULL,
-pais VARCHAR(50) NULL,
+bairro UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
-CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco)
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_pais')
-BEGIN
-    DROP TABLE Pinga.telefone_pais;
-END
-
-CREATE TABLE Pinga.telefone_pais (
-idtelefone_pais UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-ddi VARCHAR(4) NOT NULL,
-pais_sigla CHAR(3) NOT NULL,
-
-CONSTRAINT pk_telefone_pais PRIMARY KEY NONCLUSTERED (idtelefone_pais)
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_regiao')
-BEGIN
-    DROP TABLE Pinga.telefone_regiao;
-END
-
-CREATE TABLE Pinga.telefone_regiao (
-idtelefone_regiao UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-ddd VARCHAR(4) NOT NULL,
-regiao_sigla CHAR(2) NOT NULL,
-telefone_pais_ddi UNIQUEIDENTIFIER NOT NULL,
-
-CONSTRAINT pk_telefone_regiao PRIMARY KEY NONCLUSTERED (idtelefone_regiao),
-FOREIGN KEY (telefone_pais_ddi) REFERENCES Pinga.telefone_pais(idtelefone_pais)
+CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco),
+FOREIGN KEY (tipo_logradouro) REFERENCES Pinga.tipo_logradouro(idtipo_logradouro),
+FOREIGN KEY (tipo_complemento) REFERENCES Pinga.tipo_complemento(idtipo_complemento),
+FOREIGN KEY (bairro) REFERENCES Pinga.bairro(idbairro)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_tipo')
@@ -86,14 +177,14 @@ END
 CREATE TABLE Pinga.telefone (
 idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 telefone VARCHAR(11) NOT NULL,
-telefone_regiao UNIQUEIDENTIFIER NOT NULL,
+cidade_ddd UNIQUEIDENTIFIER NOT NULL,
 telefone_tipo UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone),
-FOREIGN KEY (telefone_regiao) REFERENCES Pinga.telefone_regiao(idtelefone_regiao),
-FOREIGN KEY (telefone_tipo) REFERENCES Pinga.telefone_pais(idtelefone_tipo)
+FOREIGN KEY (cidade_ddd) REFERENCES Pinga.cidade(idcidade),
+FOREIGN KEY (telefone_tipo) REFERENCES Pinga.telefone_tipo(idtelefone_tipo)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_litragem')
@@ -127,6 +218,34 @@ CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
 FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'custo')
+BEGIN
+    DROP TABLE Pinga.custo;
+END
+
+CREATE TABLE Pinga.custo (
+idcusto UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+descricao VARCHAR(60) NOT NULL,
+valor DECIMAL(9,2) NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_custo PRIMARY KEY NONCLUSTERED (idcusto)
+);
+
+CREATE TABLE Pinga.parcelamento (
+idparcelamento UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+Entrada_Saida UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+data_pagamento DATE NOT NULL,
+data_vencimento DATE NOT NULL,
+parcelas INT NOT NULL,
+juros DECIMAL(8,5) NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
+);
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
 BEGIN
     DROP TABLE Pinga.entrada;
@@ -138,11 +257,15 @@ data DATE NOT NULL DEFAULT GETDATE(),
 litragem INT NOT NULL,
 tipo_litragem UNIQUEIDENTIFIER NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
+custo UNIQUEIDENTIFIER NOT NULL,
+parcelamento UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
-FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem)
+FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
+FOREIGN KEY (custo) REFERENCES Pinga.custo(idcusto),
+FOREIGN KEY (parcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'fornecedor')
@@ -159,21 +282,6 @@ telefone UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_fornecedor PRIMARY KEY NONCLUSTERED (idfornecedor),
 FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco),
 FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'custo')
-BEGIN
-    DROP TABLE Pinga.custo;
-END
-
-CREATE TABLE Pinga.custo (
-idcusto UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(60) NOT NULL,
-valor DECIMAL(9,2) NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
-
-CONSTRAINT pk_custo PRIMARY KEY NONCLUSTERED (idcusto)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'fase')
@@ -294,6 +402,7 @@ valor DECIMAL (9,2) NOT NULL,*/
 cliente UNIQUEIDENTIFIER NOT NULL,
 fase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento UNIQUEIDENTIFIER NOT NULL,
+parcelamento UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
@@ -302,7 +411,8 @@ FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro),
 /*FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),*/
 FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (fase) REFERENCES Pinga.fase(idfase),
-FOREIGN KEY (forma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+FOREIGN KEY (forma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento),
+FOREIGN KEY (parcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'itens_saida')
@@ -331,19 +441,6 @@ BEGIN
     DROP TABLE Pinga.parcelamento;
 END
 
-CREATE TABLE Pinga.parcelamento (
-idparcelamento UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-Entrada_Saida UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-data_pagamento DATE NOT NULL,
-data_vencimento DATE NOT NULL,
-parcelas INT NOT NULL,
-juros DECIMAL(8,5) NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
-
-CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
-);
-
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'students')
 BEGIN
     DROP TABLE students;
@@ -367,7 +464,7 @@ CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
 INSERT INTO adm.login (lgn,pwd,ativo) VALUES ('123', '123', 1);
 SELECT * FROM adm.login;
 
-UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE idlogin = 'C42F99A9-8CEF-4E64-A48D-4B3F94CBFE7B';
+UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE lgn = '123';
 
 exec sp_tables;
 
@@ -567,3 +664,4 @@ CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
 FOREIGN KEY (contrato) REFERENCES Pinga.contrato(idcontrato)
 );
 
+ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
