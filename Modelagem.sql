@@ -437,9 +437,6 @@ CREATE TABLE Pinga.saida (
 idsaida UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 data DATETIME2 NOT NULL DEFAULT GETDATE(),
 parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
-/*litragem INT NOT NULL,
-tipo_litragem UNIQUEIDENTIFIER NOT NULL,
-valor DECIMAL (9,2) NOT NULL,*/
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 fase_idfase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
@@ -449,7 +446,6 @@ modified DATETIME NULL,
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
-/*FOREIGN KEY (tipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),*/
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (fase_idfase) REFERENCES Pinga.fase(idfase),
 FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento),
@@ -475,6 +471,21 @@ CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
 FOREIGN KEY (saida_idsaida) REFERENCES Pinga.saida(idsaida),
 FOREIGN KEY (entrada_identrada) REFERENCES Pinga.produto(idproduto),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.saida(idsaida)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estoque')
+BEGIN
+    DROP TABLE Pinga.estoque;
+END
+
+CREATE TABLE Pinga.estoque (
+idestoque UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+produto_idproduto UNIQUEIDENTIFIER NOT NULL,
+quantidade INT NOT NULL,
+modified DATETIME NOT NULL DEFAULT GETDATE(),
+
+CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
+FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'students')
@@ -542,16 +553,6 @@ SELECT idproduto, p.descricao, litragem, tl.descricao, CASE WHEN p.vendendo = 1 
 FROM Pinga.produto p
 INNER JOIN Pinga.tipo_litragem tl ON p.tipo_litragem = tl.idtipo_litragem
 
-CREATE TABLE Pinga.estoque (
-idestoque UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-produto UNIQUEIDENTIFIER NOT NULL,
-quantidade INT NOT NULL,
-
-CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
-FOREIGN KEY (produto) REFERENCES Pinga.produto(idproduto)
-);
-GO
-
 /*CREATE TRIGGER Pinga.trg_estoque
 ON Pinga.entrada AFTER INSERT
 AS
@@ -572,12 +573,12 @@ END
 
 CREATE TABLE Pinga.cliente_has_parceiro (
 idcliente_has_parceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-cliente UNIQUEIDENTIFIER NOT NULL,
-parceiro UNIQUEIDENTIFIER NOT NULL,
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
+parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE()
 
-FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
-FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro)
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'representante')
@@ -588,14 +589,14 @@ END
 CREATE TABLE Pinga.representante (
 idrepresentante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(50) NOT NULL,
-telefone UNIQUEIDENTIFIER NOT NULL,
+telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
 email VARCHAR(50) NULL,
 departamento VARCHAR(30) NULL,
 cargo VARCHAR(25) NOT NULL,
 status BIT NOT NULL DEFAULT 0,
 
 CONSTRAINT pk_representante PRIMARY KEY NONCLUSTERED (idrepresentante),
-FOREIGN KEY (telefone) REFERENCES Pinga.telefone(idtelefone)
+FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente_has_representante')
@@ -605,12 +606,12 @@ END
 
 CREATE TABLE Pinga.cliente_has_representante (
 idcliente_has_representante UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-cliente UNIQUEIDENTIFIER NOT NULL,
-representante UNIQUEIDENTIFIER NOT NULL,
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
+representante_idrepresentante UNIQUEIDENTIFIER NOT NULL,
 responsavel_contrato BIT NOT NULL DEFAULT 0
 
-FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
-FOREIGN KEY (representante) REFERENCES Pinga.representante(idrepresentante)
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (representante_idrepresentante) REFERENCES Pinga.representante(idrepresentante)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'visita')
@@ -620,15 +621,15 @@ END
 
 CREATE TABLE Pinga.visita (
 idvisita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-cliente UNIQUEIDENTIFIER NOT NULL,
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 data DATETIME NOT NULL,
-endereco UNIQUEIDENTIFIER NOT NULL,
+endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
 comecou TIME NULL,
 terminou TIME NULL,
 
 CONSTRAINT pk_visita PRIMARY KEY NONCLUSTERED (idvisita),
-FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
-FOREIGN KEY (endereco) REFERENCES Pinga.endereco(idendereco)
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro_has_visita')
@@ -638,11 +639,11 @@ END
 
 CREATE TABLE Pinga.parceiro_has_visita (
 idparceiro_has_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-parceiro UNIQUEIDENTIFIER NOT NULL,
-visita UNIQUEIDENTIFIER NOT NULL
+parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
+visita_idvisita UNIQUEIDENTIFIER NOT NULL
 
-FOREIGN KEY (parceiro) REFERENCES Pinga.parceiro(idparceiro),
-FOREIGN KEY (visita) REFERENCES Pinga.visita(idvisita),
+FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
+FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita),
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'feedback_visita')
@@ -652,14 +653,14 @@ END
 
 CREATE TABLE Pinga.feedback_visita (
 idfeedback_visita UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-visita UNIQUEIDENTIFIER NOT NULL,
+visita_idvisita UNIQUEIDENTIFIER NOT NULL,
 comentario VARCHAR(100) NULL,
 nota TINYINT NOT NULL,
 venda_realizada BIT NOT NULL,
 visita_reagendada BIT NOT NULL, -- criar uma nova visita
 
 CONSTRAINT pk_feedback_visita PRIMARY KEY NONCLUSTERED (idfeedback_visita),
-FOREIGN KEY (visita) REFERENCES Pinga.visita(idvisita)
+FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato')
@@ -669,18 +670,18 @@ END
 
 CREATE TABLE Pinga.contrato (
 idcontrato UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-cliente UNIQUEIDENTIFIER NOT NULL,
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 data_entrada_vigor DATE NOT NULL,
 data_expiracao DATE NOT NULL,
 data_assinatura DATE NULL,
 prorrogavel BIT NOT NULL DEFAULT 0,
 status BIT NOT NULL DEFAULT 0,
-forma_pagamento UNIQUEIDENTIFIER NOT NULL,
+forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
 multa_quebra DECIMAL (9,2) NOT NULL,
 
 CONSTRAINT pk_contrato PRIMARY KEY NONCLUSTERED (idcontrato),
-FOREIGN KEY (cliente) REFERENCES Pinga.cliente(idcliente),
-FOREIGN KEY (forma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'testemunha')
@@ -694,13 +695,13 @@ primeiro_nome VARCHAR(20) NOT NULL,
 nome_meio VARCHAR(40) NULL,
 sobrenome VARCHAR(25) NOT NULL,
 cpf CHAR(11) NOT NULL,
-contrato UNIQUEIDENTIFIER NOT NULL,
+contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
-FOREIGN KEY (contrato) REFERENCES Pinga.contrato(idcontrato)
+FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato)
 );
 
-ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
+--ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
 
 
 INSERT INTO Pinga.tipo_continente (tipo_continente, ativo)
@@ -710,18 +711,43 @@ VALUES ('Quatro continentes', 0),
 
 SELECT * FROM Pinga.tipo_continente;
 
-INSERT INTO Pinga.continente (continente, tipo_continente)
-VALUES ('América', '1144C4DC-1C1F-4F76-9C4D-0FB8C82132B2'),('Eurafrásia', '1144C4DC-1C1F-4F76-9C4D-0FB8C82132B2'),('Oceania', '1144C4DC-1C1F-4F76-9C4D-0FB8C82132B2'),('Antártida', '1144C4DC-1C1F-4F76-9C4D-0FB8C82132B2'),
-('América', '11EADDC8-B8A1-491C-BC0F-FAD469A39529'),('Ásia', '11EADDC8-B8A1-491C-BC0F-FAD469A39529'),('Europa', '11EADDC8-B8A1-491C-BC0F-FAD469A39529'),('África', '11EADDC8-B8A1-491C-BC0F-FAD469A39529'),('Oceania', '11EADDC8-B8A1-491C-BC0F-FAD469A39529'),
-('América', 'B8FBEF47-A6B3-4D45-AE74-FCD4E274A931'),('Ásia', 'B8FBEF47-A6B3-4D45-AE74-FCD4E274A931'),('Europa', 'B8FBEF47-A6B3-4D45-AE74-FCD4E274A931'),('África', 'B8FBEF47-A6B3-4D45-AE74-FCD4E274A931'),('Oceania', 'B8FBEF47-A6B3-4D45-AE74-FCD4E274A931'),('Antártida', 'B8FBEF47-A6B3-4D45-AE74-FCD4E274A931'),
-('América do Norte', '17D4ACBD-7B97-44EF-8106-DD2DFA5A7365'),('América do Sul', '17D4ACBD-7B97-44EF-8106-DD2DFA5A7365'),('Eurafrásia', '17D4ACBD-7B97-44EF-8106-DD2DFA5A7365'),('África', '17D4ACBD-7B97-44EF-8106-DD2DFA5A7365'),('Oceania', '17D4ACBD-7B97-44EF-8106-DD2DFA5A7365'),('Antártida', '17D4ACBD-7B97-44EF-8106-DD2DFA5A7365'),
-('América do Norte', '50171430-D250-40AF-89E8-CBCE17F926EC'),('América do Sul', '50171430-D250-40AF-89E8-CBCE17F926EC'),('Ásia', '50171430-D250-40AF-89E8-CBCE17F926EC'),('Europa', '50171430-D250-40AF-89E8-CBCE17F926EC'),('Oceania', '50171430-D250-40AF-89E8-CBCE17F926EC'),('Antártida', '50171430-D250-40AF-89E8-CBCE17F926EC');
+INSERT INTO Pinga.continente (continente, tipo_continente_idtipo_continente)
+VALUES ('América', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),('Eurafrásia', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),('Oceania', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),('Antártida', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),
+('América', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('Ásia', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('Europa', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('África', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('Oceania', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),
+('América', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Ásia', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Europa', 'E07EB459-CD6E-445A-A144-4119059621B0'),('África', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Oceania', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Antártida', 'E07EB459-CD6E-445A-A144-4119059621B0'),
+('América do Norte', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('América do Sul', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('Eurafrásia', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('África', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('Oceania', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('Antártida', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),
+('América do Norte', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('América do Sul', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Ásia', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Europa', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Oceania', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Antártida', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C');
 
 SELECT * FROM Pinga.continente c, Pinga.tipo_continente tc
-WHERE tc.idtipo_continente = c.tipo_continente;
+WHERE tc.idtipo_continente = c.tipo_continente_idtipo_continente;
 
-INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente)
-VALUES ('Brasil', 'Português do Brasil', 'Latin1_General_CS_AS', '55', 'BRA', 'UTC-03:00', '5E3546D4-A72D-4432-B12D-E33957B32492');
+INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente_idcontinente)
+VALUES ('Brasil', 'Português do Brasil', 'Latin1_General_CS_AS', '55', 'BRA', 'UTC-03:00', '1D611A60-2721-420A-8B6C-33FB2A660024');
 
 SELECT * FROM Pinga.pais p
-INNER JOIN Pinga.continente c ON p.continente = c.idcontinente;
+INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente;
+GO
+
+CREATE PROCEDURE Pinga.usp_InserirNovoPais
+	@pais VARCHAR(40),
+	@idioma VARCHAR(40),
+	@colacao VARCHAR(55),
+	@DDI VARCHAR(4),
+	@sigla VARCHAR(3),
+	@fusoHorario CHAR(9),
+	@continenteIdcontinente UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente_idcontinente)
+			VALUES (@pais, @idioma, @colacao, @DDI, @sigla, @fusoHorario, @continenteIdcontinente);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha para salvar o país.', 1;
+	END CATCH
+END;
+
+EXEC Pinga.usp_InserirNovoPais 'Argentina', 'Espanhol', 'Latin1_General_CS_AS', '54', 'ARG', 'UTC-03:00', '1D611A60-2721-420A-8B6C-33FB2A660024';
+
