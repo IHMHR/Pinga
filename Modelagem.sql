@@ -745,9 +745,121 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
-		THROW 51921, 'Falha para salvar o país.', 1;
+		THROW 51921, 'Falha ao realizar o insert do país.', 1;
 	END CATCH
 END;
 
 EXEC Pinga.usp_InserirNovoPais 'Argentina', 'Espanhol', 'Latin1_General_CS_AS', '54', 'ARG', 'UTC-03:00', '1D611A60-2721-420A-8B6C-33FB2A660024';
+GO
 
+/* USP's INSERIR PRODUTO */
+CREATE PROCEDURE Pinga.usp_InserirNovoProduto
+	@descricao VARCHAR(30),
+	@tipoLitragemIdtipoLitragem UNIQUEIDENTIFIER,
+	@litragem INT,
+	@vendendo BIT,
+	@valorUnitario DECIMAL(9,2),
+	@produtoQuantidadeIdprodutoQuantidade UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do produto apenas.', 1;
+	END CATCH
+END;
+GO
+
+CREATE PROCEDURE Pinga.usp_InserirNovoProdutoComTipoLitragem
+	@descricaoProduto VARCHAR(30),
+	@descricaoTipoLitragem VARCHAR(35),
+	@litragem INT,
+	@vendendo BIT,
+	@valorUnitario DECIMAL(9,2),
+	@produtoQuantidadeIdprodutoQuantidade UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.tipo_litragem (descricao)
+			VALUES (@descricaoTipoLitragem);
+		COMMIT TRANSACTION;   
+		DECLARE @idtipoLitagrem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE descricao = @descricaoTipoLitragem);
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			VALUES (@descricaoProduto, @idtipoLitagrem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do produto com tipo litragem.', 1;
+	END CATCH
+END;
+GO
+
+CREATE PROCEDURE Pinga.usp_InserirNovoProdutoComQuantidadeProduto
+	@descricao VARCHAR(30),
+	@tipoLitragemIdtipoLitragem UNIQUEIDENTIFIER,
+	@litragem INT,
+	@vendendo BIT,
+	@valorUnitario DECIMAL(9,2),
+	@quantidadeMinima INT,
+	@quantidadeMaxima INT,
+	@quantidadeRecomendaEstoque INT,
+	@quantidadeSolicitarCompra INT
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
+			VALUES (@quantidadeMinima, @quantidadeMaxima, @quantidadeRecomendaEstoque, @quantidadeSolicitarCompra, GETDATE());
+		COMMIT TRANSACTION;   
+		DECLARE @idprodutoQuantidade UNIQUEIDENTIFIER = (SELECT TOP 1 idproduto_quantidade FROM Pinga.produto_quantidade WHERE quantidade_minima = @quantidadeMinima AND quantidade_maxima = @quantidadeMaxima AND quantidade_recomenda_estoque = @quantidadeRecomendaEstoque AND quantidade_solicitar_compra = @quantidadeSolicitarCompra ORDER BY created DESC);
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @idprodutoQuantidade, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do produto com quantidade produto.', 1;
+	END CATCH
+END;
+GO
+
+CREATE PROCEDURE Pinga.usp_InserirNovoProdutoCompleto
+	@descricao VARCHAR(30),
+	@descricaoTipoLitragem VARCHAR(35),
+	@litragem INT,
+	@vendendo BIT,
+	@valorUnitario DECIMAL(9,2),
+	@quantidadeMinima INT,
+	@quantidadeMaxima INT,
+	@quantidadeRecomendaEstoque INT,
+	@quantidadeSolicitarCompra INT
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.tipo_litragem (descricao)
+			VALUES (@descricaoTipoLitragem);
+		COMMIT TRANSACTION;
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
+			VALUES (@quantidadeMinima, @quantidadeMaxima, @quantidadeRecomendaEstoque, @quantidadeSolicitarCompra, GETDATE());
+		COMMIT TRANSACTION;
+		DECLARE @idtipoLitagrem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE descricao = @descricaoTipoLitragem);
+		DECLARE @idprodutoQuantidade UNIQUEIDENTIFIER = (SELECT TOP 1 idproduto_quantidade FROM Pinga.produto_quantidade WHERE quantidade_minima = @quantidadeMinima AND quantidade_maxima = @quantidadeMaxima AND quantidade_recomenda_estoque = @quantidadeRecomendaEstoque AND quantidade_solicitar_compra = @quantidadeSolicitarCompra ORDER BY created DESC); 
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			VALUES (@descricao, @idtipoLitagrem, @litragem, @vendendo, @valorUnitario, @idprodutoQuantidade, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do produto completo.', 1;
+	END CATCH
+END;
+GO
+/* USP's INSERIR PRODUTO */
