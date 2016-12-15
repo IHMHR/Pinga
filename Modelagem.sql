@@ -173,6 +173,20 @@ descricao VARCHAR(20) NOT NULL,
 CONSTRAINT pk_idtipo_telefone PRIMARY KEY NONCLUSTERED (idtipo_telefone)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'operadora')
+BEGIN
+    DROP TABLE operadora;
+END
+
+CREATE TABLE Pinga.operadora (
+idoperadora UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+nome VARCHAR(25) NOT NULL,
+razao_social VARCHAR(40) NOT NULL,
+status BIT NOT NULL DEFAULT 0,
+
+CONSTRAINT pk_operadora PRIMARY KEY NONCLUSTERED (idoperadora)
+);
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
 BEGIN
     DROP TABLE Pinga.telefone;
@@ -183,12 +197,14 @@ idtelefone UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 telefone VARCHAR(11) NOT NULL,
 cidade_ddd UNIQUEIDENTIFIER NOT NULL,
 tipo_telefone_idtipo_telefone UNIQUEIDENTIFIER NOT NULL,
+operadora_idoperadora UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone),
 FOREIGN KEY (cidade_ddd) REFERENCES Pinga.cidade(idcidade),
-FOREIGN KEY (tipo_telefone_idtipo_telefone) REFERENCES Pinga.tipo_telefone(idtipo_telefone)
+FOREIGN KEY (tipo_telefone_idtipo_telefone) REFERENCES Pinga.tipo_telefone(idtipo_telefone),
+FOREIGN KEY (operadora_idoperadora) REFERENCES Pinga.operadora(idoperadora)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_litragem')
@@ -205,7 +221,7 @@ CONSTRAINT pk_tipo_litragem PRIMARY KEY NONCLUSTERED (idtipo_litragem)
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_custo')
 BEGIN
-	DROP TABLE Pinga.tipo_custo;
+    DROP TABLE Pinga.tipo_custo;
 END
 
 CREATE TABLE Pinga.tipo_custo (
@@ -323,20 +339,39 @@ END
 CREATE TABLE Pinga.cliente (
 idcliente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 cpf_cnpj VARCHAR(14) NOT NULL,
-razao_social VARCHAR(60) NOT NULL,
-nome_fantasia VARCHAR(60) NOT NULL,
+nome_razao_social VARCHAR(60) NOT NULL,
+apelido_nome_fantasia VARCHAR(60) NOT NULL,
 inscricao_municipal CHAR(14) NULL,
-inscricao_estadual CHAR(14) NULL,
-data_fundacao DATE NOT NULL,
+identidade_inscricao_estadual CHAR(14) NULL,
+data_nascimento_fundacao DATE NOT NULL,
+sexo CHAR(1) NULL,
 endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
-visitado BIT NOT NULL DEFAULT 0,
 telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_cliente PRIMARY KEY NONCLUSTERED (idcliente),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
-FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone)
+FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone),
+CONSTRAINT chk_sexo CHECK (sexo IN ('M', 'F'))
+);
+
+IF EXISTS(SELECT 1 FROM sys.table WHERE name = 'informacoes_cliente')
+BEGIN
+    DROP TABLE Pinga.informacoes_cliente;
+END
+
+CREATE TABLE informacoes_cliente (
+idinformacoes_cliente UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
+tipo_cliente CHAR(2) NOT NULL,
+visitado BIT NOT NULL DEFAULT 0,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_informacoes_cliente PRIMARY KEY NONCLUSTERED (idinformacoes_cliente),
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
+CONSTRAINT chk_tipo_cliente CHECK (tipo_cliente IN ('PF', 'PJ'))
 );
 
 /*IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'qnt_minima')
@@ -418,7 +453,7 @@ CREATE TABLE Pinga.parceiro (
 idparceiro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 nome VARCHAR(60) NOT NULL,
 endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
-ativo BIT NOT NULL DEFAULT 0,
+status BIT NOT NULL DEFAULT 0,
 telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
@@ -501,14 +536,14 @@ CREATE TABLE adm.login(
 idlogin UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 lgn VARCHAR(30) NOT NULL,
 pwd VARCHAR(65) NOT NULL,
-ativo BIT NOT NULL DEFAULT 0,
+status BIT NOT NULL DEFAULT 0,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
 )
 
-INSERT INTO adm.login (lgn,pwd,ativo) VALUES ('123', '123', 1);
+INSERT INTO adm.login (lgn,pwd,status) VALUES ('123', '123', 1);
 SELECT * FROM adm.login;
 
 UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE lgn = '123';
@@ -536,7 +571,7 @@ INSERT INTO pingaDB.Pinga.tipo_litragem VALUES (NEWID(), 'Meiotinha'),(NEWID(), 
 
 SELECT * FROM pingaDB.Pinga.saida
 
-SELECT p.idparceiro, p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
+SELECT p.idparceiro, p.nome, CASE WHEN p.status = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
 
 SELECT data, parceiro, cliente, fase, forma_pagamento
 FROM pingaDB.Pinga.saida
