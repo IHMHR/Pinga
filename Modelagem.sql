@@ -898,3 +898,57 @@ BEGIN
 END;
 GO
 /* USP's INSERIR PRODUTO */
+
+/* USP's INSERIR CLIENTE */
+CREATE PROCEDURE Pinga.usp_InserirNovoCliente
+        @cpfCnpj VARCHAR(14),
+	@nomeRazaoSocial VARCHAR(60,
+	@apelidoNomeFantasia VARCHAR(60),
+	@inscricaoMunicipal CHAR(14),
+	@identidadeInscricaoestadual CHAR(14),
+	@dataNascimentoFundacao DATE,
+	@sexo CHAR(1),
+	@enderecoIdendereco UNIQUEIDENTIFIER,
+	@telefoneIdtelefone UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.cliente (cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, endereco_idendereco, telefone_idtelefone, created)
+			VALUES (@cpfCnpj, @nomeRazaoSocial, @apelidoNomeFantasia, @incricaoMunicipal, @identidadeInscricaoEstadual, @dataNascimentoFundacao, @sexo, @enderecoIdendereco, @telefoneIdtelefone, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do cliente apenas.', 1;
+	END CATCH
+END;
+GO
+				 
+/*CREATE PROCEDURE Pinga.usp_InserirNovoClienteComEndereco
+        @cpfCnpj VARCHAR(14),
+	@nomeRazaoSocial VARCHAR(60,
+	@apelidoNomeFantasia VARCHAR(60),
+	@inscricaoMunicipal CHAR(14),
+	@identidadeInscricaoestadual CHAR(14),
+	@dataNascimentoFundacao DATE,
+	@sexo CHAR(1),
+	
+	--@enderecoIdendereco UNIQUEIDENTIFIER,
+	@logradouro....
+	
+	@telefoneIdtelefone UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.
+				 /* CHAMAR A USP INSERIR ENDERECO ?? */
+/* USP's INSERIR CLIENTE */
+
+
+
+
+
+
+
+
