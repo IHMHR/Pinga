@@ -356,7 +356,7 @@ FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone),
 CONSTRAINT chk_sexo CHECK (sexo IN ('M', 'F'))
 );
 
-IF EXISTS(SELECT 1 FROM sys.table WHERE name = 'informacoes_cliente')
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'informacoes_cliente')
 BEGIN
     DROP TABLE Pinga.informacoes_cliente;
 END
@@ -901,8 +901,8 @@ GO
 
 /* USP's INSERIR CLIENTE */
 CREATE PROCEDURE Pinga.usp_InserirNovoCliente
-        @cpfCnpj VARCHAR(14),
-	@nomeRazaoSocial VARCHAR(60,
+    @cpfCnpj VARCHAR(14),
+	@nomeRazaoSocial VARCHAR(60),
 	@apelidoNomeFantasia VARCHAR(60),
 	@inscricaoMunicipal CHAR(14),
 	@identidadeInscricaoestadual CHAR(14),
@@ -915,7 +915,7 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.cliente (cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, endereco_idendereco, telefone_idtelefone, created)
-			VALUES (@cpfCnpj, @nomeRazaoSocial, @apelidoNomeFantasia, @incricaoMunicipal, @identidadeInscricaoEstadual, @dataNascimentoFundacao, @sexo, @enderecoIdendereco, @telefoneIdtelefone, GETDATE());
+			VALUES (@cpfCnpj, @nomeRazaoSocial, @apelidoNomeFantasia, @inscricaoMunicipal, @identidadeInscricaoEstadual, @dataNascimentoFundacao, @sexo, @enderecoIdendereco, @telefoneIdtelefone, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
@@ -923,10 +923,12 @@ BEGIN
 	END CATCH
 END;
 GO
-				 
-/*CREATE PROCEDURE Pinga.usp_InserirNovoClienteComEndereco
-        @cpfCnpj VARCHAR(14),
-	@nomeRazaoSocial VARCHAR(60,
+
+
+/*
+CREATE PROCEDURE Pinga.usp_InserirNovoClienteComEndereco
+    @cpfCnpj VARCHAR(14),
+	@nomeRazaoSocial VARCHAR(60),
 	@apelidoNomeFantasia VARCHAR(60),
 	@inscricaoMunicipal CHAR(14),
 	@identidadeInscricaoestadual CHAR(14),
@@ -941,14 +943,62 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.
+			INSERT INTO Pinga.*/
 				 /* CHAMAR A USP INSERIR ENDERECO ?? */
 /* USP's INSERIR CLIENTE */
 
+/* USP's INSERIR ENDERECO */
+CREATE PROCEDURE Pinga.usp_InserirNovoEndereco
+	@tipoLogradouroIdtipoLogradouro UNIQUEIDENTIFIER,
+	@logradouro VARCHAR(100),
+	@numero INT,
+	@tipoComplementoIdtipoComplemento UNIQUEIDENTIFIER,
+	@complemento VARCHAR(30),
+	@CEP CHAR(8),
+	@pontoReferencia VARCHAR(45),
+	@bairroIdbairro UNIQUEIDENTIFIER
+	AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
+			VALUES (@tipoLogradouroIdtipoLogradouro, @logradouro, @numero, @tipoComplementoIdtipoComplemento, @complemento, @CEP, @pontoReferencia, @bairroIdbairro, GETDATE());
+			COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do endereco apenas.', 1;
+	END CATCH
+END;
+GO
 
+CREATE PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoLogradouro
+	@tipoLogradouro VARCHAR(35),
+	@logradouro VARCHAR(100),
+	@numero INT,
+	@tipoComplementoIdtipoComplemento UNIQUEIDENTIFIER,
+	@complemento VARCHAR(30),
+	@CEP CHAR(8),
+	@pontoReferencia VARCHAR(45),
+	@bairroIdbairro UNIQUEIDENTIFIER
+	AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.tipo_endereco (tipo_logradouro)
+			VALUES (@tipoLogradouro);
+		COMMIT TRANSACTION;
+		DECLARE @idTipoLogradouro UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_endereco FROM Pinga.tipo_endereco WHERE tipo_logradouro = @tipoLogradouro);
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
+			VALUES (@idTipoLogradouro, @logradouro, @numero, @tipoComplementoIdtipoComplemento, @complemento, @CEP, @pontoReferencia, @bairroIdbairro, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do endereco com tipo logradouro.', 1;
+	END CATCH
+END;
+GO
 
-
-
-
+/* USP's INSERIR ENDERECO */
 
 
