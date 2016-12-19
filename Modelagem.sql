@@ -152,13 +152,15 @@ complemento VARCHAR(30) NULL,
 CEP CHAR(8) NOT NULL,
 ponto_referencia VARCHAR(45) NULL,
 bairro_idbairro UNIQUEIDENTIFIER NOT NULL,
+cidade_idcidade UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco),
 FOREIGN KEY (tipo_logradouro_idtipo_logradouro) REFERENCES Pinga.tipo_logradouro(idtipo_logradouro),
 FOREIGN KEY (tipo_complemento_idtipo_complemento) REFERENCES Pinga.tipo_complemento(idtipo_complemento),
-FOREIGN KEY (bairro_idbairro) REFERENCES Pinga.bairro(idbairro)
+FOREIGN KEY (bairro_idbairro) REFERENCES Pinga.bairro(idbairro),
+FOREIGN KEY (cidade_idcidade) REFERENCES Pinga.cidade(idcidade)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_tipo')
@@ -999,6 +1001,33 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoComplemento
+	@tipoLogradouroIdtipoLogradouro UNIQUEIDENTIFIER,
+	@logradouro VARCHAR(100),
+	@numero INT,
+	@tipoComplemento VARCHAR(35),
+	@complemento VARCHAR(30),
+	@CEP CHAR(8),
+	@pontoReferencia VARCHAR(45),
+	@bairroIdbairro UNIQUEIDENTIFIER
+	AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.tipo_complemento (tipo_complemento)
+			VALUES (@tipoComplemento);
+		COMMIT TRANSACTION;
+		DECLARE @idTipoComplemento UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_complemento FROM Pinga.tipo_complemento WHERE tipo_complemento = @tipoComplemento);
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
+			VALUES (@tipoLogradouroIdtipoLogradouro, @logradouro, @numero, @tipoComplemento, @complemento, @CEP, @pontoReferencia, @bairroIdbairro, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do endereco com tipo complemento.', 1;
+	END CATCH
+END;
+GO
 /* USP's INSERIR ENDERECO */
 
 
