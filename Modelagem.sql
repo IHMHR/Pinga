@@ -333,6 +333,48 @@ modified DATETIME NULL,
 CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_localidade')
+BEGIN
+    DROP TABLE Pinga.email_localidade;
+END
+
+CREATE TABLE Pinga.email_localidade (
+idemail_localidade UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+email_localidade VARCHAR(10) NOT NULL,
+status BIT NOT NULL DEFAULT 0,
+	
+CONSTRAINT pk_email_localidade PRIMARY KEY NONCLUSTERED (idemail_localidade)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_dominio')
+BEGIN
+    DROP TABLE Pinga.email_dominio;
+END
+
+CREATE TABLE Pinga.email_dominio (
+idemail_dominio UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+email_dominio VARCHAR(20) NOT NULL,
+status BIT NOT NULL DEFAULT 0,
+	
+CONSTRAINT pk_email_dominio PRIMARY KEY NONCLUSTERED (idemail_dominio)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email')
+BEGIN
+    DROP TABLE Pinga.email;
+END
+
+CREATE TABLE Pinga.email (
+idemail UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+email VARCHAR(35) NOT NULL,
+email_dominio_idemail_dominio UNIQUEIDENTIFIER NOT NULL,
+email_localidade_idemail_localidade UNIQUEIDENTIFIER NOT NULL,
+	
+CONSTRAINT pk_email PRIMARY KEY NONCLUSTERED (idemail)
+FOREIGN KEY (email_dominio_idemail_dominio) REFERENCES Pinga.email_dominio(idemail_dominio),
+FOREIGN KEY (email_localidade_idemail_localidade) REFERENCES Pinga.email_localidade(idemail_localidade)
+);
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente')
 BEGIN
     DROP TABLE Pinga.cliente;
@@ -347,6 +389,7 @@ inscricao_municipal CHAR(14) NULL,
 identidade_inscricao_estadual CHAR(14) NULL,
 data_nascimento_fundacao DATE NOT NULL,
 sexo CHAR(1) NULL,
+email_idemail UNIQUEIDENTIFIER NOT NULL,
 endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
 telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
@@ -355,6 +398,7 @@ modified DATETIME NULL,
 CONSTRAINT pk_cliente PRIMARY KEY NONCLUSTERED (idcliente),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
 FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone),
+FOREIGN KEY (email_idemail) REFERENCES Pinga.email(idemail),
 CONSTRAINT chk_sexo CHECK (sexo IN ('M', 'F'))
 );
 
@@ -950,7 +994,47 @@ BEGIN
 /* USP's INSERIR CLIENTE */
 
 /* USP's INSERIR ENDERECO */
-CREATE PROCEDURE Pinga.usp_InserirNovoEndereco
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
+	@pais VARCHAR(40),
+	@idioma VARCHAR(40),
+	@colacao VARCHAR(55),
+	@DDI VARCHAR(4),
+	@sigla VARCHAR(3),
+	@fuso_horario CHAR(9),
+	@continenteIdcontinente UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente_idcontinente)
+			VALUES (@pais, @idioma, @colacao, @DDI, @sigla, @fuso_horario, @continenteIdcontinente);
+			COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do pais.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEstado
+	@estado VARCHAR(50),
+	@uf CHAR(2),
+	@paisIdpais UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.estado (estado, uf, pais_idpais)
+			VALUES (@estado, @uf, @paisIdpais);
+			COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		THROW 51921, 'Falha ao realizar o insert do pais.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEndereco
 	@tipoLogradouroIdtipoLogradouro UNIQUEIDENTIFIER,
 	@logradouro VARCHAR(100),
 	@numero INT,
@@ -1029,5 +1113,4 @@ BEGIN
 END;
 GO
 /* USP's INSERIR ENDERECO */
-
 
