@@ -1084,6 +1084,40 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoLogradouro
+	@tipoLogradouro VARCHAR(35)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.tipo_logradouro (tipo_logradouro)
+			VALUES (@tipoLogradouro);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW 51921, 'Falha ao realizar o insert do tipo logradouro.', 1;
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoComplemento
+	@tipoComplemento VARCHAR(35)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.tipo_logradouro (tipo_complemento)
+			VALUES (@tipoComplemento);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW 51921, 'Falha ao realizar o insert do tipo complemento.', 1;
+	END CATCH
+END
+GO
+
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEndereco
 	@tipoLogradouroIdtipoLogradouro UNIQUEIDENTIFIER,
 	@logradouro VARCHAR(100),
@@ -1121,8 +1155,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoLogradouro
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.tipo_endereco (tipo_logradouro)
-			VALUES (@tipoLogradouro);
+			EXECUTE Pinga.usp_InserirNovoTipoLogradouro @tipoLogradouro;
 		COMMIT TRANSACTION;
 		DECLARE @idTipoLogradouro UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_endereco FROM Pinga.tipo_endereco WHERE tipo_logradouro = @tipoLogradouro);
 		BEGIN TRANSACTION
@@ -1150,13 +1183,42 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoComplemento
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.tipo_complemento (tipo_complemento)
-			VALUES (@tipoComplemento);
+			EXECUTE Pinga.usp_InserirNovoTipoLogradouro @tipoComplemento;
 		COMMIT TRANSACTION;
 		DECLARE @idTipoComplemento UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_complemento FROM Pinga.tipo_complemento WHERE tipo_complemento = @tipoComplemento);
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
 			VALUES (@tipoLogradouroIdtipoLogradouro, @logradouro, @numero, @tipoComplemento, @complemento, @CEP, @pontoReferencia, @bairroIdbairro, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW 51921, 'Falha ao realizar o insert do endereco com tipo complemento.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoComplemento
+	@tipoLogradouroIdtipoLogradouro UNIQUEIDENTIFIER,
+	@logradouro VARCHAR(100),
+	@numero INT,
+	@tipoComplementoIdtipoComplemento UNIQUEIDENTIFIER,
+	@complemento VARCHAR(30),
+	@CEP CHAR(8),
+	@pontoReferencia VARCHAR(45),
+	@bairro VARCHAR(50),
+	@regiao VARCHAR(15),
+	@cidadeIdcidade UNIQUEIDENTIFIER
+	AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			EXECUTE Pinga.usp_InserirNovoBairro @bairro, @regiao, @cidadeIdcidade;
+		COMMIT TRANSACTION;
+		DECLARE @Idbairro UNIQUEIDENTIFIER = (SELECT TOP 1 1 FROM Pinga.bairro WHERE bairro = @bairro AND regiao = @regiao AND cidade_idcidade = @cidadeIdcidade);
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
+			VALUES (@tipoLogradouroIdtipoLogradouro, @logradouro, @numero, @tipoComplementoIdtipoComplemento, @complemento, @CEP, @pontoReferencia, @Idbairro, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
