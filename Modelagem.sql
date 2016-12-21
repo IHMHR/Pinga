@@ -76,6 +76,7 @@ CREATE TABLE Pinga.estado (
 idestado UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 estado VARCHAR(50) NOT NULL,
 uf CHAR(2) NOT NULL,
+capital BIT NOT NULL DEFAULT 0,
 pais_idpais UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_estado PRIMARY KEY NONCLUSTERED (idestado),
@@ -107,6 +108,7 @@ END
 CREATE TABLE Pinga.bairro (
 idbairro UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 bairro VARCHAR(50) NOT NULL,
+regiao VARCHAR(15) NULL,
 cidade_idcidade UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_bairro PRIMARY KEY NONCLUSTERED (idbairro),
@@ -826,6 +828,7 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do país.', 1;
 	END CATCH
 END;
@@ -850,6 +853,7 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do produto apenas.', 1;
 	END CATCH
 END;
@@ -876,6 +880,7 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do produto com tipo litragem.', 1;
 	END CATCH
 END;
@@ -905,6 +910,7 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do produto com quantidade produto.', 1;
 	END CATCH
 END;
@@ -939,6 +945,7 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do produto completo.', 1;
 	END CATCH
 END;
@@ -965,6 +972,7 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do cliente apenas.', 1;
 	END CATCH
 END;
@@ -1011,6 +1019,7 @@ BEGIN
 			COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do pais.', 1;
 	END CATCH
 END;
@@ -1019,19 +1028,60 @@ GO
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEstado
 	@estado VARCHAR(50),
 	@uf CHAR(2),
+	@capital BIT,
 	@paisIdpais UNIQUEIDENTIFIER
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.estado (estado, uf, pais_idpais)
-			VALUES (@estado, @uf, @paisIdpais);
+			INSERT INTO Pinga.estado (estado, uf, capital, pais_idpais)
+			VALUES (@estado, @uf, @capital, @paisIdpais);
 			COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do pais.', 1;
 	END CATCH
 END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaCidade
+	@cidade VARCHAR(50),
+	@DDD CHAR(3),
+	@capital BIT,
+	@estadoIdestado UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.cidade (cidade, DDD, capital, estado_idestado)
+			VALUES (@cidade, @DDD, @capital, @estadoIdestado);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW 51921, 'Falha ao realizar o insert da cidade.', 1;
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoBairro
+	@bairro VARCHAR(50),
+	@regiao VARCHAR(15),
+	@cidadeIdcidade UNIQUEIDENTIFIER
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.bairro (bairro, regiao, cidade_idcidade)
+			VALUES (@bairro, @regiao, @cidadeIdcidade);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW 51921, 'Falha ao realizar o insert do bairro.', 1;
+	END CATCH
+END
 GO
 
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEndereco
@@ -1052,6 +1102,7 @@ BEGIN
 			COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do endereco apenas.', 1;
 	END CATCH
 END;
@@ -1079,7 +1130,8 @@ BEGIN
 			VALUES (@idTipoLogradouro, @logradouro, @numero, @tipoComplementoIdtipoComplemento, @complemento, @CEP, @pontoReferencia, @bairroIdbairro, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
-	BEGIN CATCH
+	BEGIN 
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do endereco com tipo logradouro.', 1;
 	END CATCH
 END;
@@ -1108,9 +1160,9 @@ BEGIN
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
+		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do endereco com tipo complemento.', 1;
 	END CATCH
 END;
 GO
 /* USP's INSERIR ENDERECO */
-
