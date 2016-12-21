@@ -752,6 +752,64 @@ CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
 FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato)
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_periodicidade_entrega')
+BEGIN
+    DROP TABLE Pinga.tipo_periodicidade_entrega;
+END
+
+CREATE TABLE Pinga.tipo_periodicidade_entrega (
+idtipo_periodicidade_entrega UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+descricao VARCHAR(15) NOT NULL,
+status BIT NOT NULL DEFAULT 0,
+	
+CONSTRAINT pk_tipo_periodicidade_entrega PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_periodicidade_entrega_dia')
+BEGIN
+    DROP TABLE Pinga.tipo_periodicidade_entrega_dia;
+END
+
+CREATE TABLE Pinga.tipo_periodicidade_entrega_dia (
+idtipo_periodicidade_entrega_dia UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+dias VARCHAR(85) NOT NULL,
+dias_uteis BIT NOT NULL DEFAULT 0, -- somente será 1 se todos os dias são uteis
+dia_feriado BIT NOT NULL DEFAULT 0, -- avaliar se é para feriados que são no dia certo ou que são em dias variaveis
+
+CONSTRAINT pk_tipo_periodicidade_entrega_dia PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega_dia)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'periodicidade_entrega')
+BEGIN
+    DROP TABLE Pinga.periodicidade_entrega;
+END
+
+CREATE TABLE Pinga.periodicidade_entrega (
+idperiodicidade_entrega UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+tipo_periodicidade_entrega_idtipo_periodicidade_entrega UNIQUEIDENTIFIER NOT NULL,
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
+status BIT NOT NULL DEFAULT 0,
+
+CONSTRAINT pk_periodicidade_entrega PRIMARY KEY NONCLUSTERED (idperiodicidade_entrega),
+FOREIGN KEY (tipo_periodicidade_entrega_idtipo_periodicidade_entrega) REFERENCES Pinga.tipo_periodicidade_entrega(idtipo_periodicidade_entrega),
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'periodicidade_has_produto')
+BEGIN
+    DROP TABLE Pinga.periodicidade_has_produto;
+END
+
+CREATE TABLE Pinga.periodicidade_has_produto (
+idperiodicidade_has_produto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+periodicidade_entrega_idperiodicidade_entrega UNIQUEIDENTIFIER NOT NULL,
+produto_idproduto UNIQUEIDENTIFIER NOT NULL,
+	
+CONSTRAINT pk_periodicidade_has_produto PRIMARY KEY NONCLUSTERED (idperiodicidade_has_produto),
+FOREIGN KEY (periodicidade_entrega_idperiodicidade_entrega) REFERENCES Pinga.periodicidade_entrega(idperiodicidade_entrega),
+FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto),
+);
+
 --ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
 
 
