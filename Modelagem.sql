@@ -1254,3 +1254,18 @@ BEGIN
 END;
 GO
 /* USP's INSERIR ENDERECO */
+
+/* TRIGGER's PARA VALIDAÇÃO */
+CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
+ON Pinga.tipo_continente WITH ENCRYPTION
+AFTER INSERT, UPDATE
+AS
+	-- Validar para que somente 1 possa ser verdadeiro
+	@qntValidos = (SELECT COUNT(1) FROM tipo_continente WHERE ativo = 1);
+	IF @qntValidos > 1
+	BEGIN
+		ROLLBACK;
+		THROW 61921, 'Mais de um tipo continente ativo, somente 1 pode ser ativo.', 1;
+	END
+GO;
+/* TRIGGER's PARA VALIDAÇÃO */
