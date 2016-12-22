@@ -1,13 +1,18 @@
 USE master;
 GO
 
+sp_configure ‘contained database authentication’, 1;
+RECONFIGURE;
+GO
+
 IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'pingaDB')
 BEGIN
-	ALTER DATABASE pingaDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    ALTER DATABASE pingaDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
     DROP DATABASE pingaDB;
 END
 
-CREATE DATABASE pingaDB ON (NAME = 'pingaDB', FILENAME = 'C:\Users\Martinelli\Documents\GitHub\Pinga\DB\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
+CREATE DATABASE pingaDB CONTAINMENT = PARTIAL
+ON (NAME = 'pingaDB', FILENAME = 'C:\Users\Martinelli\Documents\GitHub\Pinga\DB\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
 LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\Martinelli\Documents\GitHub\Pinga\DB\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
 COLLATE Latin1_General_CS_AS;
 GO
