@@ -1,7 +1,7 @@
 USE master;
 GO
 
-sp_configure ‘contained database authentication’, 1;
+sp_configure 'contained database authentication', 1;
 RECONFIGURE;
 GO
 
@@ -377,7 +377,7 @@ email VARCHAR(35) NOT NULL,
 email_dominio_idemail_dominio UNIQUEIDENTIFIER NOT NULL,
 email_localidade_idemail_localidade UNIQUEIDENTIFIER NOT NULL,
 	
-CONSTRAINT pk_email PRIMARY KEY NONCLUSTERED (idemail)
+CONSTRAINT pk_email PRIMARY KEY NONCLUSTERED (idemail),
 FOREIGN KEY (email_dominio_idemail_dominio) REFERENCES Pinga.email_dominio(idemail_dominio),
 FOREIGN KEY (email_localidade_idemail_localidade) REFERENCES Pinga.email_localidade(idemail_localidade)
 );
@@ -414,7 +414,7 @@ BEGIN
     DROP TABLE Pinga.informacoes_cliente;
 END
 
-CREATE TABLE informacoes_cliente (
+CREATE TABLE Pinga.informacoes_cliente (
 idinformacoes_cliente UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 tipo_cliente CHAR(2) NOT NULL,
@@ -1138,7 +1138,7 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.tipo_logradouro (tipo_complemento)
+			INSERT INTO Pinga.tipo_complemento (tipo_complemento)
 			VALUES (@tipoComplemento);
 		COMMIT TRANSACTION;
 	END TRY
@@ -1173,7 +1173,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoLogradouro
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoLogradouro
 	@tipoLogradouro VARCHAR(35),
 	@logradouro VARCHAR(100),
 	@numero INT,
@@ -1194,7 +1194,7 @@ BEGIN
 			VALUES (@idTipoLogradouro, @logradouro, @numero, @tipoComplementoIdtipoComplemento, @complemento, @CEP, @pontoReferencia, @bairroIdbairro, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
-	BEGIN 
+	BEGIN CATCH
 		ROLLBACK;
 		THROW 51921, 'Falha ao realizar o insert do endereco com tipo logradouro.', 1;
 	END CATCH
@@ -1246,7 +1246,7 @@ BEGIN
 		BEGIN TRANSACTION
 			EXECUTE Pinga.usp_InserirNovoBairro @bairro, @regiao, @cidadeIdcidade;
 		COMMIT TRANSACTION;
-		DECLARE @Idbairro UNIQUEIDENTIFIER = (SELECT TOP 1 1 FROM Pinga.bairro WHERE bairro = @bairro AND regiao = @regiao AND cidade_idcidade = @cidadeIdcidade);
+		DECLARE @Idbairro UNIQUEIDENTIFIER = (SELECT TOP 1 idbairro FROM Pinga.bairro WHERE bairro = @bairro AND regiao = @regiao AND cidade_idcidade = @cidadeIdcidade);
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
 			VALUES (@tipoLogradouroIdtipoLogradouro, @logradouro, @numero, @tipoComplementoIdtipoComplemento, @complemento, @CEP, @pontoReferencia, @Idbairro, GETDATE());
@@ -1266,11 +1266,11 @@ ON Pinga.tipo_continente WITH ENCRYPTION
 AFTER INSERT, UPDATE
 AS
 	-- Validar para que somente 1 possa ser verdadeiro
-	@qntValidos = (SELECT COUNT(1) FROM tipo_continente WHERE ativo = 1);
+	DECLARE @qntValidos INT = (SELECT COUNT(1) FROM tipo_continente WHERE ativo = 1);
 	IF @qntValidos > 1
 	BEGIN
 		ROLLBACK;
 		THROW 61921, 'Mais de um tipo continente ativo, somente 1 pode ser ativo.', 1;
 	END
-GO;
+GO
 /* TRIGGER's PARA VALIDAÇÃO */
