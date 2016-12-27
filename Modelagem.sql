@@ -861,6 +861,39 @@ SELECT * FROM Pinga.pais p
 INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente;
 GO
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = '')
+BEGIN
+    DROP TABLE adm.log_erros;
+END
+
+CREATE TABLE adm.log_erros (
+idlog_erros UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+usuario VARCHAR(30) NOT NULL DEFAULT SYSTEM_USER,
+erro VARCHAR(100) NOT NULL,
+horario DATETIME NOT NULL DEFAULT GETDATE(),
+procedimento VARCHAR(80) NOT NULL,
+possivel_causa VARCHAR(80) NULL,
+error_comes_from VARCHAR(20) NOT NULL, --database, application
+
+CONSTRAINT pk_log_erros PRIMARY KEY NONCLUSTERED (idlog_erros),
+CONSTRAINT chk_error_from CHECK (error_comes_from IN ('database','application'))
+);
+
+CREATE OR ALTER FUNCTION adm.udf_errorLog
+	@erro VARCHAR(100),
+	@procedimento VARCHAR(80),
+	@possivelCausa VARCHAR(80),
+	@errorComesFrom VARCHAR(20)
+RETURNS VOID
+WITH SCHEMABINDING, ENCRYPTION
+AS BEGIN
+	BEGIN TRANSACTION;
+		INSERT INTO adm.log_errors (usuario, erro, horario, procedimento, possivel_causa, error_comes_from)
+		VALUES (SYSTEM_USER, @erro, GETDATE(), @procedimento, @possivelCausa, @errorComesFrom);
+	COMMIT TRANSACTION;
+END;
+GO
+
 CREATE PROCEDURE Pinga.usp_InserirNovoPais
 	@pais VARCHAR(40),
 	@idioma VARCHAR(40),
