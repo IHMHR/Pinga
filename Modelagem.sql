@@ -966,6 +966,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto apenas.', 1;
 	END CATCH
 END;
@@ -994,6 +999,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto com tipo litragem.', 1;
 	END CATCH
 END;
@@ -1025,6 +1035,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto com quantidade produto.', 1;
 	END CATCH
 END;
@@ -1061,6 +1076,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto completo.', 1;
 	END CATCH
 END;
@@ -1089,6 +1109,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do cliente apenas.', 1;
 	END CATCH
 END;
@@ -1137,6 +1162,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do pais.', 1;
 	END CATCH
 END;
@@ -1158,6 +1188,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do pais.', 1;
 	END CATCH
 END;
@@ -1179,6 +1214,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert da cidade.', 1;
 	END CATCH
 END
@@ -1199,6 +1239,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do bairro.', 1;
 	END CATCH
 END
@@ -1217,6 +1262,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do tipo logradouro.', 1;
 	END CATCH
 END
@@ -1235,6 +1285,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do tipo complemento.', 1;
 	END CATCH
 END
@@ -1260,6 +1315,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do endereco apenas.', 1;
 	END CATCH
 END;
@@ -1289,6 +1349,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do endereco com tipo logradouro.', 1;
 	END CATCH
 END;
@@ -1318,6 +1383,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do endereco com tipo complemento.', 1;
 	END CATCH
 END;
@@ -1349,6 +1419,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do endereco com tipo complemento.', 1;
 	END CATCH
 END;
@@ -1374,6 +1449,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto apenas.', 1;
 	END CATCH
 END;
@@ -1402,6 +1482,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto com tipo litragem.', 1;
 	END CATCH
 END;
@@ -1469,6 +1554,11 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do produto com quantidade produto.', 1;
 	END CATCH
 END;
@@ -1496,7 +1586,12 @@ BEGIN
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-	ROLLBACK;
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
         THROW 51921, 'Falha ao realizar o insert do contrato apenas', 1;
     END CATCH
 END;
@@ -1534,7 +1629,12 @@ BEGIN
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-	ROLLBACK;
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
         THROW 51921, 'Falha ao realizar o insert do contrato com cliente', 1;
     END CATCH
 END;
@@ -1566,7 +1666,12 @@ BEGIN
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-	ROLLBACK;
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
         THROW 51921, 'Falha ao realizar o insert do contrato com periodicidade', 1;
     END CATCH
 END;
@@ -1597,7 +1702,12 @@ BEGIN
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-	ROLLBACK;
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
         THROW 51921, 'Falha ao realizar o insert do contrato com forma de pagamento', 1;
     END CATCH
 END;
@@ -1615,6 +1725,11 @@ AS
 	IF @qntValidos > 1
 	BEGIN
 		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER TRIGGER: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Regra de Negócio', 'database';
 		THROW 61921, 'Mais de um tipo continente ativo, somente 1 pode ser ativo.', 1;
 	END
 GO
