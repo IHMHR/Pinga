@@ -924,6 +924,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
 	@continenteIdcontinente UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		SET NOCOUNT ON;
 		BEGIN TRANSACTION
@@ -955,6 +956,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoProduto
 	@produtoQuantidadeIdprodutoQuantidade UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		SET NOCOUNT ON;
 		BEGIN TRANSACTION
@@ -978,6 +980,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoProdutoComTipoLitragem
 	@produtoQuantidadeIdprodutoQuantidade UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.tipo_litragem (descricao)
@@ -1008,6 +1011,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoProdutoComQuantidadeProduto
 	@quantidadeSolicitarCompra INT
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
@@ -1038,6 +1042,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoProdutoCompleto
 	@quantidadeSolicitarCompra INT
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.tipo_litragem (descricao)
@@ -1075,6 +1080,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoCliente
 	@telefoneIdtelefone UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.cliente (cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, endereco_idendereco, telefone_idtelefone, created)
@@ -1122,6 +1128,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
 	@continenteIdcontinente UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente_idcontinente)
@@ -1142,6 +1149,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEstado
 	@paisIdpais UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.estado (estado, uf, capital, pais_idpais)
@@ -1162,6 +1170,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaCidade
 	@estadoIdestado UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.cidade (cidade, DDD, capital, estado_idestado)
@@ -1181,6 +1190,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoBairro
 	@cidadeIdcidade UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.bairro (bairro, regiao, cidade_idcidade)
@@ -1198,6 +1208,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoLogradouro
 	@tipoLogradouro VARCHAR(35)
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.tipo_logradouro (tipo_logradouro)
@@ -1215,6 +1226,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoComplemento
 	@tipoComplemento VARCHAR(35)
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.tipo_complemento (tipo_complemento)
@@ -1239,6 +1251,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEndereco
 	@bairroIdbairro UNIQUEIDENTIFIER
 	AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
@@ -1263,6 +1276,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoLogradouro
 	@bairroIdbairro UNIQUEIDENTIFIER
 	AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			EXECUTE Pinga.usp_InserirNovoTipoLogradouro @tipoLogradouro;
@@ -1291,6 +1305,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoComplemento
 	@bairroIdbairro UNIQUEIDENTIFIER
 	AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			EXECUTE Pinga.usp_InserirNovoTipoLogradouro @tipoComplemento;
@@ -1321,6 +1336,7 @@ CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoEnderecoComTipoComplemento
 	@cidadeIdcidade UNIQUEIDENTIFIER
 	AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
 			EXECUTE Pinga.usp_InserirNovoBairro @bairro, @regiao, @cidadeIdcidade;
@@ -1349,6 +1365,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoProduto
 	@produtoQuantidadeIdprodutoQuantidade UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
@@ -1371,6 +1388,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoProdutoComTipoLitragem
 	@produtoQuantidadeIdprodutoQuantidade UNIQUEIDENTIFIER
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.tipo_litragem (descricao)
@@ -1401,6 +1419,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoProdutoComQuantidadeProduto
 	@quantidadeSolicitarCompra INT
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
@@ -1431,6 +1450,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoProdutoCompleto
 	@quantidadeSolicitarCompra INT
 AS
 BEGIN
+	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.tipo_litragem (descricao)
@@ -1468,6 +1488,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoContrato
     @multaQuebra DECIMAL(9,2)
 AS
 BEGIN
+	SET NOCOUNT ON;
     BEGIN TRY
         BEGIN TRANSACTION;
             INSERT INTO Pinga.contrato (cliente_idcliente, data_entrada_vigor, data_expiracao, data_assinatura, periodicidade_entrega_idperiodicidade_entrega, prorrogavel, [status], forma_pagamento_idforma_pagamento, multa_quebra)
@@ -1501,6 +1522,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoContratoComCliente
     @multaQuebra DECIMAL(9,2)
 AS
 BEGIN
+	SET NOCOUNT ON;
     BEGIN TRY
 		BEGIN TRANSACTION;
 			EXECUTE Pinga.usp_InserirNovoCliente @cpfCnpj, @nomeRazaoSocial, @apelidoNomeFantasia, @inscricaoMunicipal, @identidadeInscricaoestadual, @dataNascimentoFundacao, @sexo, @enderecoIdendereco, @telefoneIdtelefone;
@@ -1531,6 +1553,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoContratoComPeriodicidade
     @multaQuebra DECIMAL(9,2)
 AS
 BEGIN
+	SET NOCOUNT ON;
     BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.periodicidade_entrega (tipo_periodicidade_entrega_idtipo_periodicidade_entrega, cliente_idcliente, [status])
@@ -1561,6 +1584,7 @@ CREATE OR ALTER PROCEDURE usp_InserirNovoContratoComFormaPagamento
     @multaQuebra DECIMAL(9,2)
 AS
 BEGIN
+	SET NOCOUNT ON;
     BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.forma_pagamento (descricao, created)
