@@ -880,12 +880,8 @@ CONSTRAINT chk_error_from CHECK (error_comes_from IN ('database','application'))
 );
 GO
 
-
-
-
-
 CREATE OR ALTER PROCEDURE adm.usp_errorLog
-	@erro VARCHAR(100),
+	@erro VARCHAR(250),
 	@procedimento VARCHAR(80),
 	@possivelCausa VARCHAR(80),
 	@errorComesFrom VARCHAR(20)
@@ -918,7 +914,6 @@ EXEC sp_refreshsqlmodule 'adm.usp_errorLog'
 EXEC adm.usp_errorLog 'Erro', 'procedimento', 'possivelCausa', 'database';
 TRUNCATE TABLE adm.log_erros;
 
-
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
 	@pais VARCHAR(40),
 	@idioma VARCHAR(40),
@@ -938,12 +933,10 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
-		DECLARE @err VARCHAR(100) = (SELECT CONCAT(CONVERT(VARCHAR(15), N'ErrorNumber: ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_NUMBER(),
-												   CONVERT(VARCHAR(20), N' - ErrorMessage: ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_MESSAGE(),
-												   CONVERT(VARCHAR(5), N'::L ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_LINE()
-												  )
-									);
-		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(CONVERT(VARCHAR(15), N'USER PROCEDURE: ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_PROCEDURE()));
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
 		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do país.', 1;
 	END CATCH
