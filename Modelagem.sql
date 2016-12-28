@@ -719,63 +719,6 @@ CONSTRAINT pk_feedback_visita PRIMARY KEY NONCLUSTERED (idfeedback_visita),
 FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita)
 );
 
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato')
-BEGIN
-    DROP TABLE Pinga.contrato;
-END
-
-CREATE TABLE Pinga.contrato (
-idcontrato UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
-data_entrada_vigor DATE NOT NULL,
-data_expiracao DATE NOT NULL,
-data_assinatura DATE NULL,
-periodicidade_entrega_idperiodicidade_entrega UNIQUEIDENTIFIER NOT NULL,
-prorrogavel BIT NOT NULL DEFAULT 0,
-[status] BIT NOT NULL DEFAULT 0,
-forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
-multa_quebra DECIMAL (9,2) NOT NULL,
-
-CONSTRAINT pk_contrato PRIMARY KEY NONCLUSTERED (idcontrato),
-FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
-FOREIGN KEY (periodicidade_entrega_idperiodicidade_entrega) REFERENCES Pinga.periodicidade_entrega(idperiodicidade_entrega),
-FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato_has_produto')
-BEGIN
-	DROP TABLE Pinga.contrato_has_produto;
-END
-
-CREATE TABLE Pinga.contrato_has_produto (
-idcontrato_has_produto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
-produto_idproduto UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
-
-CONSTRAINT pk_contrato_has_produto PRIMARY KEY NONCLUSTERED (idcontrato_has_produto),
-FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato),
-FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto),
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'testemunha')
-BEGIN
-    DROP TABLE Pinga.testemunha;
-END
-
-CREATE TABLE Pinga.testemunha (
-idtestemunha UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-primeiro_nome VARCHAR(20) NOT NULL,
-nome_meio VARCHAR(40) NULL,
-sobrenome VARCHAR(25) NOT NULL,
-cpf CHAR(11) NOT NULL,
-contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
-
-CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
-FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato)
-);
-
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_periodicidade_entrega')
 BEGIN
     DROP TABLE Pinga.tipo_periodicidade_entrega;
@@ -834,6 +777,63 @@ FOREIGN KEY (periodicidade_entrega_idperiodicidade_entrega) REFERENCES Pinga.per
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto),
 );
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato')
+BEGIN
+    DROP TABLE Pinga.contrato;
+END
+
+CREATE TABLE Pinga.contrato (
+idcontrato UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
+data_entrada_vigor DATE NOT NULL,
+data_expiracao DATE NOT NULL,
+data_assinatura DATE NULL,
+periodicidade_entrega_idperiodicidade_entrega UNIQUEIDENTIFIER NOT NULL,
+prorrogavel BIT NOT NULL DEFAULT 0,
+[status] BIT NOT NULL DEFAULT 0,
+forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
+multa_quebra DECIMAL (9,2) NOT NULL,
+
+CONSTRAINT pk_contrato PRIMARY KEY NONCLUSTERED (idcontrato),
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
+FOREIGN KEY (periodicidade_entrega_idperiodicidade_entrega) REFERENCES Pinga.periodicidade_entrega(idperiodicidade_entrega),
+FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato_has_produto')
+BEGIN
+	DROP TABLE Pinga.contrato_has_produto;
+END
+
+CREATE TABLE Pinga.contrato_has_produto (
+idcontrato_has_produto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
+produto_idproduto UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_contrato_has_produto PRIMARY KEY NONCLUSTERED (idcontrato_has_produto),
+FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato),
+FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto),
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'testemunha')
+BEGIN
+    DROP TABLE Pinga.testemunha;
+END
+
+CREATE TABLE Pinga.testemunha (
+idtestemunha UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+primeiro_nome VARCHAR(20) NOT NULL,
+nome_meio VARCHAR(40) NULL,
+sobrenome VARCHAR(25) NOT NULL,
+cpf CHAR(11) NOT NULL,
+contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
+FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato)
+);
+
 --ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
 
 
@@ -861,7 +861,7 @@ SELECT * FROM Pinga.pais p
 INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente;
 GO
 
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = '')
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'log_erros')
 BEGIN
     DROP TABLE adm.log_erros;
 END
@@ -878,23 +878,48 @@ error_comes_from VARCHAR(20) NOT NULL, --database, application
 CONSTRAINT pk_log_erros PRIMARY KEY NONCLUSTERED (idlog_erros),
 CONSTRAINT chk_error_from CHECK (error_comes_from IN ('database','application'))
 );
+GO
 
-CREATE OR ALTER FUNCTION adm.udf_errorLog
+
+
+
+
+CREATE OR ALTER PROCEDURE adm.usp_errorLog
 	@erro VARCHAR(100),
 	@procedimento VARCHAR(80),
 	@possivelCausa VARCHAR(80),
 	@errorComesFrom VARCHAR(20)
-RETURNS VOID
-WITH SCHEMABINDING, ENCRYPTION
-AS BEGIN
-	BEGIN TRANSACTION;
-		INSERT INTO adm.log_errors (usuario, erro, horario, procedimento, possivel_causa, error_comes_from)
-		VALUES (SYSTEM_USER, @erro, GETDATE(), @procedimento, @possivelCausa, @errorComesFrom);
-	COMMIT TRANSACTION;
+AS
+BEGIN
+	SET NOCOUNT ON;
+	IF XACT_STATE() = 1
+	BEGIN
+		COMMIT;
+	END
+	ELSE IF XACT_STATE() = -1
+	BEGIN
+		ROLLBACK;
+	END
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO adm.log_erros (usuario, erro, horario, procedimento, possivel_causa, error_comes_from)
+			VALUES (SYSTEM_USER, @erro, GETDATE(), @procedimento, @possivelCausa, @errorComesFrom);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW 99999, 'Erro no errorLog', 1;
+	END CATCH;
 END;
 GO
 
-CREATE PROCEDURE Pinga.usp_InserirNovoPais
+EXEC sp_refreshsqlmodule 'adm.usp_errorLog'
+EXEC adm.usp_errorLog 'Erro', 'procedimento', 'possivelCausa', 'database';
+TRUNCATE TABLE adm.log_erros;
+
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
 	@pais VARCHAR(40),
 	@idioma VARCHAR(40),
 	@colacao VARCHAR(55),
@@ -905,6 +930,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoPais
 AS
 BEGIN
 	BEGIN TRY
+		SET NOCOUNT ON;
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente_idcontinente)
 			VALUES (@pais, @idioma, @colacao, @DDI, @sigla, @fusoHorario, @continenteIdcontinente);
@@ -912,6 +938,13 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		ROLLBACK;
+		DECLARE @err VARCHAR(100) = (SELECT CONCAT(CONVERT(VARCHAR(15), N'ErrorNumber: ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_NUMBER(),
+												   CONVERT(VARCHAR(20), N' - ErrorMessage: ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_MESSAGE(),
+												   CONVERT(VARCHAR(5), N'::L ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_LINE()
+												  )
+									);
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(CONVERT(VARCHAR(15), N'USER PROCEDURE: ' COLLATE Latin1_General_100_CI_AS_KS_WS_SC), ERROR_PROCEDURE()));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
 		THROW 51921, 'Falha ao realizar o insert do país.', 1;
 	END CATCH
 END;
@@ -930,6 +963,7 @@ CREATE PROCEDURE Pinga.usp_InserirNovoProduto
 AS
 BEGIN
 	BEGIN TRY
+		SET NOCOUNT ON;
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade, GETDATE());
