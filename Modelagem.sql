@@ -678,14 +678,12 @@ END
 CREATE TABLE Pinga.visita (
 idvisita UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
-data DATETIME NOT NULL,
-endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
+[data] DATE NOT NULL,
 comecou TIME NULL,
 terminou TIME NULL,
 
 CONSTRAINT pk_visita PRIMARY KEY NONCLUSTERED (idvisita),
-FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
-FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco)
+FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro_has_visita')
@@ -1792,3 +1790,130 @@ BEGIN
 END;
 GO
 /* USP's INSERIR CUSTO */
+
+/* USP's INSERIR VISITA */
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaVisita
+	@clienteIdcliente UNIQUEIDENTIFIER,
+	@data DATE,
+	@comecou TIME,
+	@terminou TIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		INSERT INTO Pinga.visita (cliente_idcliente, [data], comecou, terminou)
+		VALUES (@clienteIdcliente, @data, @comecou, @terminou);
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da visita apenas.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaVisitaComCliente
+	@cpfCnpj VARCHAR(14),
+	@nomeRazaoSocial VARCHAR(60),
+	@apelidoNomeFantasia VARCHAR(60),
+	@inscricaoMunicipal CHAR(14),
+	@identidadeInscricaoestadual CHAR(14),
+	@dataNascimentoFundacao DATE,
+	@sexo CHAR(1),
+	@enderecoIdendereco UNIQUEIDENTIFIER,
+	@telefoneIdtelefone UNIQUEIDENTIFIER,
+	@data DATE,
+	@comecou TIME,
+	@terminou TIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			EXECUTE Pinga.usp_InserirNovoCliente @cpfCnpj, @nomeRazaoSocial, @apelidoNomeFantasia, @inscricaoMunicipal, @identidadeInscricaoestadual, @dataNascimentoFundacao, @sexo, @enderecoIdendereco, @telefoneIdtelefone;
+		COMMIT TRANSACTION;
+		DECLARE @ClienteIdCliente UNIQUEIDENTIFIER = (SELECT TOP 1 ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = @cpfCnpj AND nome_razao_social = @nomeRazaoSocial AND apelido_nome_fantasia = @apelidoNomeFantasia AND inscricao_municipal = @inscricaoMunicipal AND identidade_inscricao_estadual = @identidadeInscricaoestadual AND data_nascimento_fundacao = @dataNascimentoFundacao AND sexo = @sexo AND endereco_idendereco = @enderecoIdendereco AND telefone_idtelefone = @telefoneIdtelefone);
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.visita (cliente_idcliente, [data], comecou, terminou)
+			VALUES (@ClienteIdCliente, @data, @comecou, @terminou);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da visita com cliente.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaVisistaParceiro
+	@parceiroIdparceiro UNIQUEIDENTIFIER,
+	@visitaIdvisita UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.parceiro_has_visita (idparceiro_has_visita, visita_idvisita)
+			VALUES (@parceiroIdparceiro, @visitaIdvisita);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da visita com cliente.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaVisistaParceiroComVisista
+	@parceiroIdparceiro UNIQUEIDENTIFIER,
+	@clienteIdcliente UNIQUEIDENTIFIER,
+	@data DATE,
+	@comecou TIME,
+	@terminou TIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			EXEC Pinga.usp_InserirNovaVisita @clienteIdcliente, @data, @comecou, @terminou;
+		COMMIT TRANSACTION;
+		DECLARE @IdVisita UNIQUEIDENTIFIER = (SELECT TOP 1 ROWGUIDCOL FROM Pinga.visita WHERE cliente_idcliente = @clienteIdcliente AND [data] = @data AND comecou = @comecou AND terminou = @terminou);
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.parceiro_has_visita (idparceiro_has_visita, visita_idvisita)
+			VALUES (@parceiroIdparceiro, @IdVisita);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da visita com cliente.', 1;
+	END CATCH
+END;
+GO
+/* USP's INSERIR VISITA */
