@@ -2033,7 +2033,9 @@ BEGIN
 	INNER JOIN Pinga.parceiro p
 	ON p.idparceiro = phv.parceiro_idparceiro
 	INNER JOIN Pinga.cliente c
-	ON c.idcliente = v.cliente_idcliente;
+	ON c.idcliente = v.cliente_idcliente
+	GROUP BY v.[data]
+	HAVING COUNT(v.[data]) > 0;
 	
 
 	-- Vamos fazer com que a prox visita seja na outra semana, mesmo dia e hora (POR ENQUANTO)
