@@ -2012,6 +2012,32 @@ BEGIN
 
 	-- Regra de Negocio
 
+	-- Table Variable to stored values to use
+	DECLARE @table TABLE
+	(
+		diaSemana VARCHAR(15),
+		qntVisitas INT
+	);
+	INSERT INTO @table
+	SELECT CASE DATEPART(dw,@dataAgendada)
+			WHEN 1 THEN 'Domingo'
+			WHEN 2 THEN 'Segunda-Feira'
+			WHEN 3 THEN 'Terca-Feira'
+			WHEN 4 THEN 'Quarta-Feira'
+			WHEN 5 THEN 'Quinta-Feira'
+			WHEN 6 THEN 'Sexta-Feira'
+			WHEN 7 THEN 'Sabado'
+		   END AS [Dia da Semana], COUNT(*) FROM Pinga.visita v
+	INNER JOIN Pinga.parceiro_has_visita phv
+	ON v.idvisita = phv.visita_idvisita
+	INNER JOIN Pinga.parceiro p
+	ON p.idparceiro = phv.parceiro_idparceiro
+	INNER JOIN Pinga.cliente c
+	ON c.idcliente = v.cliente_idcliente;
+	
+
+	-- Vamos fazer com que a prox visita seja na outra semana, mesmo dia e hora (POR ENQUANTO)
+	SET @novaVisita = DATEADD(d, 7, @dataAgendada);
 	RETURN @novaVisita;
 END;
 GO
