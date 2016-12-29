@@ -1712,7 +1712,6 @@ BEGIN
     END CATCH
 END;
 GO
-	
 /* USP's INSERIR CONTRATO */
 
 /* TRIGGER's PARA VALIDAÇÃO */
@@ -1734,3 +1733,62 @@ AS
 	END
 GO
 /* TRIGGER's PARA VALIDAÇÃO */
+
+/* USP's INSERIR CUSTO */
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoCusto
+	@tipoCustoIdtipoCusto UNIQUEIDENTIFIER,
+	@valor DECIMAL(9,2)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.custo (tipo_custo_idtipo_custo, valor, created)
+			VALUES (@tipoCustoIdtipoCusto, @valor);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do custo apenas.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoCustoComTipoCusto
+	@descricaoTipoCusto VARCHAR(60),
+	@valor DECIMAL(9,2)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.tipo_custo (descricao)
+			VALUES (@descricaoTipoCusto);			
+		COMMIT TRANSACTION;
+		DECLARE @IdTipoCusto UNIQUEIDENTIFIER = (SELECT TOP 1 ROWGUIDCOL FROM Pinga.tipo_custo WHERE descricao = @descricaoTipoCusto);
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.custo (tipo_custo_idtipo_custo, valor, created)
+			VALUES (@IdTipoCusto, @valor);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do custo com tipo custo.', 1;
+	END CATCH
+END;
+GO
+/* USP's INSERIR CUSTO */
