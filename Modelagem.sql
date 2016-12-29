@@ -670,6 +670,26 @@ FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (representante_idrepresentante) REFERENCES Pinga.representante(idrepresentante)
 );
 
+/*CREATE TABLE vendedor (
+idvendedor UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+firstName
+middleName
+lastName
+birthDate
+Pis
+cpf,
+identidade,
+orgaoEmissor,
+dataEmissao,
+dataAdmissao,
+dataDemissao,
+email,
+telefone_idtelefone
+endereco_idendereco,
+[status],
+
+);*/
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'visita')
 BEGIN
     DROP TABLE Pinga.visita;
@@ -681,6 +701,7 @@ cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 [data] DATE NOT NULL,
 comecou TIME NULL,
 terminou TIME NULL,
+--realizada_por (Criar table FUNCIONARIOS ou VENDEDORES)
 
 CONSTRAINT pk_visita PRIMARY KEY NONCLUSTERED (idvisita),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente)
@@ -1916,4 +1937,81 @@ BEGIN
 	END CATCH
 END;
 GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoFeedBackVisita
+	@visitaIdvisita UNIQUEIDENTIFIER,
+	@comentario VARCHAR(100),
+	@nota TINYINT,
+	@vendaRealizada BIT,
+	@visitaReagendada BIT,
+	@data DATE,
+	@comecou TIME,
+	@terminou TIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET ANSI_NULLS ON;
+
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.feedback_visita (visita_idvisita, comentario, nota, venda_realizada, visita_reagendada)
+			VALUES (@visitaIdvisita, @comentario, @nota, @vendaRealizada, @visitaReagendada);
+		COMMIT TRANSACTION;
+		IF @visitaReagendada = 1
+		BEGIN
+			BEGIN TRANSACTION;
+				DECLARE @ClienteIdCliente UNIQUEIDENTIFIER = (SELECT TOP 1 cliente_idcliente FROM Pinga.visita WHERE idvisita = @visitaIdvisita);
+
+
+				-- Criar uma FUNCTION para retornar a data disponivel para visita
+				INSERT INTO Pinga.visita (cliente_idcliente, [data], comecou, terminou)
+				VALUES (@ClienteIdCliente, @data, @comecou, @terminou);
+
+
+			COMMIT TRANSACTION;
+		END;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do feedback.', 1;
+	END CATCH
+END;
+GO
 /* USP's INSERIR VISITA */
+
+CREATE OR ALTER FUNCTION Pinga.udf_IdentificarDataParaVisita (
+	@parceiroIdparceiro UNIQUEIDENTIFIER,
+	@clienteIdcliente UNIQUEIDENTIFIER,
+	@dataAgendada DATE)
+RETURNS DATETIME
+WITH ENCRYPTION, SCHEMABINDING
+AS
+BEGIN
+	/*
+		IDENTIFICAR O PROXIMO DIA UTIL COM HORARIO DISPONIVEL PARA REAGENDAMENTO DA VISITA DO CLIENTE
+		OBSERVAR QUAIS OS DIAS QUE SÃO FEITAS AS VISITAS DESTE CLIENTE
+		VERIFICAR DISPONIBILIDADE NA 'AGENDA' DO PARCEIRO
+	*/
+	/*
+		SELECT 1 FROM Pinga.visita v
+		INNER JOIN Pinga.parceiro_has_visita phv
+		ON v.idvisita = phv.visita_idvisita
+		INNER JOIN Pinga.parceiro p
+		ON p.idparceiro = phv.parceiro_idparceiro
+		INNER JOIN Pinga.cliente c
+		ON c.idcliente = v.cliente_idcliente
+		WHERE v.[data] = @data AND v.comecou = @comecou
+		AND v.terminou = @terminou
+	*/
+	DECLARE @novaVisita DATETIME;
+
+	-- Regra de Negocio
+
+	RETURN @novaVisita;
+END;
+GO
