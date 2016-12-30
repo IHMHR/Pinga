@@ -159,15 +159,13 @@ complemento VARCHAR(30) NULL,
 CEP CHAR(8) NOT NULL,
 ponto_referencia VARCHAR(45) NULL,
 bairro_idbairro UNIQUEIDENTIFIER NOT NULL,
-cidade_idcidade UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
 CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco),
 FOREIGN KEY (tipo_logradouro_idtipo_logradouro) REFERENCES Pinga.tipo_logradouro(idtipo_logradouro),
 FOREIGN KEY (tipo_complemento_idtipo_complemento) REFERENCES Pinga.tipo_complemento(idtipo_complemento),
-FOREIGN KEY (bairro_idbairro) REFERENCES Pinga.bairro(idbairro),
-FOREIGN KEY (cidade_idcidade) REFERENCES Pinga.cidade(idcidade)
+FOREIGN KEY (bairro_idbairro) REFERENCES Pinga.bairro(idbairro)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_tipo')
@@ -406,7 +404,8 @@ CONSTRAINT pk_cliente PRIMARY KEY NONCLUSTERED (idcliente),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
 FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone),
 FOREIGN KEY (email_idemail) REFERENCES Pinga.email(idemail),
-CONSTRAINT chk_sexo CHECK (sexo IN ('M', 'F'))
+CONSTRAINT chk_sexo CHECK (sexo IN ('M', 'F')),
+CONSTRAINT unq_cpf_cnpj UNIQUE NONCLUSTERED (cpf_cnpj)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'informacoes_cliente')
@@ -864,17 +863,17 @@ VALUES ('Quatro continentes', 0),
 SELECT * FROM Pinga.tipo_continente;
 
 INSERT INTO Pinga.continente (continente, tipo_continente_idtipo_continente)
-VALUES ('América', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),('Eurafrásia', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),('Oceania', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),('Antártida', '4C89D7DC-82DE-42DB-B783-D2FFDEC82CE2'),
-('América', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('Ásia', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('Europa', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('África', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),('Oceania', '5B0A31A5-CCE1-4A77-A8CF-74A5C9CB3169'),
-('América', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Ásia', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Europa', 'E07EB459-CD6E-445A-A144-4119059621B0'),('África', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Oceania', 'E07EB459-CD6E-445A-A144-4119059621B0'),('Antártida', 'E07EB459-CD6E-445A-A144-4119059621B0'),
-('América do Norte', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('América do Sul', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('Eurafrásia', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('África', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('Oceania', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),('Antártida', '4BBAAF41-14C2-49D2-917E-9CD42A09C69F'),
-('América do Norte', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('América do Sul', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Ásia', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Europa', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Oceania', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C'),('Antártida', 'DA4C2F5A-95B6-4EC8-BB28-2819CE1E727C');
+VALUES ('América', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Quatro continentes')),('Eurafrásia', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Quatro continentes')),('Oceania', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Quatro continentes')),('Antártida', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Quatro continentes')),
+('América', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Cinco continentes')),('Ásia', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Cinco continentes')),('Europa', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Cinco continentes')),('África', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Cinco continentes')),('Oceania', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Cinco continentes')),
+('América', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes')),('Ásia', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes')),('Europa', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes')),('África', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes')),('Oceania', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes')),('Antártida', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes')),
+('América do Norte', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes 2')),('América do Sul', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes 2')),('Eurafrásia', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes 2')),('África', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes 2')),('Oceania', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes 2')),('Antártida', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Seis continentes 2')),
+('América do Norte', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Sete continentes')),('América do Sul', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Sete continentes')),('Ásia', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Sete continentes')),('Europa', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Sete continentes')),('Oceania', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Sete continentes')),('Antártida', (SELECT ROWGUIDCOL FROM Pinga.tipo_continente WHERE tipo_continente = 'Sete continentes'));
 
 SELECT * FROM Pinga.continente c, Pinga.tipo_continente tc
 WHERE tc.idtipo_continente = c.tipo_continente_idtipo_continente;
 
 INSERT INTO Pinga.pais (pais, idioma, colacao, DDI, sigla, fuso_horario, continente_idcontinente)
-VALUES ('Brasil', 'Português do Brasil', 'Latin1_General_CS_AS', '55', 'BRA', 'UTC-03:00', '1D611A60-2721-420A-8B6C-33FB2A660024');
+VALUES ('Brasil', 'Português do Brasil', 'Latin1_General_CS_AS', '55', 'BRA', 'UTC-03:00', (SELECT c.ROWGUIDCOL FROM Pinga.continente c INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE tc.ativo = 1 AND c.continente = 'América'));
 
 SELECT * FROM Pinga.pais p
 INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente;
@@ -1765,7 +1764,7 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.custo (tipo_custo_idtipo_custo, valor, created)
-			VALUES (@tipoCustoIdtipoCusto, @valor);
+			VALUES (@tipoCustoIdtipoCusto, @valor, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
@@ -1796,7 +1795,7 @@ BEGIN
 		DECLARE @IdTipoCusto UNIQUEIDENTIFIER = (SELECT TOP 1 ROWGUIDCOL FROM Pinga.tipo_custo WHERE descricao = @descricaoTipoCusto);
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.custo (tipo_custo_idtipo_custo, valor, created)
-			VALUES (@IdTipoCusto, @valor);
+			VALUES (@IdTipoCusto, @valor, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
@@ -1987,7 +1986,7 @@ GO
 CREATE OR ALTER FUNCTION Pinga.udf_IdentificarDataParaVisita (
 	@parceiroIdparceiro UNIQUEIDENTIFIER,
 	@clienteIdcliente UNIQUEIDENTIFIER,
-	@dataAgendada DATE)
+	@dataAgendada DATETIME)
 RETURNS DATETIME
 WITH ENCRYPTION, SCHEMABINDING
 AS
@@ -2043,3 +2042,57 @@ BEGIN
 	RETURN @novaVisita;
 END;
 GO
+
+
+-- SELECT Pinga.udf_IdentificarDataParaVisita @parceiroIdparceiro, @clienteIdcliente, @data
+
+INSERT INTO Pinga.tipo_logradouro (tipo_logradouro)
+VALUES ('Rua'), ('Avenida'), ('Alameda');
+
+INSERT INTO Pinga.tipo_complemento (tipo_complemento)
+VALUES ('Casa'), ('Apartamento'), ('Casa de esquina');
+
+INSERT INTO Pinga.estado (estado, uf, capital, pais_idpais)
+VALUES ('Minas Gerais', 'MG', 0, (SELECT ROWGUIDCOL FROM Pinga.pais WHERE pais = 'Brasil')),
+('Rio de Janeiro', 'RJ', 0, (SELECT ROWGUIDCOL FROM Pinga.pais WHERE pais = 'Brasil')),
+('São Paulo', 'SP', 0, (SELECT ROWGUIDCOL FROM Pinga.pais WHERE pais = 'Brasil'));
+
+INSERT INTO Pinga.cidade (cidade, DDD, capital, estado_idestado)
+VALUES ('Belo Horizonte', '031', 1, (SELECT ROWGUIDCOL FROM Pinga.estado WHERE uf = 'MG')),
+('Contagem', '031', 0, (SELECT ROWGUIDCOL FROM Pinga.estado WHERE uf = 'MG')),
+('Abaeté', '035', 0, (SELECT ROWGUIDCOL FROM Pinga.estado WHERE uf = 'MG'));
+
+INSERT INTO Pinga.bairro (bairro, regiao, cidade_idcidade)
+VALUES ('Alípio de Melo', 'Noroeste', (SELECT ROWGUIDCOL FROM Pinga.cidade WHERE cidade = 'Belo Horizonte')),
+('Barroca', 'Oeste', (SELECT ROWGUIDCOL FROM Pinga.cidade WHERE cidade = 'Belo Horizonte'));
+
+INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numero, tipo_complemento_idtipo_complemento, complemento, CEP, ponto_referencia, bairro_idbairro, created)
+VALUES ((SELECT ROWGUIDCOL FROM Pinga.tipo_logradouro WHERE tipo_logradouro = 'Rua'), 'dos Securitários', 115, (SELECT ROWGUIDCOL FROM Pinga.tipo_complemento WHERE tipo_complemento = 'Casa'), 'com grade branca', '30840760', 'Próxima a padaria Gamela', (SELECT ROWGUIDCOL FROM Pinga.bairro WHERE bairro = 'Alípio de Melo'), GETDATE());
+
+
+INSERT INTO Pinga.tipo_telefone (descricao)
+VALUES ('Telefone Residencial'),('Celular'),('Telefone Comercial'),('Telefone Extra');
+
+INSERT INTO Pinga.operadora (nome, razao_social, status)
+VALUES ('TIM', 'Telecom Italia Mobile', 1);
+
+INSERT INTO Pinga.telefone (telefone, cidade_ddd, tipo_telefone_idtipo_telefone, operadora_idoperadora, created)
+VALUES ('988521996', (SELECT ROWGUIDCOL FROM Pinga.cidade WHERE DDD = '031' AND cidade = 'Belo Horizonte'), (SELECT ROWGUIDCOL FROM Pinga.tipo_telefone WHERE descricao = 'Celular'), (SELECT ROWGUIDCOL FROM Pinga.operadora WHERE nome = 'TIM'), GETDATE());
+
+INSERT INTO Pinga.parceiro (nome, endereco_idendereco, status, telefone_idtelefone, created)
+VALUES ('Parceiro A', (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), 1, (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE()),
+('Parceiro B', (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), 1, (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE()),
+('Parceiro C', (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), 1, (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE());
+
+
+INSERT INTO Pinga.email_localidade (email_localidade, status)
+VALUES ('br', 1),('it', 1),('co', 1),('jp', 1),('com.br', 1), ('com', 1);
+
+INSERT INTO Pinga.email_dominio (email_dominio, status)
+VALUES ('hotmail', 1),('outlook', 1),('yahoo', 1);
+
+INSERT INTO Pinga.email (email, email_dominio_idemail_dominio, email_localidade_idemail_localidade)
+VALUES ('martinelli.igor', (SELECT ROWGUIDCOL FROM Pinga.email_dominio WHERE email_dominio = 'hotmail'), (SELECT ROWGUIDCOL FROM Pinga.email_localidade WHERE email_localidade = 'com'));
+
+INSERT INTO Pinga.cliente (cpf_cnpj,nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, email_idemail, endereco_idendereco, telefone_idtelefone, created)
+VALUES ('13089902605', 'Igor Henrique Martinelli de Heredia Ramos', 'IHMHR', '13089902605', 'MG17771898', '1996-09-22', 'M', (SELECT e.ROWGUIDCOL FROM Pinga.email e INNER JOIN Pinga.email_dominio em ON em.idemail_dominio = e.email_dominio_idemail_dominio INNER JOIN Pinga.email_localidade el ON el.idemail_localidade = e.email_localidade_idemail_localidade WHERE e.email = 'martinelli.igor' AND em.email_dominio = 'hotmail' AND el.email_localidade = 'com'), (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE());
