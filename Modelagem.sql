@@ -23,6 +23,9 @@ GO
 USE pingaDB;
 GO
 
+CREATE SCHEMA Legado;
+GO
+
 CREATE SCHEMA Pinga;
 GO
 
@@ -732,6 +735,8 @@ comentario VARCHAR(100) NULL,
 nota TINYINT NOT NULL,
 venda_realizada BIT NOT NULL,
 visita_reagendada BIT NOT NULL, -- criar uma nova visita
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
 
 CONSTRAINT pk_feedback_visita PRIMARY KEY NONCLUSTERED (idfeedback_visita),
 FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita)
@@ -2043,8 +2048,9 @@ BEGIN
 END;
 GO
 
-
 -- SELECT Pinga.udf_IdentificarDataParaVisita @parceiroIdparceiro, @clienteIdcliente, @data
+SELECT Pinga.udf_IdentificarDataParaVisita('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE()) AS UserFunction; 
+
 
 INSERT INTO Pinga.tipo_logradouro (tipo_logradouro)
 VALUES ('Rua'), ('Avenida'), ('Alameda');
@@ -2096,3 +2102,98 @@ VALUES ('martinelli.igor', (SELECT ROWGUIDCOL FROM Pinga.email_dominio WHERE ema
 
 INSERT INTO Pinga.cliente (cpf_cnpj,nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, email_idemail, endereco_idendereco, telefone_idtelefone, created)
 VALUES ('13089902605', 'Igor Henrique Martinelli de Heredia Ramos', 'IHMHR', '13089902605', 'MG17771898', '1996-09-22', 'M', (SELECT e.ROWGUIDCOL FROM Pinga.email e INNER JOIN Pinga.email_dominio em ON em.idemail_dominio = e.email_dominio_idemail_dominio INNER JOIN Pinga.email_localidade el ON el.idemail_localidade = e.email_localidade_idemail_localidade WHERE e.email = 'martinelli.igor' AND em.email_dominio = 'hotmail' AND el.email_localidade = 'com'), (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE());
+
+
+INSERT INTO Pinga.visita (cliente_idcliente, data, comecou, terminou)
+VALUES ('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '15:00', '15:15'),
+('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '15:00', '15:15'),
+('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '15:30', '15:45'),
+('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '16:00', '16:15');
+
+INSERT INTO Pinga.feedback_visita (visita_idvisita, comentario, nota, venda_realizada, visita_reagendada, created)
+VALUES ('9DE53D8F-9B54-4386-85E3-328A045872A7', 'comentario', 10, 1, 1, GETDATE());
+
+INSERT INTO Pinga.parceiro_has_visita (parceiro_idparceiro, visita_idvisita)
+VALUES ('4D140F96-EA43-4F8C-AC50-98FC29110F02', '9DE53D8F-9B54-4386-85E3-328A045872A7');
+
+INSERT INTO Pinga.parceiro_has_visita (parceiro_idparceiro, visita_idvisita)
+VALUES ('4D140F96-EA43-4F8C-AC50-98FC29110F02', '45076C04-E3D5-4F5F-A4FA-6510186AA82D')
+,('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'BB315B67-BBBE-40C8-8AD5-DC03FA9B443E')
+,('4D140F96-EA43-4F8C-AC50-98FC29110F02', '7777F6EA-8B26-48F9-8885-B9A3590320E3')
+,('4D140F96-EA43-4F8C-AC50-98FC29110F02', '12D61FE3-8949-400F-AAD4-6610378742D4')
+,('4D140F96-EA43-4F8C-AC50-98FC29110F02', '77FA9E7B-A9DE-44D3-907E-B656C74764ED')
+,('4D140F96-EA43-4F8C-AC50-98FC29110F02', '57C18D8D-79D7-4DBD-857A-EDA171EA7438')
+,('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'C912999C-520B-426B-811F-151AA37A69D0');
+
+
+INSERT INTO Pinga.visita (cliente_idcliente, data, comecou, terminou)
+VALUES ('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', DATEADD(d, -2, GETDATE()), '15:00', '15:15'),
+('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', DATEADD(d, -3, GETDATE()), '15:00', '15:15'),
+('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', DATEADD(d, -4, GETDATE()), '15:30', '15:45'),
+('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', DATEADD(d, -7, GETDATE()), '16:00', '16:15');
+
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'horario')
+BEGIN
+	DROP TABLE Pinga.horario;
+END
+
+CREATE TABLE Pinga.horario (
+idhorario UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+horario_inicio TIME NOT NULL,
+tempo_duracao TIME NOT NULL,
+dia_semana TINYINT NOT NULL, -- 1=Domingo,2=Segunda...6=Sexta,7=Sabado
+[status] BIT NOT NULL DEFAULT 0,
+
+CONSTRAINT pk_horario PRIMARY KEY NONCLUSTERED (idhorario),
+CONSTRAINT chk_dia_semana CHECK (dia_semana IN (1,2,3,4,5,6,7))
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro_has_horario')
+BEGIN
+	DROP TABLE Pinga.parceiro_has_horario;
+END
+
+CREATE TABLE Pinga.parceiro_has_horario (
+idparceiro_has_horario UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
+horario_idhorario UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_parceiro_has_horario PRIMARY KEY NONCLUSTERED (idparceiro_has_horario),
+FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
+FOREIGN KEY (horario_idhorario) REFERENCES Pinga.horario(idhorario)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'excecoes')
+BEGIN
+	DROP TABLE Pinga.excecoes;
+END
+
+CREATE TABLE Pinga.excecoes (
+idexcecoes UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+[data] DATE NOT NULL,
+[status] BIT NOT NULL DEFAULT 0,
+
+CONSTRAINT pk_excecoes PRIMARY KEY NONCLUSTERED (idexcecoes)
+);
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'agenda')
+BEGIN
+	DROP TABLE Pinga.agenda;
+END
+
+CREATE TABLE Pinga.agenda (
+idagenda UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+visita_idvisita UNIQUEIDENTIFIER NOT NULL,
+horario_idhorario UNIQUEIDENTIFIER NOT NULL,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
+PERIOD FOR SYSTEM_TIME (created, modified),
+
+CONSTRAINT pk_agenda PRIMARY KEY NONCLUSTERED (idagenda),
+FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita),
+FOREIGN KEY (horario_idhorario) REFERENCES Pinga.horario(idhorario)
+)
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.agenda));
+
+
