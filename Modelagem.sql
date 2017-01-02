@@ -213,8 +213,8 @@ complemento VARCHAR(30) NULL,
 CEP CHAR(8) NOT NULL,
 ponto_referencia VARCHAR(45) NULL,
 bairro_idbairro UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco),
 FOREIGN KEY (tipo_logradouro_idtipo_logradouro) REFERENCES Pinga.tipo_logradouro(idtipo_logradouro),
@@ -259,8 +259,8 @@ telefone VARCHAR(11) NOT NULL,
 cidade_ddd UNIQUEIDENTIFIER NOT NULL,
 tipo_telefone_idtipo_telefone UNIQUEIDENTIFIER NOT NULL,
 operadora_idoperadora UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone),
 FOREIGN KEY (cidade_ddd) REFERENCES Pinga.cidade(idcidade),
@@ -301,8 +301,8 @@ CREATE TABLE Pinga.custo (
 idcusto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 tipo_custo_idtipo_custo UNIQUEIDENTIFIER NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_custo PRIMARY KEY NONCLUSTERED (idcusto),
 FOREIGN KEY (tipo_custo_idtipo_custo) REFERENCES Pinga.tipo_custo(idtipo_custo)
@@ -320,8 +320,8 @@ data_pagamento DATE NOT NULL,
 data_vencimento DATE NOT NULL,
 parcelas INT NOT NULL,
 juros DECIMAL(8,5) NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 );
@@ -339,8 +339,8 @@ tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
 custo_idcusto UNIQUEIDENTIFIER NOT NULL,
 parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
 FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
@@ -372,8 +372,8 @@ END
 CREATE TABLE Pinga.fase (
 idfase UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 descricao VARCHAR(60) NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_fase PRIMARY KEY NONCLUSTERED (idfase)
 );
@@ -386,8 +386,8 @@ END
 CREATE TABLE Pinga.forma_pagamento (
 idforma_pagamento UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 descricao VARCHAR(45) NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento)
 );
@@ -451,8 +451,8 @@ sexo CHAR(1) NULL,
 email_idemail UNIQUEIDENTIFIER NOT NULL,
 endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
 telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_cliente PRIMARY KEY NONCLUSTERED (idcliente),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
@@ -472,8 +472,8 @@ idinformacoes_cliente UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 tipo_cliente CHAR(2) NOT NULL,
 visitado BIT NOT NULL DEFAULT 0,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_informacoes_cliente PRIMARY KEY NONCLUSTERED (idinformacoes_cliente),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
@@ -491,8 +491,8 @@ quantidade_minima INT NOT NULL,
 quantidade_maxima INT NOT NULL,
 quantidade_recomenda_estoque INT NOT NULL,
 quantidade_solicitar_compra INT NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_idproduto_quantidade PRIMARY KEY NONCLUSTERED (idproduto_quantidade)
 );
@@ -510,8 +510,8 @@ litragem INT NULL,
 vendendo BIT NOT NULL DEFAULT 0,
 valor_unitario DECIMAL(9,2) NULL,
 produto_quantidade_idproduto_quantidade UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
 FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
@@ -529,8 +529,8 @@ nome VARCHAR(60) NOT NULL,
 endereco_idendereco UNIQUEIDENTIFIER NOT NULL,
 [status] BIT NOT NULL DEFAULT 0,
 telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_parceiro PRIMARY KEY NONCLUSTERED (idparceiro),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
@@ -544,14 +544,14 @@ END
 
 CREATE TABLE Pinga.saida (
 idsaida UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-data DATETIME2 NOT NULL DEFAULT GETDATE(),
+data SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 fase_idfase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
 parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
@@ -573,8 +573,8 @@ entrada_identrada UNIQUEIDENTIFIER NOT NULL,
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
 valor_saida DECIMAL(9,2) NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
 FOREIGN KEY (saida_idsaida) REFERENCES Pinga.saida(idsaida),
@@ -591,7 +591,8 @@ CREATE TABLE Pinga.estoque (
 idestoque UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
-modified DATETIME NOT NULL DEFAULT GETDATE(),
+createad SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
@@ -611,8 +612,8 @@ idlogin UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 lgn VARCHAR(30) NOT NULL,
 pwd VARCHAR(65) NOT NULL,
 [status] BIT NOT NULL DEFAULT 0,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
 )
@@ -684,7 +685,8 @@ CREATE TABLE Pinga.cliente_has_parceiro (
 idcliente_has_parceiro UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE()
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro)
@@ -786,8 +788,8 @@ comentario VARCHAR(100) NULL,
 nota TINYINT NOT NULL,
 venda_realizada BIT NOT NULL,
 visita_reagendada BIT NOT NULL, -- criar uma nova visita
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_feedback_visita PRIMARY KEY NONCLUSTERED (idfeedback_visita),
 FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita)
@@ -883,8 +885,8 @@ CREATE TABLE Pinga.contrato_has_produto (
 idcontrato_has_produto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_contrato_has_produto PRIMARY KEY NONCLUSTERED (idcontrato_has_produto),
 FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato),
@@ -920,7 +922,7 @@ CREATE TABLE adm.log_erros (
 idlog_erros UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 usuario VARCHAR(30) NOT NULL DEFAULT SYSTEM_USER,
 erro VARCHAR(100) NOT NULL,
-horario DATETIME NOT NULL DEFAULT GETDATE(),
+horario SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 procedimento VARCHAR(80) NOT NULL,
 possivel_causa VARCHAR(80) NULL,
 error_comes_from VARCHAR(20) NOT NULL, --database, application
@@ -2018,8 +2020,8 @@ GO*/
 CREATE OR ALTER FUNCTION Pinga.udf_IdentificarDataParaVisita (
 	@parceiroIdparceiro UNIQUEIDENTIFIER,
 	@clienteIdcliente UNIQUEIDENTIFIER,
-	@dataAgendada DATETIME)
-RETURNS DATETIME
+	@dataAgendada SMALLDATETIME)
+RETURNS SMALLDATETIME
 WITH ENCRYPTION
 AS
 BEGIN
@@ -2028,7 +2030,7 @@ BEGIN
 		RETURN NULL;
 	END
 
-	DECLARE @novaVisita DATETIME;
+	DECLARE @novaVisita SMALLDATETIME;
 	DECLARE @proxDiaUtil DATE = (SELECT adm.udf_ProximoDiaUtil(@dataAgendada));
 
 	-- Table Variable to stored values to use
@@ -2055,7 +2057,7 @@ BEGIN
 	-- Implementações para a v2.0
 
 	DECLARE @temp VARCHAR(50) = CONCAT(@proxDiaUtil, ' ', DATEPART(HOUR, @dataAgendada), ':', DATEPART(MINUTE, @dataAgendada));
-	SET @novaVisita = (CONVERT(DATETIME, @temp));
+	SET @novaVisita = (CONVERT(SMALLDATETIME, @temp));
 	RETURN @novaVisita;
 END;
 GO
