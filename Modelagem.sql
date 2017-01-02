@@ -2020,28 +2020,25 @@ CREATE OR ALTER FUNCTION Pinga.udf_IdentificarDataParaVisita (
 	@clienteIdcliente UNIQUEIDENTIFIER,
 	@dataAgendada DATETIME)
 RETURNS DATETIME
-WITH ENCRYPTION, SCHEMABINDING
+WITH ENCRYPTION
 AS
 BEGIN
+	IF @parceiroIdparceiro IS NULL OR @clienteIdcliente IS NULL
+	BEGIN
+		RETURN NULL;
+	END
+
 	DECLARE @novaVisita DATETIME;
 	DECLARE @proxDiaUtil DATE = (SELECT adm.udf_ProximoDiaUtil(@dataAgendada));
 
 	-- Table Variable to stored values to use
-	DECLARE @table TABLE
+	/*DECLARE @table TABLE
 	(
-		diaSemana VARCHAR(15),
+		diaSemana TINYINT,
 		qntVisitas INT
 	);
 	INSERT INTO @table
-	SELECT CASE DATEPART(dw,@dataAgendada)
-			WHEN 1 THEN 'Domingo'
-			WHEN 2 THEN 'Segunda-Feira'
-			WHEN 3 THEN 'Terca-Feira'
-			WHEN 4 THEN 'Quarta-Feira'
-			WHEN 5 THEN 'Quinta-Feira'
-			WHEN 6 THEN 'Sexta-Feira'
-			WHEN 7 THEN 'Sabado'
-		   END AS [Dia da Semana], COUNT(*) FROM Pinga.visita v
+	SELECT DATEPART(dw,@dataAgendada)[Dia da Semana], COUNT(*) FROM Pinga.visita v
 	INNER JOIN Pinga.parceiro_has_visita phv
 	ON v.idvisita = phv.visita_idvisita
 	INNER JOIN Pinga.parceiro p
@@ -2049,18 +2046,23 @@ BEGIN
 	INNER JOIN Pinga.cliente c
 	ON c.idcliente = v.cliente_idcliente
 	GROUP BY v.[data]
-	HAVING COUNT(v.[data]) > 0;
-	
+	HAVING COUNT(v.[data]) > 0;*/
 
-	-- Vamos fazer com que a prox visita seja na outra semana, mesmo dia e hora (POR ENQUANTO)
-	SET @novaVisita = DATEADD(d, 7, @dataAgendada);
+	-- Identificar o melhor dia para retorno no cliente
+	-- podemos marcar no segundo melhor dia (2º dia mais visitado)
+	-- Identificar horario disponivel na agenda do parceiro
+	
+	-- Implementações para a v2.0
+
+	DECLARE @temp VARCHAR(50) = CONCAT(@proxDiaUtil, ' ', DATEPART(HOUR, @dataAgendada), ':', DATEPART(MINUTE, @dataAgendada));
+	SET @novaVisita = (CONVERT(DATETIME, @temp));
 	RETURN @novaVisita;
 END;
 GO
 
 -- SELECT Pinga.udf_IdentificarDataParaVisita @parceiroIdparceiro, @clienteIdcliente, @data
 SELECT Pinga.udf_IdentificarDataParaVisita('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE()) AS UserFunction; 
-
+SELECT Pinga.udf_IdentificarDataParaVisita(NULL, NULL, GETDATE())
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'horario')
 BEGIN
@@ -2141,7 +2143,7 @@ BEGIN
 	);
 	IF NOT EXISTS(SELECT 1 FROM Pinga.excecoes WHERE [data] = @DATERETURN AND [status] = 1)
 	BEGIN
-		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN);
+		RETURN @DATERETURN;
 	END
 	ELSE
 	BEGIN
