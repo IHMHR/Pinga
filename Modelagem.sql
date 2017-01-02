@@ -339,14 +339,16 @@ tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
 custo_idcusto UNIQUEIDENTIFIER NOT NULL,
 parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
+created DATETIME2 GENERATED ALWAYS AS START ROW NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS END ROW NOT NULL,
+PERIOD FOR SYSTEM_TIME(created, modified),
 
 CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
 FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
 FOREIGN KEY (custo_idcusto) REFERENCES Pinga.custo(idcusto),
 FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
-);
+)
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.entrada));
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'fornecedor')
 BEGIN
@@ -573,14 +575,16 @@ entrada_identrada UNIQUEIDENTIFIER NOT NULL,
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
 valor_saida DECIMAL(9,2) NOT NULL,
-created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
+created DATETIME2 GENERATED ALWAYS AS START ROW NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS END ROW NOT NULL,
+PERIOD FOR SYSTEM_TIME (created, modified),
 
 CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
 FOREIGN KEY (saida_idsaida) REFERENCES Pinga.saida(idsaida),
 FOREIGN KEY (entrada_identrada) REFERENCES Pinga.produto(idproduto),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.saida(idsaida)
-);
+)
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.itens_saida));
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estoque')
 BEGIN
@@ -591,12 +595,14 @@ CREATE TABLE Pinga.estoque (
 idestoque UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
-createad SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
+createad DATETIME2 GENERATED ALWAYS AS START ROW NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS END ROW NOT NULL,
+PERIOD FOR SYSTEM_TIME (created, modified),
 
 CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
-);
+)
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.estoque));
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'students')
 BEGIN
