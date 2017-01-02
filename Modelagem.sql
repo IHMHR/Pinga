@@ -2248,26 +2248,38 @@ FOREIGN KEY (horario_idhorario) REFERENCES Pinga.horario(idhorario)
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.agenda));
 
 
-INSERT INTO Pinga.horario (horario_inicio, tempo_duracao, dia_semana, [status])
-VALUES ('08:00', '00:15', 2, 1), ('08:15', '00:15', 2, 1), ('08:30', '00:15', 2, 1), ('08:45', '00:15', 2, 1), ('09:00', '00:15', 2, 1), ('09:15', '00:15', 2, 1), ('09:30', '00:15', 2, 1), ('09:45', '00:15', 2, 1), ('10:00', '00:15', 2, 1),
-('16:00', '00:15', 2, 1), ('17:00', '00:15', 2, 1), ('18:00', '00:15', 2, 1), ('18:30', '00:15', 2, 1), ('19:00', '00:15', 2, 1), ('19:30', '00:15', 2, 1), ('20:00', '00:15', 2, 1),('08:00', '00:15', 3, 1), ('08:15', '00:15', 3, 1),
-('08:30', '00:15', 3, 1), ('08:45', '00:15', 3, 1), ('09:00', '00:15', 3, 1), ('09:15', '00:15', 3, 1), ('09:30', '00:15', 3, 1), ('09:45', '00:15', 3, 1), ('10:00', '00:15', 3, 1),('16:00', '00:15', 3, 1), ('17:00', '00:15', 3, 1),
-('18:00', '00:15', 3, 1), ('18:30', '00:15', 3, 1), ('19:00', '00:15', 3, 1), ('19:30', '00:15', 3, 1), ('20:00', '00:15', 3, 1),('08:00', '00:15', 4, 1), ('08:15', '00:15', 4, 1), ('08:30', '00:15', 4, 1), ('08:45', '00:15', 4, 1),
-('09:00', '00:15', 4, 1), ('09:15', '00:15', 4, 1), ('09:30', '00:15', 4, 1), ('09:45', '00:15', 4, 1), ('10:00', '00:15', 4, 1),('16:00', '00:15', 4, 1), ('17:00', '00:15', 4, 1), ('18:00', '00:15', 4, 1), ('18:30', '00:15', 4, 1),
-('19:00', '00:15', 4, 1), ('19:30', '00:15', 4, 1), ('20:00', '00:15', 4, 1),('08:00', '00:15', 5, 1), ('08:15', '00:15', 5, 1),('08:30', '00:15', 5, 1), ('08:45', '00:15', 5, 1), ('09:00', '00:15', 5, 1), ('09:15', '00:15', 5, 1),
-('09:30', '00:15', 5, 1), ('09:45', '00:15', 5, 1), ('10:00', '00:15', 5, 1),('16:00', '00:15', 5, 1), ('17:00', '00:15', 5, 1), ('18:00', '00:15', 5, 1), ('18:30', '00:15', 5, 1), ('19:00', '00:15', 5, 1), ('19:30', '00:15', 5, 1),
-('20:00', '00:15', 5, 1),('08:00', '00:15', 6, 1), ('08:15', '00:15', 6, 1),('08:30', '00:15', 6, 1), ('08:45', '00:15', 6, 1), ('09:00', '00:15', 6, 1), ('09:15', '00:15', 6, 1), ('09:30', '00:15', 6, 1), ('09:45', '00:15', 6, 1),
-('10:00', '00:15', 6, 1),('16:00', '00:15', 6, 1), ('17:00', '00:15', 6, 1), ('18:00', '00:15', 6, 1), ('18:30', '00:15', 6, 1), ('19:00', '00:15', 6, 1), ('19:30', '00:15', 6, 1), ('20:00', '00:15', 6, 1);
+CREATE OR ALTER FUNCTION adm.udf_ProximoDiaUtil (
+	@data DATE)
+RETURNS DATE
+BEGIN
+	DECLARE @DATERETURN DATE;
+	DECLARE @WDAY INT = DATEPART(WEEKDAY, @data);
+	SET @DATERETURN = (
+		SELECT CASE
+			WHEN @WDAY = 1 THEN DATEADD(DAY, 1, @data) -- domingo
+			WHEN @WDAY = 7 THEN DATEADD(DAY, 2, @data) -- sabado
+			ELSE DATEADD(DAY, 1, @data)
+		END
+	);
+	IF NOT EXISTS(SELECT 1 FROM Pinga.excecoes WHERE [data] = @DATERETURN AND [status] = 1)
+	BEGIN
+		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN);
+	END
+	ELSE
+	BEGIN
+		-- Este dia é uma exceção, devemos encontrar o prox dia util
+		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN); -- adicionamos mais um dia e verificados se é fds
+		SET @WDAY = DATEPART(WEEKDAY, @DATERETURN);
+		SET @DATERETURN = (
+			SELECT CASE
+				WHEN @WDAY = 1 THEN DATEADD(DAY, 1, @DATERETURN) -- domingo
+				WHEN @WDAY = 7 THEN DATEADD(DAY, 2, @DATERETURN) -- sabado
+				ELSE DATEADD(DAY, 1, @DATERETURN)
+			END
+		);
+	END
+	
+	RETURN @DATERETURN;
+END;
 
-
-SELECT ROWGUIDCOL, CAST(horario_inicio AS VARCHAR(5)) AS Horario, CAST(tempo_duracao AS VARCHAR(5)) AS TempoDuracao, dia_semana, [status] FROM Pinga.horario
-
-
-INSERT INTO Pinga.excecoes (data, [status])
-VALUES ('20170101', 1),('20171225', 1);
-
-
-INSERT INTO Pinga.parceiro_has_horario (parceiro_idparceiro, horario_idhorario)
-VALUES ('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'F16968A0-72D7-4CA5-8806-D800F1A68108'), ('4D140F96-EA43-4F8C-AC50-98FC29110F02', '333DCEE8-6A46-40B4-84FD-9EB541C060A6'), ('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'EC898152-D2B2-4A23-81D5-D7F55F683A6F'),
-('9603F7D9-227C-4C92-B598-6BFBED71A341', 'F16968A0-72D7-4CA5-8806-D800F1A68108'), ('9603F7D9-227C-4C92-B598-6BFBED71A341', '333DCEE8-6A46-40B4-84FD-9EB541C060A6'), ('9603F7D9-227C-4C92-B598-6BFBED71A341', 'EC898152-D2B2-4A23-81D5-D7F55F683A6F'),
-('4AD584FC-18DD-4AE8-9EEA-0A14EDC3EB13', 'F16968A0-72D7-4CA5-8806-D800F1A68108'), ('4AD584FC-18DD-4AE8-9EEA-0A14EDC3EB13', '333DCEE8-6A46-40B4-84FD-9EB541C060A6'), ('4AD584FC-18DD-4AE8-9EEA-0A14EDC3EB13', 'EC898152-D2B2-4A23-81D5-D7F55F683A6F');
+SELECT adm.udf_ProximoDiaUtil('20170105')
