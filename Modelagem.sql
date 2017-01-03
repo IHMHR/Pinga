@@ -123,7 +123,8 @@ fuso_horario CHAR(9) NULL, -- UTC+02:00
 continente_idcontinente UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_pais PRIMARY KEY NONCLUSTERED (idpais),
-FOREIGN KEY (continente_idcontinente) REFERENCES Pinga.continente(idcontinente)
+FOREIGN KEY (continente_idcontinente) REFERENCES Pinga.continente(idcontinente),
+CONSTRAINT unq_pais UNIQUE (pais, sigla, DDI)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estado')
@@ -139,7 +140,8 @@ capital BIT NOT NULL DEFAULT 0,
 pais_idpais UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_estado PRIMARY KEY NONCLUSTERED (idestado),
-FOREIGN KEY (pais_idpais) REFERENCES Pinga.pais(idpais)
+FOREIGN KEY (pais_idpais) REFERENCES Pinga.pais(idpais),
+CONSTRAINT unq_estado UNIQUE (uf)
 );
 
 
@@ -156,7 +158,8 @@ capital BIT NOT NULL DEFAULT 0,
 estado_idestado UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_cidade PRIMARY KEY NONCLUSTERED (idcidade),
-FOREIGN KEY (estado_idestado) REFERENCES Pinga.estado(idestado)
+FOREIGN KEY (estado_idestado) REFERENCES Pinga.estado(idestado),
+CONSTRAINT unq_cidade UNIQUE (DDD)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'bairro')
@@ -183,7 +186,8 @@ CREATE TABLE Pinga.tipo_logradouro (
 idtipo_logradouro UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 tipo_logradouro VARCHAR(35) NOT NULL,
 
-CONSTRAINT pk_tipo_logradouro PRIMARY KEY NONCLUSTERED (idtipo_logradouro)
+CONSTRAINT pk_tipo_logradouro PRIMARY KEY NONCLUSTERED (idtipo_logradouro),
+CONSTRAINT unq_tipo_logradouro UNIQUE (tipo_logradouro)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_complemento')
@@ -195,7 +199,8 @@ CREATE TABLE Pinga.tipo_complemento (
 idtipo_complemento UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 tipo_complemento VARCHAR(35) NOT NULL,
 
-CONSTRAINT pk_tipo_complemento PRIMARY KEY NONCLUSTERED (idtipo_complemento)
+CONSTRAINT pk_tipo_complemento PRIMARY KEY NONCLUSTERED (idtipo_complemento),
+CONSTRAINT unq_tipo_complemento UNIQUE (tipo_complemento)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'endereco')
@@ -229,9 +234,10 @@ END
 
 CREATE TABLE Pinga.tipo_telefone (
 idtipo_telefone UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(20) NOT NULL,
+tipo_telefone VARCHAR(20) NOT NULL,
 
-CONSTRAINT pk_idtipo_telefone PRIMARY KEY NONCLUSTERED (idtipo_telefone)
+CONSTRAINT pk_idtipo_telefone PRIMARY KEY NONCLUSTERED (idtipo_telefone),
+CONSTRAINT unq_tipo_telefone UNIQUE (tipo_telefone)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'operadora')
@@ -241,11 +247,12 @@ END
 
 CREATE TABLE Pinga.operadora (
 idoperadora UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-nome VARCHAR(25) NOT NULL,
+operadora VARCHAR(25) NOT NULL,
 razao_social VARCHAR(40) NOT NULL,
 [status] BIT NOT NULL DEFAULT 0,
 
-CONSTRAINT pk_operadora PRIMARY KEY NONCLUSTERED (idoperadora)
+CONSTRAINT pk_operadora PRIMARY KEY NONCLUSTERED (idoperadora),
+CONSTRAINT unq_operadora UNIQUE (operadora)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
@@ -275,9 +282,10 @@ END
 
 CREATE TABLE Pinga.tipo_litragem (
 idtipo_litragem UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(35) NOT NULL,
+tipo_litragem VARCHAR(35) NOT NULL,
 
-CONSTRAINT pk_tipo_litragem PRIMARY KEY NONCLUSTERED (idtipo_litragem)
+CONSTRAINT pk_tipo_litragem PRIMARY KEY NONCLUSTERED (idtipo_litragem),
+CONSTRAINT unq_tipo_litragem UNIQUE (tipo_litragem)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_custo')
@@ -287,9 +295,10 @@ END
 
 CREATE TABLE Pinga.tipo_custo (
 idtipo_custo UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(60) NOT NULL,
+tipo_custo VARCHAR(60) NOT NULL,
 
-CONSTRAINT pk_tipo_custo PRIMARY KEY NONCLUSTERED (idtipo_custo)
+CONSTRAINT pk_tipo_custo PRIMARY KEY NONCLUSTERED (idtipo_custo),
+CONSTRAINT unq_tipo_custo UNIQUE (tipo_custo)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'custo')
@@ -373,11 +382,12 @@ END
 
 CREATE TABLE Pinga.fase (
 idfase UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(60) NOT NULL,
+fase VARCHAR(60) NOT NULL,
 created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 modified SMALLDATETIME NULL,
 
-CONSTRAINT pk_fase PRIMARY KEY NONCLUSTERED (idfase)
+CONSTRAINT pk_fase PRIMARY KEY NONCLUSTERED (idfase),
+CONSTRAINT unq_fase UNIQUE (fase)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'forma_pagamento')
@@ -387,11 +397,12 @@ END
 
 CREATE TABLE Pinga.forma_pagamento (
 idforma_pagamento UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(45) NOT NULL,
+forma_pagamento VARCHAR(45) NOT NULL,
 created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 modified SMALLDATETIME NULL,
 
-CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento)
+CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento),
+CONSTRAINT unq_forma_pagamento UNIQUE (forma_pagamento)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_localidade')
@@ -506,7 +517,7 @@ END
 
 CREATE TABLE Pinga.produto (
 idproduto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(30) NOT NULL,
+produto VARCHAR(30) NOT NULL,
 tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
 litragem INT NULL,
 vendendo BIT NOT NULL DEFAULT 0,
@@ -517,7 +528,8 @@ modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
 FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
-FOREIGN KEY (produto_quantidade_idproduto_quantidade) REFERENCES Pinga.produto_quantidade(idproduto_quantidade)
+FOREIGN KEY (produto_quantidade_idproduto_quantidade) REFERENCES Pinga.produto_quantidade(idproduto_quantidade),
+CONSTRAINT unq_produto UNIQUE (produto)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro')
@@ -630,56 +642,6 @@ SELECT * FROM adm.login;
 UPDATE adm.login SET pwd = '40BD001563085FC35165329EA1FF5C5ECBDBBEEF' WHERE lgn = '123';
 
 exec sp_tables;
-
-/*SELECT c.nome AS 'Nome Cliente', CASE WHEN c.visitado = 1 THEN 'Sim' ELSE 'Não' END AS 'Cliente Visitado',
-CONVERT(CHAR(10), c.created, 103) AS 'Data Cadastro', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf,
-c.idcliente, e.idendereco, s.cliente AS 'Vnd'
-FROM pingaDB.Pinga.cliente c INNER JOIN pingaDB.Pinga.endereco e ON c.endereco = e.idendereco
-LEFT JOIN pingaDB.Pinga.saida s ON s.cliente = c.idcliente*/
-
-
---SELECT * FROM pingaDB.Pinga.entrada;
-
-
-/*18/09/2016 00:00:00
-2016-09-18*/
-
-/*SELECT p.nome, CASE WHEN p.ativo = 1 THEN 'Sim' ELSE 'Não', e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro
-FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco
-LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro*/
-
-/*INSERT INTO pingaDB.Pinga.tipo_litragem VALUES (NEWID(), 'Meiotinha'),(NEWID(), 'Litro');
-
-SELECT * FROM pingaDB.Pinga.saida
-
-SELECT p.idparceiro, p.nome, CASE WHEN p.status = 1 THEN 'Sim' ELSE 'Não' END AS ativo, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, s.parceiro FROM Pinga.parceiro p INNER JOIN Pinga.endereco e ON e.idendereco = p.endereco LEFT JOIN Pinga.saida s ON s.cliente = p.idparceiro;
-
-SELECT data, parceiro, cliente, fase, forma_pagamento
-FROM pingaDB.Pinga.saida
-
-
-SELECT * FROM pingaDB.Pinga.produto
-SELECT descricao FROM Pinga.forma_pagamento;
-
-SELECT * FROM pingaDB.Pinga.saida
-
-SELECT * FROM pingaDB.Pinga.produto
-
-SELECT idproduto, p.descricao, litragem, tl.descricao, CASE WHEN p.vendendo = 1 THEN 'Vendendo' ELSE 'Fora do mercado' END AS Vendendo, p.valor_unitario
-FROM Pinga.produto p
-INNER JOIN Pinga.tipo_litragem tl ON p.tipo_litragem = tl.idtipo_litragem*/
-
-/*CREATE TRIGGER Pinga.trg_estoque
-ON Pinga.entrada AFTER INSERT
-AS
-	INSERT INTO estoque VALUES ();
-GO*/
-
-/*SELECT * FROM pingaDB.Pinga.cliente;
-
-
-SELECT produto, quantidade, (p.descricao + N' - ' + quantidade) AS item FROM Pinga.estoque e INNER JOIN Pinga.produto p ON p.idproduto = e.produto;*/
-
 
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente_has_parceiro')
@@ -808,10 +770,11 @@ END
 
 CREATE TABLE Pinga.tipo_periodicidade_entrega (
 idtipo_periodicidade_entrega UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-descricao VARCHAR(15) NOT NULL,
+tipo_periodicidade_entrega VARCHAR(15) NOT NULL,
 [status] BIT NOT NULL DEFAULT 0,
 	
-CONSTRAINT pk_tipo_periodicidade_entrega PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega)
+CONSTRAINT pk_tipo_periodicidade_entrega PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega),
+CONSTRAINT unq_tipo_periodicidade_entrega UNIQUE (tipo_periodicidade_entrega)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_periodicidade_entrega_dia')
