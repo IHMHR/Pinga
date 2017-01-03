@@ -80,14 +80,30 @@ INSERT INTO Pinga.cliente (cpf_cnpj,nome_razao_social, apelido_nome_fantasia, in
 VALUES ('13089902605', 'Igor Henrique Martinelli de Heredia Ramos', 'IHMHR', '13089902605', 'MG17771898', '1996-09-22', 'M', (SELECT e.ROWGUIDCOL FROM Pinga.email e INNER JOIN Pinga.email_dominio em ON em.idemail_dominio = e.email_dominio_idemail_dominio INNER JOIN Pinga.email_localidade el ON el.idemail_localidade = e.email_localidade_idemail_localidade WHERE e.email = 'martinelli.igor' AND em.email_dominio = 'hotmail' AND el.email_localidade = 'com'), (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE());
 
 
-INSERT INTO Pinga.visita (cliente_idcliente, data, comecou, terminou)
-VALUES ('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '15:00', '15:15'),
-('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '15:00', '15:15'),
-('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '15:30', '15:45'),
-('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE(), '16:00', '16:15');
+INSERT INTO Pinga.horario (horario_inicio, tempo_duracao, dia_semana, [status])
+VALUES ('08:00', '00:15', 2, 1),('08:00', '00:15', 3, 1),('08:00', '00:15', 4, 1),
+('08:00', '00:15', 5, 1),('08:00', '00:15', 6, 1),('08:00', '00:15', 7, 1);
 
-INSERT INTO Pinga.feedback_visita (visita_idvisita, comentario, nota, venda_realizada, visita_reagendada, created)
-VALUES ('9DE53D8F-9B54-4386-85E3-328A045872A7', 'comentario', 10, 1, 1, GETDATE());
+INSERT INTO Pinga.parceiro_has_horario (parceiro_idparceiro, horario_idhorario)
+VALUES ((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), (SELECT ROWGUIDCOL FROM Pinga.horario WHERE horario_inicio = '08:00' AND dia_semana = 2)),
+((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), (SELECT ROWGUIDCOL FROM Pinga.horario WHERE horario_inicio = '08:00' AND dia_semana = 3)),
+((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), (SELECT ROWGUIDCOL FROM Pinga.horario WHERE horario_inicio = '08:00' AND dia_semana = 4));
+
+
+INSERT INTO Pinga.visita (parceiro_has_horario_idparceiro_has_horario, cliente_idcliente)
+VALUES ((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605')),
+((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605')),
+((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605')),
+((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605'));
+
+
+INSERT INTO Pinga.excecoes (data, [status])
+VALUES ('20170101', 1),('20171225', 1), ('20170907', 1);
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+INSERT INTO Pinga.feedback_visita (visita_idvisita, [data], comecou, terminou, comentario, nota, venda_realizada, cliente_convertido, visita_idvisita)
+VALUES ();
 
 INSERT INTO Pinga.parceiro_has_visita (parceiro_idparceiro, visita_idvisita)
 VALUES ((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), '9DE53D8F-9B54-4386-85E3-328A045872A7');
@@ -109,23 +125,8 @@ VALUES ('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', DATEADD(d, -2, GETDATE()), '15:0
 ('D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', DATEADD(d, -7, GETDATE()), '16:00', '16:15');
 
 
-INSERT INTO Pinga.horario (horario_inicio, tempo_duracao, dia_semana, [status])
-VALUES ('08:00', '00:15', 2, 1), ('08:15', '00:15', 2, 1), ('08:30', '00:15', 2, 1), ('08:45', '00:15', 2, 1), ('09:00', '00:15', 2, 1), ('09:15', '00:15', 2, 1), ('09:30', '00:15', 2, 1), ('09:45', '00:15', 2, 1), ('10:00', '00:15', 2, 1),
-('16:00', '00:15', 2, 1), ('17:00', '00:15', 2, 1), ('18:00', '00:15', 2, 1), ('18:30', '00:15', 2, 1), ('19:00', '00:15', 2, 1), ('19:30', '00:15', 2, 1), ('20:00', '00:15', 2, 1),('08:00', '00:15', 3, 1), ('08:15', '00:15', 3, 1),
-('08:30', '00:15', 3, 1), ('08:45', '00:15', 3, 1), ('09:00', '00:15', 3, 1), ('09:15', '00:15', 3, 1), ('09:30', '00:15', 3, 1), ('09:45', '00:15', 3, 1), ('10:00', '00:15', 3, 1),('16:00', '00:15', 3, 1), ('17:00', '00:15', 3, 1),
-('18:00', '00:15', 3, 1), ('18:30', '00:15', 3, 1), ('19:00', '00:15', 3, 1), ('19:30', '00:15', 3, 1), ('20:00', '00:15', 3, 1),('08:00', '00:15', 4, 1), ('08:15', '00:15', 4, 1), ('08:30', '00:15', 4, 1), ('08:45', '00:15', 4, 1),
-('09:00', '00:15', 4, 1), ('09:15', '00:15', 4, 1), ('09:30', '00:15', 4, 1), ('09:45', '00:15', 4, 1), ('10:00', '00:15', 4, 1),('16:00', '00:15', 4, 1), ('17:00', '00:15', 4, 1), ('18:00', '00:15', 4, 1), ('18:30', '00:15', 4, 1),
-('19:00', '00:15', 4, 1), ('19:30', '00:15', 4, 1), ('20:00', '00:15', 4, 1),('08:00', '00:15', 5, 1), ('08:15', '00:15', 5, 1),('08:30', '00:15', 5, 1), ('08:45', '00:15', 5, 1), ('09:00', '00:15', 5, 1), ('09:15', '00:15', 5, 1),
-('09:30', '00:15', 5, 1), ('09:45', '00:15', 5, 1), ('10:00', '00:15', 5, 1),('16:00', '00:15', 5, 1), ('17:00', '00:15', 5, 1), ('18:00', '00:15', 5, 1), ('18:30', '00:15', 5, 1), ('19:00', '00:15', 5, 1), ('19:30', '00:15', 5, 1),
-('20:00', '00:15', 5, 1),('08:00', '00:15', 6, 1), ('08:15', '00:15', 6, 1),('08:30', '00:15', 6, 1), ('08:45', '00:15', 6, 1), ('09:00', '00:15', 6, 1), ('09:15', '00:15', 6, 1), ('09:30', '00:15', 6, 1), ('09:45', '00:15', 6, 1),
-('10:00', '00:15', 6, 1),('16:00', '00:15', 6, 1), ('17:00', '00:15', 6, 1), ('18:00', '00:15', 6, 1), ('18:30', '00:15', 6, 1), ('19:00', '00:15', 6, 1), ('19:30', '00:15', 6, 1), ('20:00', '00:15', 6, 1);
-
-
 SELECT ROWGUIDCOL, CAST(horario_inicio AS VARCHAR(5)) AS Horario, CAST(tempo_duracao AS VARCHAR(5)) AS TempoDuracao, dia_semana, [status] FROM Pinga.horario
 
-
-INSERT INTO Pinga.excecoes (data, [status])
-VALUES ('20170101', 1),('20171225', 1);
 
 
 INSERT INTO Pinga.parceiro_has_horario (parceiro_idparceiro, horario_idhorario)
