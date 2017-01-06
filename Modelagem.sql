@@ -12,8 +12,8 @@ BEGIN
 END
 
 CREATE DATABASE pingaDB CONTAINMENT = PARTIAL
-ON (NAME = 'pingaDB', FILENAME = 'C:\Users\Igor\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
-LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\Igor\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
+ON (NAME = 'pingaDB', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
+LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
 COLLATE Latin1_General_CS_AS;
 GO
 
@@ -348,8 +348,8 @@ tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
 valor DECIMAL(9,2) NOT NULL,
 custo_idcusto UNIQUEIDENTIFIER NOT NULL,
 parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created DATETIME2 GENERATED ALWAYS AS START ROW NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS END ROW NOT NULL,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
 PERIOD FOR SYSTEM_TIME(created, modified),
 
 CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
@@ -587,8 +587,8 @@ entrada_identrada UNIQUEIDENTIFIER NOT NULL,
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
 valor_saida DECIMAL(9,2) NOT NULL,
-created DATETIME2 GENERATED ALWAYS AS START ROW NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS END ROW NOT NULL,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
 PERIOD FOR SYSTEM_TIME (created, modified),
 
 CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
@@ -607,8 +607,8 @@ CREATE TABLE Pinga.estoque (
 idestoque UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
-createad DATETIME2 GENERATED ALWAYS AS START ROW NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS END ROW NOT NULL,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
 PERIOD FOR SYSTEM_TIME (created, modified),
 
 CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
@@ -981,7 +981,7 @@ BEGIN
 	BEGIN TRY
 		SET NOCOUNT ON;
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1009,12 +1009,12 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.tipo_litragem (descricao)
+			INSERT INTO Pinga.tipo_litragem (tipo_litragem)
 			VALUES (@descricaoTipoLitragem);
 		COMMIT TRANSACTION;   
-		DECLARE @idtipoLitagrem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE descricao = @descricaoTipoLitragem);
+		DECLARE @idtipoLitagrem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE tipo_litragem = @descricaoTipoLitragem);
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricaoProduto, @idtipoLitagrem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1050,7 +1050,7 @@ BEGIN
 		COMMIT TRANSACTION;   
 		DECLARE @idprodutoQuantidade UNIQUEIDENTIFIER = (SELECT TOP 1 idproduto_quantidade FROM Pinga.produto_quantidade WHERE quantidade_minima = @quantidadeMinima AND quantidade_maxima = @quantidadeMaxima AND quantidade_recomenda_estoque = @quantidadeRecomendaEstoque AND quantidade_solicitar_compra = @quantidadeSolicitarCompra ORDER BY created DESC);
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @idprodutoQuantidade, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1081,17 +1081,17 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.tipo_litragem (descricao)
+			INSERT INTO Pinga.tipo_litragem (tipo_litragem)
 			VALUES (@descricaoTipoLitragem);
 		COMMIT TRANSACTION;
 		BEGIN TRANSACTION
 			INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
 			VALUES (@quantidadeMinima, @quantidadeMaxima, @quantidadeRecomendaEstoque, @quantidadeSolicitarCompra, GETDATE());
 		COMMIT TRANSACTION;
-		DECLARE @idtipoLitagrem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE descricao = @descricaoTipoLitragem);
+		DECLARE @idtipoLitagrem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE tipo_litragem = @descricaoTipoLitragem);
 		DECLARE @idprodutoQuantidade UNIQUEIDENTIFIER = (SELECT TOP 1 idproduto_quantidade FROM Pinga.produto_quantidade WHERE quantidade_minima = @quantidadeMinima AND quantidade_maxima = @quantidadeMaxima AND quantidade_recomenda_estoque = @quantidadeRecomendaEstoque AND quantidade_solicitar_compra = @quantidadeSolicitarCompra ORDER BY created DESC); 
 		BEGIN TRANSACTION
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @idtipoLitagrem, @litragem, @vendendo, @valorUnitario, @idprodutoQuantidade, GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1464,8 +1464,7 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
-			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade,GETDATE());
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade,GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
 	BEGIN CATCH
@@ -1492,12 +1491,12 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.tipo_litragem (descricao)
+			INSERT INTO Pinga.tipo_litragem (tipo_litragem)
 			VALUES (@descricaoLitragem);
 		COMMIT TRANSACTION;
-		DECLARE @idtipoLitragem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE descricao = @descricaoLitragem);
+		DECLARE @idtipoLitragem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE tipo_litragem = @descricaoLitragem);
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @idtipoLitragem, @litragem, @vendendo, @valorUnitario, @produtoQuantidadeIdprodutoQuantidade,GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1533,7 +1532,7 @@ BEGIN
 		COMMIT TRANSACTION;
 		DECLARE @idquantidadeProduto UNIQUEIDENTIFIER = (SELECT TOP 1 idproduto_quantidade FROM Pinga.produto_quantidade WHERE quantidade_minima = @quantidadeMinima AND quantidade_maxima = @quantidadeMaxima AND quantidade_recomenda_estoque = @quantidadeRecomendaEstoque AND quantidade_solicitar_compra = @quantidadeSolicitarCompra);
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @tipoLitragemIdtipoLitragem, @litragem, @vendendo, @valorUnitario, @idquantidadeProduto,GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1559,17 +1558,17 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.tipo_litragem (descricao)
+			INSERT INTO Pinga.tipo_litragem (tipo_litragem)
 			VALUES (@descricaoLitragem);
 		COMMIT TRANSACTION;
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
 			VALUES (@quantidadeMinima, @quantidadeMaxima, @quantidadeRecomendaEstoque, @quantidadeSolicitarCompra, GETDATE());
 		COMMIT TRANSACTION;
-		DECLARE @idtipoLitragem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE descricao = @descricaoLitragem);
+		DECLARE @idtipoLitragem UNIQUEIDENTIFIER = (SELECT TOP 1 idtipo_litragem FROM Pinga.tipo_litragem WHERE tipo_litragem = @descricaoLitragem);
 		DECLARE @idquantidadeProduto UNIQUEIDENTIFIER = (SELECT TOP 1 idproduto_quantidade FROM Pinga.produto_quantidade WHERE quantidade_minima = @quantidadeMinima AND quantidade_maxima = @quantidadeMaxima AND quantidade_recomenda_estoque = @quantidadeRecomendaEstoque AND quantidade_solicitar_compra = @quantidadeSolicitarCompra);
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.produto (descricao, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
+			INSERT INTO Pinga.produto (produto, tipo_litragem_idtipo_litragem, litragem, vendendo, valor_unitario, produto_quantidade_idproduto_quantidade, created)
 			VALUES (@descricao, @idtipoLitragem, @litragem, @vendendo, @valorUnitario, @idquantidadeProduto,GETDATE());
 		COMMIT TRANSACTION;
 	END TRY
@@ -1713,10 +1712,10 @@ BEGIN
 	SET NOCOUNT ON;
     BEGIN TRY
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.forma_pagamento (descricao, created)
+			INSERT INTO Pinga.forma_pagamento (forma_pagamento, created)
 			VALUES (@descricaoFormaPagamento, GETDATE());
 		COMMIT TRANSACTION;
-		DECLARE @idFormaPagamento UNIQUEIDENTIFIER = (SELECT TOP 1 idforma_pagamento FROM Pinga.forma_pagamento WHERE descricao = @descricaoFormaPagamento ORDER BY created DESC);
+		DECLARE @idFormaPagamento UNIQUEIDENTIFIER = (SELECT TOP 1 idforma_pagamento FROM Pinga.forma_pagamento WHERE forma_pagamento = @descricaoFormaPagamento ORDER BY created DESC);
         BEGIN TRANSACTION;
             INSERT INTO Pinga.contrato (cliente_idcliente, data_entrada_vigor, data_expiracao, data_assinatura, periodicidade_entrega_idperiodicidade_entrega, prorrogavel, [status], forma_pagamento_idforma_pagamento, multa_quebra)
             VALUES (@clienteIdcliente, @dataEntradaVigor, @dataExpiracao, @dataAssinatura, @periodicidadeEntregaIdperiodicidadeEntrega, @prorrogavel, @status, @idFormaPagamento, @multaQuebra);
@@ -1792,10 +1791,10 @@ BEGIN
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
-			INSERT INTO Pinga.tipo_custo (descricao)
+			INSERT INTO Pinga.tipo_custo (tipo_custo)
 			VALUES (@descricaoTipoCusto);			
 		COMMIT TRANSACTION;
-		DECLARE @IdTipoCusto UNIQUEIDENTIFIER = (SELECT TOP 1 ROWGUIDCOL FROM Pinga.tipo_custo WHERE descricao = @descricaoTipoCusto);
+		DECLARE @IdTipoCusto UNIQUEIDENTIFIER = (SELECT TOP 1 ROWGUIDCOL FROM Pinga.tipo_custo WHERE tipo_custo = @descricaoTipoCusto);
 		BEGIN TRANSACTION;
 			INSERT INTO Pinga.custo (tipo_custo_idtipo_custo, valor, created)
 			VALUES (@IdTipoCusto, @valor, GETDATE());
@@ -2032,7 +2031,7 @@ END;
 GO
 
 -- SELECT Pinga.udf_IdentificarDataParaVisita @parceiroIdparceiro, @clienteIdcliente, @data
-SELECT Pinga.udf_IdentificarDataParaVisita('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE()) AS UserFunction; 
+--SELECT Pinga.udf_IdentificarDataParaVisita('4D140F96-EA43-4F8C-AC50-98FC29110F02', 'D48127E5-04EF-4F4E-A8EB-2D4F5AC21B01', GETDATE()) AS UserFunction; 
 SELECT Pinga.udf_IdentificarDataParaVisita(NULL, NULL, GETDATE())
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'horario')
@@ -2097,7 +2096,7 @@ FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita),
 FOREIGN KEY (horario_idhorario) REFERENCES Pinga.horario(idhorario)
 )
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.agenda));
-
+GO
 
 CREATE OR ALTER FUNCTION adm.udf_ProximoDiaUtil (
 	@data DATE)
@@ -2134,3 +2133,16 @@ BEGIN
 END;
 
 SELECT adm.udf_ProximoDiaUtil('20170105')
+
+
+
+USE pingaDB;
+CREATE LOGIN AppLogin WITH PASSWORD = '123456';
+GO
+
+CREATE USER AppLogin FOR LOGIN AppLogin;
+GO
+
+DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE ROLE, CREATE DEFAULT, BACKUP DATABASE, BACKUP LOG TO AppLogin;
+GRANT SELECT, UPDATE, INSERT ON SCHEMA::Pinga TO AppLogin;
+
