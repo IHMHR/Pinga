@@ -158,8 +158,7 @@ capital BIT NOT NULL DEFAULT 0,
 estado_idestado UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_cidade PRIMARY KEY NONCLUSTERED (idcidade),
-FOREIGN KEY (estado_idestado) REFERENCES Pinga.estado(idestado),
-CONSTRAINT unq_cidade UNIQUE (DDD)
+FOREIGN KEY (estado_idestado) REFERENCES Pinga.estado(idestado)
 );
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'bairro')
@@ -2145,4 +2144,31 @@ GO
 
 DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE ROLE, CREATE DEFAULT, BACKUP DATABASE, BACKUP LOG TO AppLogin;
 GRANT SELECT, UPDATE, INSERT ON SCHEMA::Pinga TO AppLogin;
+GO
 
+CREATE OR ALTER VIEW Pinga.uvw_VisualizarEndereco
+WITH ENCRYPTION, SCHEMABINDING
+AS
+	SELECT e.idendereco ,tl.tipo_logradouro, e.logradouro, e.numero, tc.tipo_complemento, e.complemento, e.CEP, e.ponto_referencia,
+		   b.bairro, c.DDD, c.cidade, c.capital, es.uf, es.estado, p.sigla, p.DDI, p.pais, p.fuso_horario, tcon.tipo_continente, con.continente
+	FROM Pinga.endereco e
+	INNER JOIN Pinga.tipo_logradouro tl ON e.tipo_logradouro_idtipo_logradouro = tl.idtipo_logradouro
+	INNER JOIN Pinga.tipo_complemento tc ON e.tipo_complemento_idtipo_complemento = tc.idtipo_complemento
+	INNER JOIN Pinga.bairro b ON e.bairro_idbairro = b.idbairro
+	INNER JOIN Pinga.cidade c ON b.cidade_idcidade = c.idcidade
+	INNER JOIN Pinga.estado es ON c.estado_idestado = es.idestado
+	INNER JOIN Pinga.pais p ON es.pais_idpais = p.idpais
+	INNER JOIN Pinga.continente con ON p.continente_idcontinente = con.idcontinente
+	INNER JOIN Pinga.tipo_continente tcon ON con.tipo_continente_idtipo_continente = tcon.idtipo_continente
+	WHERE tcon.ativo = 1;
+GO
+
+CREATE OR ALTER VIEW Pinga.uvw_VisualizarEmail
+WITH ENCRYPTION, SCHEMABINDING
+AS
+	SELECT e.idemail, CONCAT(e.email, '@', ed.email_dominio, '.', el.email_localidade) AS email
+	FROM Pinga.email e
+	INNER JOIN Pinga.email_dominio ed ON e.email_dominio_idemail_dominio = ed.idemail_dominio
+	INNER JOIN Pinga.email_localidade el ON e.email_localidade_idemail_localidade = el.idemail_localidade
+	WHERE el.status = 1;
+GO
