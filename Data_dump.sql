@@ -52,20 +52,20 @@ INSERT INTO Pinga.endereco (tipo_logradouro_idtipo_logradouro, logradouro, numer
 VALUES ((SELECT ROWGUIDCOL FROM Pinga.tipo_logradouro WHERE tipo_logradouro = 'Rua'), 'dos Securitários', 115, (SELECT ROWGUIDCOL FROM Pinga.tipo_complemento WHERE tipo_complemento = 'Casa'), 'com grade branca', '30840760', 'Próxima a padaria Gamela', (SELECT ROWGUIDCOL FROM Pinga.bairro WHERE bairro = 'Alípio de Melo'), GETDATE());
 
 
-INSERT INTO Pinga.tipo_telefone (descricao)
-VALUES ('Telefone Residencial'),('Celular'),('Telefone Comercial'),('Telefone Extra');
+INSERT INTO Pinga.tipo_telefone (tipo_telefone)
+VALUES ('Telefone Pessoal'),('Telefone Residencial'),('Celular'),('Telefone Comercial'),('Telefone de Recado'),('Telefone Extra');
 
-INSERT INTO Pinga.operadora (nome, razao_social, status)
-VALUES ('TIM', 'Telecom Italia Mobile', 1);
+INSERT INTO Pinga.operadora (operadora, razao_social, status)
+VALUES ('TIM', 'Telecom Italia Mobile', 1), ('Claro', 'Claro S.A.', 1), ('Oi', 'Oi LTDA', 1);
 
 INSERT INTO Pinga.telefone (telefone, cidade_ddd, tipo_telefone_idtipo_telefone, operadora_idoperadora, created)
-VALUES ('988521996', (SELECT ROWGUIDCOL FROM Pinga.cidade WHERE DDD = '031' AND cidade = 'Belo Horizonte'), (SELECT ROWGUIDCOL FROM Pinga.tipo_telefone WHERE descricao = 'Celular'), (SELECT ROWGUIDCOL FROM Pinga.operadora WHERE nome = 'TIM'), GETDATE());
+VALUES ('988521996', (SELECT ROWGUIDCOL FROM Pinga.cidade WHERE DDD = '031' AND cidade = 'Belo Horizonte'), (SELECT ROWGUIDCOL FROM Pinga.tipo_telefone WHERE tipo_telefone = 'Celular'), (SELECT ROWGUIDCOL FROM Pinga.operadora WHERE operadora = 'TIM'), GETDATE()),
+('34646398', (SELECT ROWGUIDCOL FROM Pinga.cidade WHERE DDD = '031' AND cidade = 'Belo Horizonte'), (SELECT ROWGUIDCOL FROM Pinga.tipo_telefone WHERE tipo_telefone = 'Telefone Residencial'), (SELECT ROWGUIDCOL FROM Pinga.operadora WHERE operadora = 'Oi'), GETDATE());
 
 INSERT INTO Pinga.parceiro (nome, endereco_idendereco, status, telefone_idtelefone, created)
 VALUES ('Parceiro A', (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), 1, (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE()),
 ('Parceiro B', (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), 1, (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE()),
 ('Parceiro C', (SELECT ROWGUIDCOL FROM Pinga.endereco WHERE CEP = '30840760' AND logradouro = 'dos Securitários'), 1, (SELECT ROWGUIDCOL FROM Pinga.telefone WHERE telefone = '988521996'), GETDATE());
-
 
 INSERT INTO Pinga.email_localidade (email_localidade, status)
 VALUES ('br', 1),('it', 1),('co', 1),('jp', 1),('com.br', 1), ('com', 1);
@@ -89,16 +89,14 @@ VALUES ((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), (SELE
 ((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), (SELECT ROWGUIDCOL FROM Pinga.horario WHERE horario_inicio = '08:00' AND dia_semana = 3)),
 ((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), (SELECT ROWGUIDCOL FROM Pinga.horario WHERE horario_inicio = '08:00' AND dia_semana = 4));
 
-
-INSERT INTO Pinga.visita (parceiro_has_horario_idparceiro_has_horario, cliente_idcliente)
-VALUES ((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605')),
-((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605')),
-((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605')),
-((SELECT TOP 1 ROWGUIDCOL FROM Pinga.parceiro_has_horario WHERE parceiro_idparceiro = (SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A')), (SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605'));
-
-
 INSERT INTO Pinga.excecoes (data, [status])
 VALUES ('20170101', 1),('20171225', 1), ('20170907', 1);
+
+INSERT INTO Pinga.visita (cliente_idcliente, [data], comecou, terminou)
+VALUES ((SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605'), GETDATE(), '08:00', '08:25'),
+((SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605'), GETDATE(), '09:00', '09:25'),
+((SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605'), GETDATE(), '10:00', '10:25'),
+((SELECT ROWGUIDCOL FROM Pinga.cliente WHERE cpf_cnpj = '13089902605'), GETDATE(), '11:00', '11:25');
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
@@ -137,3 +135,5 @@ VALUES ((SELECT ROWGUIDCOL FROM Pinga.parceiro WHERE nome = 'Parceiro A'), 'F169
 INSERT INTO Pinga.agenda (visita_idvisita, horario_idhorario)
 VALUES ('BB315B67-BBBE-40C8-8AD5-DC03FA9B443E', 'CAEF609E-8F11-44DB-AE1B-00846217C15C'),
 ('45076C04-E3D5-4F5F-A4FA-6510186AA82D', 'CAEF609E-8F11-44DB-AE1B-00846217C15C');
+
+
