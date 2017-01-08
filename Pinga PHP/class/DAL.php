@@ -45,7 +45,7 @@ class DAL
 
 	function fecha_banco($connection)
 	{
-		//sqlsrv_close($connection);
+		$con = null;
 	}
 }
 
