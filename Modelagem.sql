@@ -2133,17 +2133,24 @@ END;
 
 SELECT adm.udf_ProximoDiaUtil('20170105')
 
+IF EXISTS(SELECT 1 FROM sys.syslogins WHERE name = 'AppLogin')
+BEGIN
+	DROP LOGIN AppLogin;
+END
 
-
-USE pingaDB;
-CREATE LOGIN AppLogin WITH PASSWORD = '123456';
+CREATE LOGIN AppLogin WITH PASSWORD = '220996';
 GO
 
-CREATE USER AppLogin FOR LOGIN AppLogin;
+IF EXISTS(SELECT 1 FROM sys.sysusers WHERE name = 'AppUser')
+BEGIN
+	DROP USER AppUser;
+END
+
+CREATE USER AppUser FOR LOGIN AppLogin;
 GO
 
-DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE ROLE, CREATE DEFAULT, BACKUP DATABASE, BACKUP LOG TO AppLogin;
-GRANT SELECT, UPDATE, INSERT ON SCHEMA::Pinga TO AppLogin;
+DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE ROLE, CREATE DEFAULT, BACKUP DATABASE, BACKUP LOG TO AppUser;
+GRANT SELECT, UPDATE, INSERT ON SCHEMA::Pinga TO AppUser;
 GO
 
 CREATE OR ALTER VIEW Pinga.uvw_VisualizarEndereco
@@ -2170,5 +2177,29 @@ AS
 	FROM Pinga.email e
 	INNER JOIN Pinga.email_dominio ed ON e.email_dominio_idemail_dominio = ed.idemail_dominio
 	INNER JOIN Pinga.email_localidade el ON e.email_localidade_idemail_localidade = el.idemail_localidade
-	WHERE el.status = 1;
+	WHERE el.[status] = 1;
+GO
+
+CREATE OR ALTER VIEW Pinga.uvw_VisualizarTelefone
+WITH ENCRYPTION, SCHEMABINDING
+AS
+	SELECT t.idtelefone, tt.tipo_telefone, CONCAT('(', c.DDD, ')') AS ddd, t.telefone, o.operadora, c.cidade
+	FROM Pinga.telefone t
+	INNER JOIN Pinga.operadora o ON t.operadora_idoperadora = o.idoperadora
+	INNER JOIN Pinga.cidade c ON t.cidade_ddd = c.idcidade
+	INNER JOIN Pinga.tipo_telefone tt ON t.tipo_telefone_idtipo_telefone = tt.idtipo_telefone
+	WHERE o.[status] = 1
+GO
+
+CREATE OR ALTER VIEW Pinga.uvw_VisualizarInfoCliente
+WITH ENCRYPTION, SCHEMABINDING
+AS
+	SELECT idcliente, cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo,
+	email.idemail, email.email,
+	en.idendereco, en.tipo_logradouro, en.logradouro, en.numero, en.tipo_complemento, en.complemento, en.CEP, en.ponto_referencia, en.bairro, en.DDD, en.cidade, en.capital, en.uf, en.estado, en.sigla, en.DDI, en.pais, en.fuso_horario, en.tipo_continente, en.continente,
+	tel.idtelefone, tel.tipo_telefone, tel.ddd AS telefone_DDD, tel.telefone, tel.operadora, tel.cidade AS telefone_cidade
+	FROM Pinga.cliente c
+	LEFT JOIN Pinga.uvw_VisualizarEmail email ON c.email_idemail = email.idemail
+	LEFT JOIN Pinga.uvw_VisualizarEndereco en ON c.endereco_idendereco = en.idendereco
+	LEFT JOIN Pinga.uvw_VisualizarTelefone tel ON tel.idtelefone = c.telefone_idtelefone
 GO
