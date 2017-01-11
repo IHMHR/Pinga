@@ -2206,3 +2206,30 @@ AS
 	LEFT JOIN Pinga.uvw_VisualizarEndereco en ON c.endereco_idendereco = en.idendereco
 	LEFT JOIN Pinga.uvw_VisualizarTelefone tel ON tel.idtelefone = c.telefone_idtelefone
 GO
+
+
+SELECT * FROM Pinga.uvw_VisualizarInfoCliente WITH (READUNCOMMITTED, NOLOCK)
+
+SELECT * FROM Pinga.uvw_VisualizarInfoCliente
+
+
+DECLARE @backup_location VARCHAR(100) = CONCAT(N'C:\Users\IHMHR\Documents\SQL Databases\Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_FULL.bak');
+DECLARE @backup_mirror_location VARCHAR(100) = CONCAT(N'C:\Users\IHMHR\Documents\SQL Databases\Backup\Mirror Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_FULL_MIRROR.bak');
+
+BACKUP DATABASE pingaDB
+	TO DISK = @backup_location
+	--MIRROR TO DISK = @backup_mirror_location --O espelhamento do backup não está disponível nesta edição do SQL Server. Consulte a documentação online para obter mais detalhes sobre o suporte de recursos em diferentes edições do SQL Server.
+	WITH NOINIT /*NÃO SERÁ SOBREESCRITO O ARQUIVO DE BACKUP*/,
+		 SKIP /*NÃO VERIFICAR A VALIDADE DO BACKUP*/,
+		 CHECKSUM,
+		 STOP_ON_ERROR,
+		 DESCRIPTION = N'FULL BACKUP DA BASE DE DADOS pingaDB',
+		 NAME = N'Backup pingaDB',
+		 /*ENCRYPTION
+			(
+				ALGORITHM = AES_256,
+				SERVER CERTIFICATE = BackupEncryptCert
+			),*/ --BACKUP DATABASE WITH ENCRYPTION não é suportado em Express Edition (64-bit).
+		 STATS = 1,
+		 NOFORMAT;
+GO
