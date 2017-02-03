@@ -1,4 +1,4 @@
-USE master;
+parUSE master;
 GO
 
 sp_configure 'contained database authentication', 1;
@@ -16,7 +16,7 @@ ON (NAME = 'pingaDB', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB
 LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
 COLLATE Latin1_General_CS_AS;
 GO
-
+par
 ALTER DATABASE pingaDB SET OFFLINE
 GO
 
@@ -326,7 +326,6 @@ END
 
 CREATE TABLE Pinga.parcelamento (
 idparcelamento UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-Entrada_Saida UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
 data_pagamento DATE NOT NULL,
 data_vencimento DATE NOT NULL,
 parcelas INT NOT NULL,
