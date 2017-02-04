@@ -584,7 +584,6 @@ END
 CREATE TABLE Pinga.itens_saida (
 iditens_saida UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 saida_idsaida UNIQUEIDENTIFIER NOT NULL,
-entrada_identrada UNIQUEIDENTIFIER NOT NULL,
 produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 quantidade INT NOT NULL,
 valor_saida DECIMAL(9,2) NOT NULL,
@@ -935,6 +934,31 @@ GO
 --EXEC sp_refreshsqlmodule 'adm.usp_errorLog'
 --EXEC adm.usp_errorLog 'Erro', 'procedimento', 'possivelCausa', 'database';
 --TRUNCATE TABLE adm.log_erros;
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoContinente
+    @tipoContinente VARCHAR(20),
+    @ativo BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        SET NOCOUNT ON;
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.tipo_continente (tipo_continente, ativo)
+            VALUES (@tipoContinente, @ativo);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do tipo continente.', 1;
+    END CATCH
+END;
+
 
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
 	@pais VARCHAR(40),
@@ -2156,7 +2180,7 @@ CREATE USER AppUser FOR LOGIN AppLogin;
 GO
 
 DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE ROLE, CREATE DEFAULT, BACKUP DATABASE, BACKUP LOG TO AppUser;
-GRANT SELECT, UPDATE, INSERT, EXECUTE ON SCHEMA::Pinga TO AppUser;
+GRANT SELECT, UPDATE, INSERT, DELETE, EXECUTE ON SCHEMA::Pinga TO AppUser;
 GO
 
 CREATE OR ALTER VIEW Pinga.uvw_VisualizarEndereco
