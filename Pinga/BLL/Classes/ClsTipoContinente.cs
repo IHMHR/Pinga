@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsTipoContinente : IGeneric
+    public sealed class ClsTipoContinente : IGeneric<ClsTipoContinente>
     {
         #region Atributos
         public Guid idtipoContinente { get; set; }
@@ -108,8 +109,9 @@ namespace BLL.Classes
             }
         }
 
-        public DataTable Visualizar()
+        public List<ClsTipoContinente> Visualizar()
         {
+            List<ClsTipoContinente> retorno = new List<ClsTipoContinente>();
             try
             {
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
@@ -119,15 +121,25 @@ namespace BLL.Classes
                                     + "FROM Pinga.tipo_continente ORDER BY tipo_continente ASC, ativo DESC;";
                     con.Open();
                     com.Connection = con;
-                    DataTable retorno = new DataTable();
-                    retorno.Load(com.ExecuteReader());
-                    return retorno;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    while (read.Read())
+                    {
+                        ClsTipoContinente tipoCont = new ClsTipoContinente();
+                        tipoCont.idtipoContinente = Guid.Parse(read["idtipoContinente"].ToString());
+                        tipoCont.tipoContinente = read["tipoContinente"].ToString();
+                        tipoCont.ativo = (bool)read["ativo"];
+
+                        retorno.Add(tipoCont);
+                    }
                 }
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
+            return retorno;
         }
         #endregion
     }

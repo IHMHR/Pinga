@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsFormaPagamento : IGeneric
+    public sealed class ClsFormaPagamento : IGeneric<ClsFormaPagamento>
     {
         public Guid idformaPagamento { get; set; }
         public string formaPagamento { get; set; }
@@ -19,7 +19,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsFormaPagamento> Visualizar()
         {
             return null;
         }

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsTipoLogradouro : IGeneric
+    public sealed class ClsTipoLogradouro : IGeneric<ClsTipoLogradouro>
     {
         public Guid idtipoLogradouro { get; set; }
         public string tipoLogradouro { get; set; }
@@ -17,7 +17,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsTipoLogradouro> Visualizar()
         {
             return null;
         }

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEntrada : IGeneric
+    public sealed class ClsEntrada : IGeneric<ClsEntrada>
     {
         public Guid identrada { get; set; }
         public Nullable<DateTime> data { get; set; }
@@ -24,7 +24,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsEntrada> Visualizar()
         {
             return null;
         }

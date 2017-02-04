@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsTipoComplemento : IGeneric
+    public sealed class ClsTipoComplemento : IGeneric<ClsTipoComplemento>
     {
         public Guid idtipoComplemento { get; set; }
         public string tipoComplemento { get; set; }
@@ -17,7 +17,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsTipoComplemento> Visualizar()
         {
             return null;
         }

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEmail : IGeneric
+    public sealed class ClsEmail : IGeneric<ClsEmail>
     {
         public Guid idemail { get; set; }
         public string email { get; set; }
@@ -19,7 +19,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsEmail> Visualizar()
         {
             return null;
         }

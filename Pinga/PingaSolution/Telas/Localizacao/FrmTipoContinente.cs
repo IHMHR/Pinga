@@ -24,6 +24,7 @@ namespace PingaSolution.Telas.Localizacao
             textBox2.Clear();
             radioButton1.Checked = false;
             radioButton2.Checked = false;
+            button1.Text = "Salvar";
         }
 
         private void button1_Click(object sender, EventArgs e)

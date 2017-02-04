@@ -70,5 +70,13 @@ namespace PingaSolution.Telas.Login
             // Gestao Logins
             throw new NotImplementedException();
         }
+
+        private void txtUser_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1_Click(this, new EventArgs());
+            }
+        }
     }
 }

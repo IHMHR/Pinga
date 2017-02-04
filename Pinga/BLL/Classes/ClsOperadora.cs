@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsOperadora : IGeneric
+    public sealed class ClsOperadora : IGeneric<ClsOperadora>
     {
         public Guid idoperadora { get; set; }
         public string operadora { get; set; }
@@ -19,7 +19,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsOperadora> Visualizar()
         {
             return null;
         }

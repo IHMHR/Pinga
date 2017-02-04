@@ -11,3 +11,4 @@ C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.ex
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.pdb
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.FrmMain.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoContinente.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmContinente.resources

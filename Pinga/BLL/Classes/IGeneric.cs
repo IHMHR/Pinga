@@ -1,8 +1,8 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    interface IGeneric
+    interface IGeneric<T>
     {
         void Inserir();
 
@@ -10,6 +10,6 @@ namespace BLL.Classes
 
         void Apagar();
 
-        DataTable Visualizar();
+        List<T> Visualizar();
     }
 }

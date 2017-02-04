@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsCliente : IGeneric
+    public sealed class ClsCliente : IGeneric<ClsCliente>
     {
         public Guid idcliente { get; set; }
         public string cpfCnpj { get; set; }
@@ -28,7 +28,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsCliente> Visualizar()
         {
             return null;
         }

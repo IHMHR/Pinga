@@ -55,6 +55,12 @@
     <Compile Include="Telas\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\Localizacao\FrmContinente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Localizacao\FrmContinente.Designer.cs">
+      <DependentUpon>FrmContinente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\Localizacao\FrmTipoContinente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,9 @@
     </Compile>
     <EmbeddedResource Include="Telas\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Localizacao\FrmContinente.resx">
+      <DependentUpon>FrmContinente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Localizacao\FrmTipoContinente.resx">
       <DependentUpon>FrmTipoContinente.cs</DependentUpon>

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsFornecedor : IGeneric
+    public sealed class ClsFornecedor : IGeneric<ClsFornecedor>
     {
         public Guid idfornecedor { get; set; }
         public string nome { get; set; }
@@ -19,7 +19,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsFornecedor> Visualizar()
         {
             return null;
         }
