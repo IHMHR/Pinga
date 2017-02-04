@@ -176,6 +176,10 @@ namespace BLL
                         break;
                 }
             }
+            else
+            {
+                throw new ArgumentNullException("O argumento deve ser informado.");
+            }
         }
     }
 }

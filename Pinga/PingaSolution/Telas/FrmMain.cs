@@ -26,5 +26,21 @@ namespace PingaSolution.Telas
         {
             Application.Exit();
         }
+
+        private void tipoContinenteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Localizacao.FrmTipoContinente))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Localizacao.FrmTipoContinente();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }
