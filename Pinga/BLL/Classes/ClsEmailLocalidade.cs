@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsEmailLocalidade : IGeneric
+    public sealed class ClsEmailLocalidade : IGeneric
     {
         public Guid idemailLocalidade { get; set; }
         public string emailLocalidade { get; set; }

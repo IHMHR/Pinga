@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsEndereco : IGeneric
+    public sealed class ClsEndereco : IGeneric
     {
         public Guid idendereco { get; set; }
         public ClsTipoLogradouro tipoLogradouroIdtipoLogradouro { get; set; }

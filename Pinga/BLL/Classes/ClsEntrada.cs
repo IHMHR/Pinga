@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsEntrada : IGeneric
+    public sealed class ClsEntrada : IGeneric
     {
         public Guid identrada { get; set; }
         public Nullable<DateTime> data { get; set; }

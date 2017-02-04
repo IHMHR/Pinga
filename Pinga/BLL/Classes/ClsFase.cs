@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsFase : IGeneric
+    public sealed class ClsFase : IGeneric
     {
         public Guid idfase { get; set; }
         public string fase { get; set; }

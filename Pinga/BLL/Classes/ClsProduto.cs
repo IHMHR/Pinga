@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsProduto : IGeneric
+    public sealed class ClsProduto : IGeneric
     {
         public Guid idproduto { get; set; }
         public string produto { get; set; }

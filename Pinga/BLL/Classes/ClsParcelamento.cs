@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsParcelamento : IGeneric
+    public sealed class ClsParcelamento : IGeneric
     {
         public Guid idparcelamento { get; set; }
         public Nullable<DateTime> dataPagamento { get; set; }

@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsOperadora : IGeneric
+    public sealed class ClsOperadora : IGeneric
     {
         public Guid idoperadora { get; set; }
         public string operadora { get; set; }

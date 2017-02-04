@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsFormaPagamento : IGeneric
+    public sealed class ClsFormaPagamento : IGeneric
     {
         public Guid idformaPagamento { get; set; }
         public string formaPagamento { get; set; }

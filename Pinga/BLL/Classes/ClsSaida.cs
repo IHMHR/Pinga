@@ -3,7 +3,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    class ClsSaida : IGeneric
+    public sealed class ClsSaida : IGeneric
     {
         public Guid idsaida { get; set; }
         public Nullable<DateTime> data { get; set; }
