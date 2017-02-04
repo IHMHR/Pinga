@@ -3,6 +3,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
+using BLL;
+using System.Collections.Generic;
 
 namespace Pinga
 {
@@ -24,35 +26,27 @@ namespace Pinga
             {
                 try
                 {
-                    using (SqlConnection con = new SqlConnection(@"Server = .\SQLExpress; Database = PingaDB; Trusted_Connection = True;"))
+                    Bll bll = new Bll();
+                    bll.login.usuario = txtUser.Text;
+                    bll.login.senha = txtPwd.Text;
+                    var retorno = bll.login.logar();
+                    if ((bool)retorno["Acao"])
                     {
-                        SqlCommand com = new SqlCommand();
-                        com.CommandText = "SELECT 1 FROM adm.login WHERE lgn = @login AND pwd = @pwd AND ativo = 1;";
-                        //com.CommandText = "SELECT 1 FROM adm.login WHERE lgn = @login AND pwd = @pwd AND ativo = 1 OR 1=1;";
-                        com.Parameters.AddWithValue("@login", txtUser.Text.Trim().Replace("'", "\'"));
-                        com.Parameters.AddWithValue("@pwd", Classes.ClsGlobal.CalculateSHA1(txtPwd.Text.Trim().Replace("'", "\'")));
-                        con.Open();
-                        com.Connection = con;
-                        object result = com.ExecuteScalar();
-                        con.Close();
-                        con.Dispose();
+                        foreach (KeyValuePair<string, string> dados in (Dictionary<string, string>)retorno["Dados"])
+                        {
+                        }
 
-                        if (result != null)
-                        {
-                            Classes.ClsGlobal.login = txtUser.Text;
-                            FrmMain main = new FrmMain();
-                            main.Show();
-                            this.Hide();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Senha ou usuário incorreto.", "Dados incorretos", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+
+                        FrmMain main = new FrmMain();
+                        main.Show();
+                        this.Hide();
                     }
-
-                    
+                    else
+                    {
+                        MessageBox.Show(retorno["Mensagem"].ToString());
+                    }
                 }
-                catch (Exception)
+                catch (Exception erro)
                 {
                     MessageBox.Show("Erro desconhecido ao efetuar login.", "Erro login", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
