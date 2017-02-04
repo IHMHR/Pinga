@@ -1,0 +1,13 @@
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.csprojResolveAssemblyReference.cache
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Properties.Resources.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.csproj.GenerateResource.Cache
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.exe.config
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.exe
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.pdb
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\BLL.dll
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\BLL.pdb
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Login.FrmLogin.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.exe
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.pdb
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.FrmMain.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoContinente.resources

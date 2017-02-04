@@ -33,3 +33,5 @@ C:\Users\IHMHR\Source\Repos\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmTipoLitra
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmUsuarios.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\Pinga\obj\Debug\Pinga.Telas.FrmVenda.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\Pinga\obj\Debug\Pinga.csproj.GenerateResource.Cache
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\Pinga\bin\Debug\BLL.dll
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\Pinga\bin\Debug\BLL.pdb
