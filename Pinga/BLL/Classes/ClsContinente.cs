@@ -11,14 +11,93 @@ namespace BLL.Classes
         public string continente { get; set; }
         public ClsTipoContinente tipoContinenteIdtipoContinente { get; set; }
 
+        public ClsContinente()
+        {
+            tipoContinenteIdtipoContinente = new ClsTipoContinente();
+        }
+
         public void Inserir()
-        { }
+        {
+            if (string.IsNullOrEmpty(continente.Trim()))
+            {
+                throw new ArgumentNullException("Por favor informe o continente.");
+            }
+            else if(tipoContinenteIdtipoContinente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o tipo de continente.");
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.CommandText = "Pinga.usp_InserirNovoContinente";
+                    com.Parameters.AddWithValue("@continente", continente);
+                    com.Parameters.AddWithValue("@tipoContienteidtipoContinente", tipoContinenteIdtipoContinente.idtipoContinente);
+
+                    con.Open();
+                    com.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public void Alterar()
-        { }
+        {
+            if (string.IsNullOrEmpty(continente.Trim()))
+            {
+                throw new ArgumentNullException("Por favor informe o continente.");
+            }
+            else if (tipoContinenteIdtipoContinente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o tipo de continente.");
+            }
+            else if (idcontinente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o ID do continente.");
+            }
+
+            using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+            {
+                SqlCommand com = new SqlCommand();
+                com.Connection = con;
+                com.CommandText = "UPDATE Pinga.continente SET continente = @continente, tipo_continente_idtipo_continente = @idtipoContinente WHERE idcontinente = @id";
+                com.Parameters.AddWithValue("@id", idcontinente);
+                com.Parameters.AddWithValue("@continente", continente);
+                com.Parameters.AddWithValue("@idtipoContinente", tipoContinenteIdtipoContinente.idtipoContinente);
+
+                con.Open();
+                com.ExecuteNonQuery();
+                con.Close();
+            }
+        }
 
         public void Apagar()
-        { }
+        {
+            if (idcontinente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o ID do continente.");
+            }
+
+            using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+            {
+                SqlCommand com = new SqlCommand();
+                com.Connection = con;
+                com.CommandText = "DELETE FROM Pinga.continente WHERE idcontinente = @id";
+                com.Parameters.AddWithValue("@id", idcontinente);
+
+                con.Open();
+                com.ExecuteNonQuery();
+                con.Close();
+            }
+        }
 
         public List<ClsContinente> Visualizar()
         {
@@ -40,7 +119,6 @@ namespace BLL.Classes
                         ClsContinente cont = new ClsContinente();
                         cont.idcontinente = Guid.Parse(read["idcontinente"].ToString());
                         cont.continente = read["continente"].ToString();
-                        cont.tipoContinenteIdtipoContinente = new ClsTipoContinente();
                         cont.tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(read["idtipo_continente"].ToString());
                         cont.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
                         cont.tipoContinenteIdtipoContinente.ativo = (bool)read["ativo"];

@@ -39,6 +39,7 @@ namespace PingaSolution.Telas.Localizacao
                 comboBox1.DataSource = new Bll("Tipo_Continente").tipoContinente.Visualizar();
                 comboBox1.DisplayMember = "tipoContinente";
                 comboBox1.ValueMember = "idtipoContinente";
+                comboBox1.SelectedIndex = -1;
             }
             catch (Exception)
             {
@@ -104,12 +105,65 @@ namespace PingaSolution.Telas.Localizacao
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!string.IsNullOrEmpty(textBox2.Text) && comboBox1.SelectedIndex != -1)
+            {
+                bll.continente.continente = textBox2.Text.Trim().Replace("'", "");
+                bll.continente.tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(comboBox1.SelectedValue.ToString());
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    bll.continente.idcontinente = Guid.Parse(textBox1.Text);
+                }
 
+                if (button1.Text == "Salvar")
+                {
+                    bll.continente.Inserir();
+                    fillDataGrid();
+                    MessageBox.Show("Cadastrado novo tipo continente com sucesso", "Cadastro realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else if (button1.Text == "Editar")
+                {
+                    button1.Text = "Salvar";
+                    bll.continente.Alterar();
+                    fillDataGrid();
+                    MessageBox.Show("Alterado tipo continente com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+
+                textBox1.Clear();
+                textBox2.Clear();
+                comboBox1.SelectedIndex = -1;
+            }
+            else
+            {
+                MessageBox.Show("Todos os campos devem ser preenchidos", "Preencher campos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "editarContinente")
+            {
+                button1.Text = "Editar";
 
+                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["idcontinente"].Value.ToString();
+                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells["continente"].Value.ToString();
+                // make selection on combobox
+                for (int i = 0; i < comboBox1.Items.Count; i++)
+                {
+                    bll.tipoContinente = (BLL.Classes.ClsTipoContinente) comboBox1.Items[i];
+                    if (bll.tipoContinente.idtipoContinente.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idtipoContinente"].Value.ToString())
+                    {
+                        comboBox1.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            else if (dataGridView1.Columns[e.ColumnIndex].Name == "apagarContinente")
+            {
+                bll.continente.idcontinente = Guid.Parse(dataGridView1.Rows[e.RowIndex].Cells["idcontinente"].Value.ToString());
+                bll.continente.Apagar();
+                fillDataGrid();
+                MessageBox.Show("Apagado continente com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
     }
 }

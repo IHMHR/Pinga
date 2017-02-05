@@ -90,6 +90,7 @@
             this.paisToolStripMenuItem.Name = "paisToolStripMenuItem";
             this.paisToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.paisToolStripMenuItem.Text = "Pais";
+            this.paisToolStripMenuItem.Click += new System.EventHandler(this.paisToolStripMenuItem_Click);
             // 
             // estadoToolStripMenuItem
             // 
