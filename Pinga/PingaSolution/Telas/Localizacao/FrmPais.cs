@@ -26,13 +26,7 @@ namespace PingaSolution.Telas.Localizacao
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ClearForm();
-        }
-
-        private void ClearForm()
-        {
-            //this.Controls.OfType<TextBox>().ToList().ForEach(txt => txt.Clear());
-            groupBox1.Controls.OfType<TextBox>().ToList().ForEach(txt => txt.Clear());
+            Classes.ClsGlobal.ClearForm(groupBox1);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -65,11 +59,11 @@ namespace PingaSolution.Telas.Localizacao
                     MessageBox.Show("Alterado País com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
-                ClearForm();
+                Classes.ClsGlobal.ClearForm(groupBox1);
             }
             else
             {
-                MessageBox.Show("Todos os campos devem ser preenchidos", "Preencher campos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
             }
         }
 
@@ -176,7 +170,7 @@ namespace PingaSolution.Telas.Localizacao
                 comboBox1.ValueMember = "idcontinente";
                 comboBox1.SelectedIndex = -1;
             }
-            catch (Exception eer)
+            catch (Exception)
             {
                 MessageBox.Show("Falha ao popular o grid", "Falha de leitura", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

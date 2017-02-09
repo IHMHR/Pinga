@@ -97,6 +97,7 @@
             this.estadoToolStripMenuItem.Name = "estadoToolStripMenuItem";
             this.estadoToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.estadoToolStripMenuItem.Text = "Estado";
+            this.estadoToolStripMenuItem.Click += new System.EventHandler(this.estadoToolStripMenuItem_Click);
             // 
             // cidadeToolStripMenuItem
             // 

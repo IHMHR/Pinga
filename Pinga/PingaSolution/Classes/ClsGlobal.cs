@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Windows.Forms;
 
 namespace PingaSolution.Classes
 {
@@ -11,5 +8,13 @@ namespace PingaSolution.Classes
         public static string nome { get; set; }
         public static string sobrenome { get; set; }
         public static int idade { get; set; }
+
+        public static void ClearForm(GroupBox gpb)
+        {
+            gpb.Controls.OfType<TextBox>().ToList().ForEach(txt => txt.Clear());
+            gpb.Controls.OfType<ComboBox>().ToList().ForEach(cmb => cmb.SelectedIndex = -1);
+            gpb.Controls.OfType<CheckBox>().ToList().ForEach(chk => chk.Checked = false);
+            gpb.Controls.OfType<RadioButton>().ToList().ForEach(rdb => rdb.Checked = false);
+        }
     }
 }

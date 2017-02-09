@@ -97,9 +97,7 @@ namespace PingaSolution.Telas.Localizacao
 
         private void button3_Click(object sender, EventArgs e)
         {
-            textBox1.Clear();
-            textBox2.Clear();
-            comboBox1.SelectedIndex = -1;
+            Classes.ClsGlobal.ClearForm(groupBox1);
             button1.Text = "Salvar";
         }
 
@@ -128,9 +126,7 @@ namespace PingaSolution.Telas.Localizacao
                     MessageBox.Show("Alterado tipo continente com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
-                textBox1.Clear();
-                textBox2.Clear();
-                comboBox1.SelectedIndex = -1;
+                Classes.ClsGlobal.ClearForm(groupBox1);
             }
             else
             {
