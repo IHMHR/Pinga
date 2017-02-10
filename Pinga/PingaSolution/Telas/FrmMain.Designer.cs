@@ -104,6 +104,7 @@
             this.cidadeToolStripMenuItem.Name = "cidadeToolStripMenuItem";
             this.cidadeToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.cidadeToolStripMenuItem.Text = "Cidade";
+            this.cidadeToolStripMenuItem.Click += new System.EventHandler(this.cidadeToolStripMenuItem_Click);
             // 
             // bairroToolStripMenuItem
             // 

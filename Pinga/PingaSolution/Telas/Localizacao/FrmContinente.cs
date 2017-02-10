@@ -18,7 +18,32 @@ namespace PingaSolution.Telas.Localizacao
         {
             try
             {
-                fillDataGrid();
+                var columnIdcontinente = new DataGridViewTextBoxColumn();
+                columnIdcontinente.HeaderText = "idcontinente";
+                columnIdcontinente.Name = "idcontinente";
+                columnIdcontinente.DataPropertyName = "idcontinente";
+                columnIdcontinente.Visible = false;
+
+                var columnIdtipoContinente = new DataGridViewTextBoxColumn();
+                columnIdtipoContinente.HeaderText = "idtipoContinente";
+                columnIdtipoContinente.Name = "idtipoContinente";
+                columnIdtipoContinente.DataPropertyName = "idtipoContinente";
+                columnIdtipoContinente.Visible = false;
+
+                var columnContinente = new DataGridViewTextBoxColumn();
+                columnContinente.HeaderText = "Continente";
+                columnContinente.Name = "continente";
+                columnContinente.DataPropertyName = "continente";
+
+                var columnTipoContinente = new DataGridViewTextBoxColumn();
+                columnTipoContinente.HeaderText = "Tipo Continente";
+                columnTipoContinente.Name = "tipoContinente";
+                columnTipoContinente.DataPropertyName = "tipoContinente";
+
+                var columnTipoContinenteAtivo = new DataGridViewCheckBoxColumn();
+                columnTipoContinenteAtivo.HeaderText = "Tipo Continente Ativo";
+                columnTipoContinenteAtivo.Name = "tipoContinenteAtivo";
+                columnTipoContinenteAtivo.DataPropertyName = "tipoContinenteAtivo";
 
                 var columnEditar = new DataGridViewButtonColumn();
                 columnEditar.HeaderText = "Editar";
@@ -32,8 +57,15 @@ namespace PingaSolution.Telas.Localizacao
                 columnApagar.Text = "Apagar";
                 columnApagar.UseColumnTextForButtonValue = true;
 
+                dataGridView1.Columns.Add(columnIdcontinente);
+                dataGridView1.Columns.Add(columnIdtipoContinente);
+                dataGridView1.Columns.Add(columnContinente);
+                dataGridView1.Columns.Add(columnTipoContinente);
+                dataGridView1.Columns.Add(columnTipoContinenteAtivo);
                 dataGridView1.Columns.Add(columnEditar);
                 dataGridView1.Columns.Add(columnApagar);
+
+                fillDataGrid();
 
                 // popular combo box
                 comboBox1.DataSource = new Bll("Tipo_Continente").tipoContinente.Visualizar();
@@ -49,42 +81,9 @@ namespace PingaSolution.Telas.Localizacao
 
         private void fillDataGrid()
         {
-            var lista = bll.continente.Visualizar();
+            dataGridView1.Rows.Clear();
 
-            var columnIdcontinente = new DataGridViewTextBoxColumn();
-            columnIdcontinente.HeaderText = "idcontinente";
-            columnIdcontinente.Name = "idcontinente";
-            columnIdcontinente.DataPropertyName = "idcontinente";
-            columnIdcontinente.Visible = false;
-
-            var columnIdtipoContinente = new DataGridViewTextBoxColumn();
-            columnIdtipoContinente.HeaderText = "idtipoContinente";
-            columnIdtipoContinente.Name = "idtipoContinente";
-            columnIdtipoContinente.DataPropertyName = "idtipoContinente";
-            columnIdtipoContinente.Visible = false;
-
-            var columnContinente = new DataGridViewTextBoxColumn();
-            columnContinente.HeaderText = "Continente";
-            columnContinente.Name = "continente";
-            columnContinente.DataPropertyName = "continente";
-
-            var columnTipoContinente = new DataGridViewTextBoxColumn();
-            columnTipoContinente.HeaderText = "Tipo Continente";
-            columnTipoContinente.Name = "tipoContinente";
-            columnTipoContinente.DataPropertyName = "tipoContinente";
-
-            var columnTipoContinenteAtivo = new DataGridViewCheckBoxColumn();
-            columnTipoContinenteAtivo.HeaderText = "Tipo Continente Ativo";
-            columnTipoContinenteAtivo.Name = "tipoContinenteAtivo";
-            columnTipoContinenteAtivo.DataPropertyName = "tipoContinenteAtivo";
-
-            dataGridView1.Columns.Add(columnIdcontinente);
-            dataGridView1.Columns.Add(columnIdtipoContinente);
-            dataGridView1.Columns.Add(columnContinente);
-            dataGridView1.Columns.Add(columnTipoContinente);
-            dataGridView1.Columns.Add(columnTipoContinenteAtivo);
-
-            foreach (var item in lista)
+            foreach (var item in bll.continente.Visualizar())
             {
                 dataGridView1.Rows.Add(item.idcontinente, item.tipoContinenteIdtipoContinente.idtipoContinente, item.continente, item.tipoContinenteIdtipoContinente.tipoContinente, item.tipoContinenteIdtipoContinente.ativo);
             }

@@ -180,9 +180,7 @@ namespace PingaSolution.Telas.Localizacao
         {
             dataGridView1.Rows.Clear();
 
-            var lista = bll.pais.Visualizar();
-
-            foreach (var item in lista)
+            foreach (var item in bll.pais.Visualizar())
             {
                 dataGridView1.Rows.Add(item.idpais, item.pais, item.idioma, item.colacao, item.DDI, item.sigla, item.fusoHorario, item.continenteIdcontinete.idcontinente, item.continenteIdcontinete.continente, item.continenteIdcontinete.tipoContinenteIdtipoContinente.idtipoContinente, item.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente, item.continenteIdcontinete.tipoContinenteIdtipoContinente.ativo);
             }
