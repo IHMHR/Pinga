@@ -11,18 +11,79 @@ using BLL;
 
 namespace PingaSolution.Telas.Localizacao
 {
-    public partial class FrmCidade : Form
+    public partial class FrmBairro : Form
     {
-        Bll bll = new Bll("Cidade");
-        public FrmCidade()
+        Bll bll = new Bll("Bairro");
+        public FrmBairro()
         {
             InitializeComponent();
         }
 
-        private void FrmCidade_Load(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Classes.ClsGlobal.ClearForm(groupBox1);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox2.Text) && !string.IsNullOrEmpty(textBox3.Text) && comboBox1.SelectedIndex != -1)
+            {
+                bll.bairro.bairro = textBox2.Text.Trim().Replace("'", "");
+                bll.bairro.regiao = textBox3.Text.Trim().Replace("'", "");
+                bll.bairro.cidadeIdcidade.idcidade = Guid.Parse(comboBox1.SelectedValue.ToString());
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    bll.bairro.idbairro = Guid.Parse(textBox1.Text);
+                }
+
+                if (button1.Text == "Salvar")
+                {
+                    bll.bairro.Inserir();
+                    fillDataGrid();
+                    MessageBox.Show("Cadastrado novo Bairro com sucesso", "Cadastro realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else if (button1.Text == "Editar")
+                {
+                    button1.Text = "Salvar";
+
+                    bll.bairro.Alterar();
+                    fillDataGrid();
+                    MessageBox.Show("Alterado Bairro com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+
+                Classes.ClsGlobal.ClearForm(groupBox1);
+            }
+            else
+            {
+                MessageBox.Show("Todos os campos devem ser preenchidos", "Preencher campos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void FrmBairro_Load(object sender, EventArgs e)
         {
             try
             {
+                var columnIdbairro = new DataGridViewTextBoxColumn();
+                columnIdbairro.HeaderText = "ID Bairro";
+                columnIdbairro.Name = "idbairro";
+                columnIdbairro.DataPropertyName = "idbairro";
+                columnIdbairro.Visible = false;
+
+                var columnBairro = new DataGridViewTextBoxColumn();
+                columnBairro.HeaderText = "Bairro";
+                columnBairro.Name = "bairro";
+                columnBairro.DataPropertyName = "bairro";
+
+                var columnRegiao = new DataGridViewTextBoxColumn();
+                columnRegiao.HeaderText = "Região do Bairro";
+                columnRegiao.Name = "regiao";
+                columnRegiao.DataPropertyName = "regiao";
+
                 var columnIdcidade = new DataGridViewTextBoxColumn();
                 columnIdcidade.HeaderText = "ID Cidade";
                 columnIdcidade.Name = "idcidade";
@@ -108,16 +169,19 @@ namespace PingaSolution.Telas.Localizacao
 
                 var columnEditar = new DataGridViewButtonColumn();
                 columnEditar.HeaderText = "Editar";
-                columnEditar.Name = "editarCidade";
+                columnEditar.Name = "editarBairro";
                 columnEditar.Text = "Editar";
                 columnEditar.UseColumnTextForButtonValue = true;
 
                 var columnApagar = new DataGridViewButtonColumn();
                 columnApagar.HeaderText = "Apagar";
-                columnApagar.Name = "apagarCidade";
+                columnApagar.Name = "apagarBairro";
                 columnApagar.Text = "Apagar";
                 columnApagar.UseColumnTextForButtonValue = true;
 
+                dataGridView1.Columns.Add(columnIdbairro);
+                dataGridView1.Columns.Add(columnBairro);
+                dataGridView1.Columns.Add(columnRegiao);
                 dataGridView1.Columns.Add(columnIdcidade);
                 dataGridView1.Columns.Add(columnCidade);
                 dataGridView1.Columns.Add(columnDDD);
@@ -140,9 +204,9 @@ namespace PingaSolution.Telas.Localizacao
                 fillDataGrid();
 
                 // popular combo box
-                comboBox1.DataSource = new Bll("Estado").estado.Visualizar();
-                comboBox1.DisplayMember = "estado";
-                comboBox1.ValueMember = "idestado";
+                comboBox1.DataSource = new Bll("Cidade").cidade.Visualizar();
+                comboBox1.DisplayMember = "cidade";
+                comboBox1.ValueMember = "idcidade";
                 comboBox1.SelectedIndex = -1;
             }
             catch (Exception)
@@ -155,100 +219,38 @@ namespace PingaSolution.Telas.Localizacao
         {
             dataGridView1.Rows.Clear();
 
-            foreach (var item in bll.cidade.Visualizar())
+            foreach (var item in bll.bairro.Visualizar())
             {
-                dataGridView1.Rows.Add(item.idcidade, item.cidade, item.DDD, item.capital, item.estadoIdestado.idestado, item.estadoIdestado.estado, item.estadoIdestado.uf, item.estadoIdestado.capital, item.estadoIdestado.paisIdpais.idpais, item.estadoIdestado.paisIdpais.pais, item.estadoIdestado.paisIdpais.idioma, item.estadoIdestado.paisIdpais.DDI, item.estadoIdestado.paisIdpais.sigla, item.estadoIdestado.paisIdpais.fusoHorario, item.estadoIdestado.paisIdpais.continenteIdcontinete.continente, item.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente);
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Classes.ClsGlobal.ClearForm(groupBox1);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(textBox2.Text) && comboBox1.SelectedIndex != -1)
-            {
-                bll.cidade.cidade = textBox2.Text;
-                bll.cidade.capital = checkBox1.Checked;
-                bll.cidade.DDD = textBox3.Text;
-                bll.cidade.estadoIdestado.idestado = Guid.Parse(comboBox1.SelectedValue.ToString());
-                if (!string.IsNullOrEmpty(textBox1.Text))
-                {
-                    bll.cidade.idcidade = Guid.Parse(textBox1.Text);
-                }
-
-                if (button1.Text == "Salvar")
-                {
-                    bll.cidade.Inserir();
-                    fillDataGrid();
-                    MessageBox.Show("Cadastrado nova Cidade com sucesso", "Cadastro realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-                else if (button1.Text == "Editar")
-                {
-                    button1.Text = "Salvar";
-
-                    bll.cidade.Alterar();
-                    fillDataGrid();
-                    MessageBox.Show("Alterado Cidade com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-
-                Classes.ClsGlobal.ClearForm(groupBox1);
-            }
-            else
-            {
-                MessageBox.Show("Todos os campos devem ser preenchidos", "Preencher campos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dataGridView1.Rows.Add(item.idbairro, item.bairro, item.regiao, item.cidadeIdcidade.idcidade, item.cidadeIdcidade.cidade, item.cidadeIdcidade.DDD, item.cidadeIdcidade.capital, item.cidadeIdcidade.estadoIdestado.idestado, item.cidadeIdcidade.estadoIdestado.estado, item.cidadeIdcidade.estadoIdestado.uf, item.cidadeIdcidade.estadoIdestado.capital, item.cidadeIdcidade.estadoIdestado.paisIdpais.idpais, item.cidadeIdcidade.estadoIdestado.paisIdpais.pais, item.cidadeIdcidade.estadoIdestado.paisIdpais.idioma, item.cidadeIdcidade.estadoIdestado.paisIdpais.DDI, item.cidadeIdcidade.estadoIdestado.paisIdpais.sigla, item.cidadeIdcidade.estadoIdestado.paisIdpais.fusoHorario, item.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente, item.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente);
             }
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dataGridView1.Columns[e.ColumnIndex].Name == "editarCidade")
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "editarBairro")
             {
                 button1.Text = "Editar";
 
-                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["idcidade"].Value.ToString();
-                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells["cidade"].Value.ToString();
-                textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells["DDD"].Value.ToString();
-                if ((bool)dataGridView1.Rows[e.RowIndex].Cells["capital"].Value)
-                {
-                    checkBox1.Checked = true;
-                }
-                else
-                {
-                    checkBox1.Checked = false;
-                }
+                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["idbairro"].Value.ToString();
+                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells["bairro"].Value.ToString();
+                textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells["regiao"].Value.ToString();
 
                 for (int i = 0; i < comboBox1.Items.Count; i++)
                 {
-                    bll.estado = (BLL.Classes.ClsEstado)comboBox1.Items[i];
-                    if (bll.estado.idestado.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idestado"].Value.ToString())
+                    bll.cidade = (BLL.Classes.ClsCidade)comboBox1.Items[i];
+                    if (bll.cidade.idcidade.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idcidade"].Value.ToString())
                     {
                         comboBox1.SelectedIndex = i;
                         break;
                     }
                 }
             }
-            else if (dataGridView1.Columns[e.ColumnIndex].Name == "apagarCidade")
+            else if (dataGridView1.Columns[e.ColumnIndex].Name == "apagarBairro")
             {
-                bll.cidade.idcidade = Guid.Parse(dataGridView1.Rows[e.RowIndex].Cells["idcidade"].Value.ToString());
-                bll.cidade.Apagar();
+                bll.bairro.idbairro = Guid.Parse(dataGridView1.Rows[e.RowIndex].Cells["idbairro"].Value.ToString());
+                bll.bairro.Apagar();
                 fillDataGrid();
                 MessageBox.Show("Apagado cidade com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-
-        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!Classes.ClsGlobal.somenteNumero(e.KeyChar.ToString()) && e.KeyChar.ToString() != "\b")
-            {
-                e.Handled = true;
             }
         }
     }

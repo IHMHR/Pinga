@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace PingaSolution.Classes
@@ -15,6 +16,19 @@ namespace PingaSolution.Classes
             gpb.Controls.OfType<ComboBox>().ToList().ForEach(cmb => cmb.SelectedIndex = -1);
             gpb.Controls.OfType<CheckBox>().ToList().ForEach(chk => chk.Checked = false);
             gpb.Controls.OfType<RadioButton>().ToList().ForEach(rdb => rdb.Checked = false);
+        }
+
+        public static bool somenteNumero(object input)
+        {
+            try
+            {
+                Convert.ToInt16(input);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

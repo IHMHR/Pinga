@@ -218,5 +218,13 @@ namespace PingaSolution.Telas.Localizacao
                 MessageBox.Show("Apagado pais com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+
+        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Classes.ClsGlobal.somenteNumero(e.KeyChar.ToString()) && e.KeyChar.ToString() != "\b")
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

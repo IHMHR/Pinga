@@ -55,6 +55,12 @@
     <Compile Include="Telas\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\Localizacao\FrmBairro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Localizacao\FrmBairro.Designer.cs">
+      <DependentUpon>FrmBairro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\Localizacao\FrmCidade.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +108,9 @@
     </Compile>
     <EmbeddedResource Include="Telas\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Localizacao\FrmBairro.resx">
+      <DependentUpon>FrmBairro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Localizacao\FrmCidade.resx">
       <DependentUpon>FrmCidade.cs</DependentUpon>

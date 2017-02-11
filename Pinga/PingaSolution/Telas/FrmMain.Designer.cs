@@ -41,6 +41,16 @@
             this.endereçoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.produtosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cadastroProdutosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.entradaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.estoqueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fornecedorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.formaDePagamentoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.custosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tipoLitragemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tipoCustoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -48,7 +58,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.localizaçãoToolStripMenuItem});
+            this.localizaçãoToolStripMenuItem,
+            this.produtosToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1358, 24);
@@ -111,6 +122,7 @@
             this.bairroToolStripMenuItem.Name = "bairroToolStripMenuItem";
             this.bairroToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.bairroToolStripMenuItem.Text = "Bairro";
+            this.bairroToolStripMenuItem.Click += new System.EventHandler(this.bairroToolStripMenuItem_Click);
             // 
             // tipoLogradouroToolStripMenuItem
             // 
@@ -145,6 +157,76 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // produtosToolStripMenuItem
+            // 
+            this.produtosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cadastroProdutosToolStripMenuItem,
+            this.entradaToolStripMenuItem,
+            this.saidaToolStripMenuItem,
+            this.estoqueToolStripMenuItem,
+            this.fornecedorToolStripMenuItem,
+            this.formaDePagamentoToolStripMenuItem,
+            this.custosToolStripMenuItem,
+            this.tipoLitragemToolStripMenuItem,
+            this.tipoCustoToolStripMenuItem});
+            this.produtosToolStripMenuItem.Name = "produtosToolStripMenuItem";
+            this.produtosToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.produtosToolStripMenuItem.Text = "Produtos";
+            // 
+            // cadastroProdutosToolStripMenuItem
+            // 
+            this.cadastroProdutosToolStripMenuItem.Name = "cadastroProdutosToolStripMenuItem";
+            this.cadastroProdutosToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.cadastroProdutosToolStripMenuItem.Text = "Cadastro Produtos";
+            // 
+            // entradaToolStripMenuItem
+            // 
+            this.entradaToolStripMenuItem.Name = "entradaToolStripMenuItem";
+            this.entradaToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.entradaToolStripMenuItem.Text = "Entrada";
+            // 
+            // saidaToolStripMenuItem
+            // 
+            this.saidaToolStripMenuItem.Name = "saidaToolStripMenuItem";
+            this.saidaToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.saidaToolStripMenuItem.Text = "Saida";
+            // 
+            // estoqueToolStripMenuItem
+            // 
+            this.estoqueToolStripMenuItem.Name = "estoqueToolStripMenuItem";
+            this.estoqueToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.estoqueToolStripMenuItem.Text = "Estoque";
+            // 
+            // fornecedorToolStripMenuItem
+            // 
+            this.fornecedorToolStripMenuItem.Name = "fornecedorToolStripMenuItem";
+            this.fornecedorToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.fornecedorToolStripMenuItem.Text = "Fornecedor";
+            // 
+            // formaDePagamentoToolStripMenuItem
+            // 
+            this.formaDePagamentoToolStripMenuItem.Name = "formaDePagamentoToolStripMenuItem";
+            this.formaDePagamentoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.formaDePagamentoToolStripMenuItem.Text = "Forma de Pagamento";
+            // 
+            // custosToolStripMenuItem
+            // 
+            this.custosToolStripMenuItem.Name = "custosToolStripMenuItem";
+            this.custosToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.custosToolStripMenuItem.Text = "Custos";
+            // 
+            // tipoLitragemToolStripMenuItem
+            // 
+            this.tipoLitragemToolStripMenuItem.Name = "tipoLitragemToolStripMenuItem";
+            this.tipoLitragemToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.tipoLitragemToolStripMenuItem.Text = "Tipo Litragem";
+            // 
+            // tipoCustoToolStripMenuItem
+            // 
+            this.tipoCustoToolStripMenuItem.Name = "tipoCustoToolStripMenuItem";
+            this.tipoCustoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.tipoCustoToolStripMenuItem.Text = "Tipo Custo";
             // 
             // FrmMain
             // 
@@ -188,5 +270,15 @@
         private System.Windows.Forms.ToolStripMenuItem endereçoToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripMenuItem produtosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cadastroProdutosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem entradaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saidaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem estoqueToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fornecedorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem formaDePagamentoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem custosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tipoLitragemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tipoCustoToolStripMenuItem;
     }
 }
