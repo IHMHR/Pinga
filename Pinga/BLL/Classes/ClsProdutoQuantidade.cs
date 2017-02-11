@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    class ClsProdutoQuantidade : IGeneric
+    public sealed class ClsProdutoQuantidade : IGeneric<ClsProdutoQuantidade>
     {
         public Guid idprodutoQuantidade { get; set; }
         public int quantidadeMinima { get; set; }
@@ -22,7 +22,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsProdutoQuantidade> Visualizar()
         {
             return null;
         }

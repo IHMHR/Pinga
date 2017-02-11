@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    class ClsParcelamento : IGeneric
+    public sealed class ClsParcelamento : IGeneric<ClsParcelamento>
     {
         public Guid idparcelamento { get; set; }
         public Nullable<DateTime> dataPagamento { get; set; }
@@ -22,7 +22,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsParcelamento> Visualizar()
         {
             return null;
         }

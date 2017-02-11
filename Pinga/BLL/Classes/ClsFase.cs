@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    class ClsFase : IGeneric
+    public sealed class ClsFase : IGeneric<ClsFase>
     {
         public Guid idfase { get; set; }
         public string fase { get; set; }
@@ -19,7 +19,7 @@ namespace BLL.Classes
         public void Apagar()
         { }
 
-        public DataTable Visualizar()
+        public List<ClsFase> Visualizar()
         {
             return null;
         }
