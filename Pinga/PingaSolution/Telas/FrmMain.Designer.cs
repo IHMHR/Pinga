@@ -38,9 +38,6 @@
             this.bairroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tipoLogradouroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tipoComplementoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.endereçoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.produtosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cadastroProdutosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entradaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +48,8 @@
             this.custosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tipoLitragemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tipoCustoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -76,8 +75,7 @@
             this.cidadeToolStripMenuItem,
             this.bairroToolStripMenuItem,
             this.tipoLogradouroToolStripMenuItem,
-            this.tipoComplementoToolStripMenuItem,
-            this.endereçoToolStripMenuItem});
+            this.tipoComplementoToolStripMenuItem});
             this.localizaçãoToolStripMenuItem.Name = "localizaçãoToolStripMenuItem";
             this.localizaçãoToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             this.localizaçãoToolStripMenuItem.Text = "Localização";
@@ -136,28 +134,7 @@
             this.tipoComplementoToolStripMenuItem.Name = "tipoComplementoToolStripMenuItem";
             this.tipoComplementoToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.tipoComplementoToolStripMenuItem.Text = "Tipo Complemento";
-            // 
-            // endereçoToolStripMenuItem
-            // 
-            this.endereçoToolStripMenuItem.Name = "endereçoToolStripMenuItem";
-            this.endereçoToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.endereçoToolStripMenuItem.Text = "Endereço";
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 648);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1358, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.tipoComplementoToolStripMenuItem.Click += new System.EventHandler(this.tipoComplementoToolStripMenuItem_Click);
             // 
             // produtosToolStripMenuItem
             // 
@@ -229,6 +206,22 @@
             this.tipoCustoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.tipoCustoToolStripMenuItem.Text = "Tipo Custo";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 648);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1358, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,7 +261,6 @@
         private System.Windows.Forms.ToolStripMenuItem bairroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tipoLogradouroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tipoComplementoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem endereçoToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripMenuItem produtosToolStripMenuItem;

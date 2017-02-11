@@ -138,5 +138,21 @@ namespace PingaSolution.Telas
             newForm.MdiParent = this;
             newForm.Show();
         }
+
+        private void tipoComplementoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Localizacao.FrmTipoComplemento))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Localizacao.FrmTipoComplemento();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }

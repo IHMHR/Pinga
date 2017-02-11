@@ -126,7 +126,7 @@ namespace PingaSolution.Telas.Localizacao
                 bll.tipoLogradouro.idtipoLogradouro = Guid.Parse(dataGridView1.Rows[e.RowIndex].Cells["idtipoLogradouro"].Value.ToString());
                 bll.tipoLogradouro.Apagar();
                 fillDataGrid();
-                MessageBox.Show("Apagado cidade com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Apagado Tipo Logradouro com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
     }

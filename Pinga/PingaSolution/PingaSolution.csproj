@@ -85,6 +85,12 @@
     <Compile Include="Telas\Localizacao\FrmPais.Designer.cs">
       <DependentUpon>FrmPais.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\Localizacao\FrmTipoComplemento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Localizacao\FrmTipoComplemento.Designer.cs">
+      <DependentUpon>FrmTipoComplemento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\Localizacao\FrmTipoContinente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Localizacao\FrmPais.resx">
       <DependentUpon>FrmPais.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Localizacao\FrmTipoComplemento.resx">
+      <DependentUpon>FrmTipoComplemento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Localizacao\FrmTipoContinente.resx">
       <DependentUpon>FrmTipoContinente.cs</DependentUpon>
