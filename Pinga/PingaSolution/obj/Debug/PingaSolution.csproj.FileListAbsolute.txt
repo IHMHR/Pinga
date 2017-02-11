@@ -16,3 +16,4 @@ C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Te
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmEstado.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmCidade.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmBairro.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoLogradouro.resources
