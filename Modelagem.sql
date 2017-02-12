@@ -1,4 +1,4 @@
-parUSE master;
+USE master;
 GO
 
 sp_configure 'contained database authentication', 1;
@@ -1758,6 +1758,59 @@ BEGIN
 END;
 GO
 /* USP's INSERIR CONTRATO */
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoLitragem
+    @tipoLitragem VARCHAR(35)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.tipo_litragem (tipo_litragem)
+            VALUES (@tipoLitragem);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do tipo litragem apenas.', 1;
+    END CATCH
+END;
+GO 
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoProdutoQuantidade
+    @quantidadeMinima INT,
+	@quantidadeMaxima INT,
+	@quantidadeRecomendaEstoque INT,
+	@quantidadeSolicitarCompra INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
+            VALUES (@quantidadeMinima, @quantidadeMaxima, @quantidadeRecomendaEstoque, @quantidadeSolicitarCompra, GETDATE());
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do produto quantidade apenas.', 1;
+    END CATCH
+END;
+GO
 
 /* TRIGGER's PARA VALIDAÇÃO */
 CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
