@@ -19,3 +19,5 @@ C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Te
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoLogradouro.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoComplemento.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmProduto.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmEntrada.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmTipoCusto.resources

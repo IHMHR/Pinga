@@ -206,6 +206,7 @@
             this.tipoCustoToolStripMenuItem.Name = "tipoCustoToolStripMenuItem";
             this.tipoCustoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.tipoCustoToolStripMenuItem.Text = "Tipo Custo";
+            this.tipoCustoToolStripMenuItem.Click += new System.EventHandler(this.tipoCustoToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 

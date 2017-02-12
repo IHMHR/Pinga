@@ -132,7 +132,7 @@ namespace PingaSolution.Telas.Mercadoria
                 comboBox2.ValueMember = "idprodutoQuantidade";
                 comboBox2.SelectedIndex = -1;
             }
-            catch (Exception erro)
+            catch (Exception)
             {
                 MessageBox.Show("Falha ao popular o grid", "Falha de leitura", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
