@@ -1861,6 +1861,35 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaEntrada
+    @data DATE, 
+	@litragem INT,
+	@tipoLitragemIdtipoLitragem UNIQUEIDENTIFIER,
+	@custoIdcusto UNIQUEIDENTIFIER,
+	@parcelamentoIdparcelamento UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.entrada (data, litragem, tipo_litragem_idtipo_litragem, custo_idcusto, parcelamento_idparcelamento)
+            VALUES (@data, @litragem, @tipoLitragemIdtipoLitragem, @custoIdcusto, @parcelamentoIdparcelamento);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da entrada apenas.', 1;
+    END CATCH
+END;
+GO
+
 /* TRIGGER's PARA VALIDAÇÃO */
 CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
 ON Pinga.tipo_continente WITH ENCRYPTION
