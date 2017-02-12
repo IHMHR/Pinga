@@ -149,14 +149,15 @@
             this.tipoLitragemToolStripMenuItem,
             this.tipoCustoToolStripMenuItem});
             this.produtosToolStripMenuItem.Name = "produtosToolStripMenuItem";
-            this.produtosToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.produtosToolStripMenuItem.Text = "Produtos";
+            this.produtosToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.produtosToolStripMenuItem.Text = "Mercadoria";
             // 
             // cadastroProdutosToolStripMenuItem
             // 
             this.cadastroProdutosToolStripMenuItem.Name = "cadastroProdutosToolStripMenuItem";
             this.cadastroProdutosToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.cadastroProdutosToolStripMenuItem.Text = "Cadastro Produtos";
+            this.cadastroProdutosToolStripMenuItem.Text = "Produto";
+            this.cadastroProdutosToolStripMenuItem.Click += new System.EventHandler(this.cadastroProdutosToolStripMenuItem_Click);
             // 
             // entradaToolStripMenuItem
             // 
