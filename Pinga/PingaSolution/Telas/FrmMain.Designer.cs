@@ -202,6 +202,7 @@
             this.tipoLitragemToolStripMenuItem.Name = "tipoLitragemToolStripMenuItem";
             this.tipoLitragemToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.tipoLitragemToolStripMenuItem.Text = "Tipo Litragem";
+            this.tipoLitragemToolStripMenuItem.Click += new System.EventHandler(this.tipoLitragemToolStripMenuItem_Click);
             // 
             // tipoCustoToolStripMenuItem
             // 

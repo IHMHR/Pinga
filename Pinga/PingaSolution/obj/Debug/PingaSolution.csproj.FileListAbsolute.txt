@@ -23,3 +23,4 @@ C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Te
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmTipoCusto.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmCusto.resources
 C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmFormaPagamento.resources
+C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmTipoLitragem.resources

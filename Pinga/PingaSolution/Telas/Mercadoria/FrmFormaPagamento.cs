@@ -96,7 +96,7 @@ namespace PingaSolution.Telas.Mercadoria
 
                 fillDataGrid();
             }
-            catch (Exception erro)
+            catch (Exception)
             {
                 MessageBox.Show("Falha ao popular o grid", "Falha de leitura", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

@@ -58,6 +58,7 @@ namespace BLL.Classes
                     com.CommandType = CommandType.Text;
                     com.CommandText = "UPDATE Pinga.tipo_litragem SET tipo_litragem = @tipoLitragem WHERE idtipo_litragem = @id";
                     com.Parameters.AddWithValue("@id", idtipoLitragem);
+                    com.Parameters.AddWithValue("@tipoLitragem", tipoLitragem);
 
                     con.Open();
                     com.ExecuteNonQuery();

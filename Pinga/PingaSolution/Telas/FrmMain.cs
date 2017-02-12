@@ -218,5 +218,21 @@ namespace PingaSolution.Telas
             newForm.MdiParent = this;
             newForm.Show();
         }
+
+        private void tipoLitragemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmTipoLitragem))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmTipoLitragem();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }
