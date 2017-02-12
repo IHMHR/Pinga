@@ -186,5 +186,37 @@ namespace PingaSolution.Telas
             newForm.MdiParent = this;
             newForm.Show();
         }
+
+        private void custosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmCusto))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmCusto();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void formaDePagamentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmFormaPagamento))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmFormaPagamento();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }

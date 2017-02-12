@@ -109,11 +109,23 @@
     <Compile Include="Telas\Login\FrmLogin.Designer.cs">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\Mercadoria\FrmCusto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Mercadoria\FrmCusto.Designer.cs">
+      <DependentUpon>FrmCusto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\Mercadoria\FrmEntrada.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Telas\Mercadoria\FrmEntrada.Designer.cs">
       <DependentUpon>FrmEntrada.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Telas\Mercadoria\FrmFormaPagamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Mercadoria\FrmFormaPagamento.Designer.cs">
+      <DependentUpon>FrmFormaPagamento.cs</DependentUpon>
     </Compile>
     <Compile Include="Telas\Mercadoria\FrmProduto.cs">
       <SubType>Form</SubType>
@@ -166,8 +178,14 @@
     <EmbeddedResource Include="Telas\Login\FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Mercadoria\FrmCusto.resx">
+      <DependentUpon>FrmCusto.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Telas\Mercadoria\FrmEntrada.resx">
       <DependentUpon>FrmEntrada.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Mercadoria\FrmFormaPagamento.resx">
+      <DependentUpon>FrmFormaPagamento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Mercadoria\FrmProduto.resx">
       <DependentUpon>FrmProduto.cs</DependentUpon>

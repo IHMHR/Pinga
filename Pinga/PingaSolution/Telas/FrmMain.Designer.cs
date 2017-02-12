@@ -188,12 +188,14 @@
             this.formaDePagamentoToolStripMenuItem.Name = "formaDePagamentoToolStripMenuItem";
             this.formaDePagamentoToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.formaDePagamentoToolStripMenuItem.Text = "Forma de Pagamento";
+            this.formaDePagamentoToolStripMenuItem.Click += new System.EventHandler(this.formaDePagamentoToolStripMenuItem_Click);
             // 
             // custosToolStripMenuItem
             // 
             this.custosToolStripMenuItem.Name = "custosToolStripMenuItem";
             this.custosToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.custosToolStripMenuItem.Text = "Custos";
+            this.custosToolStripMenuItem.Text = "Custo";
+            this.custosToolStripMenuItem.Click += new System.EventHandler(this.custosToolStripMenuItem_Click);
             // 
             // tipoLitragemToolStripMenuItem
             // 
