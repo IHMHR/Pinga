@@ -346,7 +346,6 @@ identrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 data DATE NOT NULL DEFAULT GETDATE(),
 litragem INT NOT NULL,
 tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
-valor DECIMAL(9,2) NOT NULL,
 custo_idcusto UNIQUEIDENTIFIER NOT NULL,
 parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
 created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
@@ -1858,6 +1857,35 @@ BEGIN
         DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
         EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
         THROW 51921, 'Falha ao realizar o insert da forma de pagamento apenas.', 1;
+    END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaEntrada
+    @data DATE, 
+	@litragem INT,
+	@tipoLitragemIdtipoLitragem UNIQUEIDENTIFIER,
+	@custoIdcusto UNIQUEIDENTIFIER,
+	@parcelamentoIdparcelamento UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.entrada (data, litragem, tipo_litragem_idtipo_litragem, custo_idcusto, parcelamento_idparcelamento)
+            VALUES (@data, @litragem, @tipoLitragemIdtipoLitragem, @custoIdcusto, @parcelamentoIdparcelamento);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da entrada apenas.', 1;
     END CATCH
 END;
 GO
