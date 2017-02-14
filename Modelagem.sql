@@ -878,6 +878,18 @@ CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
 FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato)
 );
 
+CREATE TABLE adm.parceiro_has_login (
+idparceiro_has_login UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
+login_idlogin UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_parceiro_has_login PRIMARY KEY (idparceiro_has_login),
+FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
+FOREIGN KEY (login_idlogin) REFERENCES adm.login(idlogin)
+);
+
 --ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
 
 
