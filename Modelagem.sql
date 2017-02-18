@@ -74,6 +74,37 @@ GO
 ALTER DATABASE pingaDB SET COMPATIBILITY_LEVEL = 130
 GO
 
+ALTER DATABASE pingaDB ADD FILEGROUP Pinga_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILE 
+(NAME = 'pingaDB_File1', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File1.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
+(NAME = 'pingaDB_File2', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File2.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
+(NAME = 'pingaDB_File3', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File3.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB )
+TO FILEGROUP Pinga_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILEGROUP Adm_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILE
+(NAME = 'pingaDB_File4', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File4.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB),
+(NAME = 'pingaDB_File5', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File5.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB)
+TO FILEGROUP Adm_FileGroup
+
+ALTER DATABASE pingaDB ADD FILEGROUP Legado_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILE
+(NAME = 'pingaDB_File6', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File6.ndf', SIZE = 50MB, MAXSIZE = 150MB, FILEGROWTH = 10MB)
+TO FILEGROUP Legado_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD LOG FILE
+(NAME = 'pingaDB_LOG1', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB1.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB),
+(NAME = 'pingaDB_LOG2', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB2.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB)
+GO
+
 USE pingaDB;
 GO
 
@@ -2412,7 +2443,7 @@ BACKUP LOG pingaDB
 		 SKIP,
 		 CHECKSUM,
 		 STOP_ON_ERROR,
-		 DESCRIPTION = N'FULL BACKUP DA BASE DE DADOS pingaDB',
+		 DESCRIPTION = N'LOG BACKUP DA BASE DE DADOS pingaDB',
 		 NAME = N'Backup pingaDB',
 		 STATS = 1,
 		 NOFORMAT;
