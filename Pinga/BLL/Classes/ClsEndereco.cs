@@ -17,6 +17,13 @@ namespace BLL.Classes
         public Nullable<DateTime> created { get; set; }
         public Nullable<DateTime> modified { get; set; }
 
+        public ClsEndereco()
+        {
+            tipoLogradouroIdtipoLogradouro = new ClsTipoLogradouro();
+            tipoComplementoIdtipoComplemento = new ClsTipoComplemento();
+            bairroIdbairro = new ClsBairro();
+        }
+
         public void Inserir()
         { }
 

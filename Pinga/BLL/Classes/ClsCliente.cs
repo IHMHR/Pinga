@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Net.Mail;
 
 namespace BLL.Classes
 {
@@ -11,13 +13,20 @@ namespace BLL.Classes
         public string apelidoNomeFantasia { get; set; }
         public string inscricaoMunicipal { get; set; }
         public string identidadeInscricaoEstadual { get; set; }
-        public Nullable<DateTime> dataNascimentoFundacao { get; set; }
+        public DateTime dataNascimentoFundacao { get; set; }
         public char sexo { get; set; }
         public ClsEmail emailIdemail { get; set; }
         public ClsEndereco enderecoIdendereco { get; set; }
         public ClsTelefone telefoneIdtelefone { get; set; }
-        public Nullable<DateTime> created { get; set; }
+        public DateTime created { get; set; }
         public Nullable<DateTime> modified { get; set; }
+
+        public ClsCliente()
+        {
+            emailIdemail = new ClsEmail();
+            enderecoIdendereco = new ClsEndereco();
+            telefoneIdtelefone = new ClsTelefone();
+        }
 
         public void Inserir()
         { }
@@ -30,7 +39,70 @@ namespace BLL.Classes
 
         public List<ClsCliente> Visualizar()
         {
-            return null;
+            List<ClsCliente> retorno = new List<ClsCliente>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idcliente, cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, idemail, email, idendereco, tipo_logradouro, logradouro, numero, tipo_complemento, complemento, ponto_referencia, CEP, bairro, DDD, cidade, capital, estado, uf, pais, sigla, continente, idtelefone, telefone, telefone_DDD, operadora, telefone_cidade, tipo_telefone FROM Pinga.uvw_VisualizarInfoCliente;";
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    while (read.Read())
+                    {
+                        ClsCliente c = new ClsCliente();
+                        c.idcliente = Guid.Parse(read["idcliente"].ToString());
+                        c.nomeRazaoSocial = read["nome_razao_social"].ToString();
+                        c.apelidoNomeFantasia = read["apelido_nome_fantasia"].ToString();
+                        c.sexo = (char)read["sexo"];
+                        c.inscricaoMunicipal = read["inscricao_municipal"].ToString();
+                        c.identidadeInscricaoEstadual = read["identidade_inscricao_estadual"].ToString();
+                        c.dataNascimentoFundacao = DateTime.Parse(read["data_nascimento_fundacao"].ToString());
+                        c.created = DateTime.Parse(read["created"].ToString());
+                        if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                        {
+                            c.created = DateTime.Parse(read["modified"].ToString());
+                        }
+                        MailAddress email = new MailAddress(read["email"].ToString());
+                        c.emailIdemail.idemail = Guid.Parse(read["email"].ToString());
+                        c.emailIdemail.emailDominioIdemailDominio.emailDominio = email.Host.Substring(0, email.Host.IndexOf('.'));
+                        c.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade = email.Host.Substring(email.Host.IndexOf('.'));
+                        c.telefoneIdtelefone.idtelefone = Guid.Parse(read["idtelefone"].ToString());
+                        c.telefoneIdtelefone.telefone = read["telefone"].ToString();
+                        c.telefoneIdtelefone.cidadeDDD.DDD = read["DDD"].ToString();
+                        c.telefoneIdtelefone.operadoraIdoperadora.operadora = read["operadora"].ToString();
+                        c.telefoneIdtelefone.cidadeDDD.cidade = read["telefone_cidade"].ToString();
+                        c.telefoneIdtelefone.tipoTelefoneIdtipoTelefone.tipoTelefone = read["tipo_telefone"].ToString();
+                        c.enderecoIdendereco.idendereco = Guid.Parse(read["idendereco"].ToString());
+                        c.enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro = read["tipo_logradouro"].ToString();
+                        c.enderecoIdendereco.logradouro = read["logradouro"].ToString();
+                        c.enderecoIdendereco.numero = int.Parse(read["numero"].ToString());
+                        c.enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento = read["tipo_complemento"].ToString();
+                        c.enderecoIdendereco.complemento = read["complemento"].ToString();
+                        c.enderecoIdendereco.pontoReferencia = read["ponto_referencia"].ToString();
+                        c.enderecoIdendereco.CEP = read["CEP"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.bairro = read["bairro"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.DDD = read["DDD"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
+                        c.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+
+                        retorno.Add(c);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return retorno;
         }
     }
 }

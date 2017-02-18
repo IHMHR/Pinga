@@ -250,5 +250,21 @@ namespace PingaSolution.Telas
             newForm.MdiParent = this;
             newForm.Show();
         }
+
+        private void saidaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmSaida))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmSaida();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }

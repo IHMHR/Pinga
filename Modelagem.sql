@@ -12,11 +12,11 @@ BEGIN
 END
 
 CREATE DATABASE pingaDB CONTAINMENT = PARTIAL
-ON (NAME = 'pingaDB', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
-LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
+ON (NAME = 'pingaDB', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 2MB )
+LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 1MB)
 COLLATE Latin1_General_CS_AS;
 GO
-par
+
 ALTER DATABASE pingaDB SET OFFLINE
 GO
 

@@ -50,6 +50,14 @@
             this.tipoCustoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cRMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.parceiroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.representanteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contratoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.visitaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fornecedorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.horarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -58,7 +66,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.localizaçãoToolStripMenuItem,
-            this.produtosToolStripMenuItem});
+            this.produtosToolStripMenuItem,
+            this.cRMToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1358, 24);
@@ -171,6 +180,7 @@
             this.saidaToolStripMenuItem.Name = "saidaToolStripMenuItem";
             this.saidaToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.saidaToolStripMenuItem.Text = "Saida";
+            this.saidaToolStripMenuItem.Click += new System.EventHandler(this.saidaToolStripMenuItem_Click);
             // 
             // estoqueToolStripMenuItem
             // 
@@ -228,6 +238,62 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
+            // cRMToolStripMenuItem
+            // 
+            this.cRMToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.parceiroToolStripMenuItem,
+            this.clienteToolStripMenuItem,
+            this.representanteToolStripMenuItem,
+            this.contratoToolStripMenuItem,
+            this.visitaToolStripMenuItem,
+            this.fornecedorToolStripMenuItem1,
+            this.horarioToolStripMenuItem});
+            this.cRMToolStripMenuItem.Name = "cRMToolStripMenuItem";
+            this.cRMToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.cRMToolStripMenuItem.Text = "CRM";
+            // 
+            // parceiroToolStripMenuItem
+            // 
+            this.parceiroToolStripMenuItem.Name = "parceiroToolStripMenuItem";
+            this.parceiroToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.parceiroToolStripMenuItem.Text = "Parceiro";
+            // 
+            // clienteToolStripMenuItem
+            // 
+            this.clienteToolStripMenuItem.Name = "clienteToolStripMenuItem";
+            this.clienteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clienteToolStripMenuItem.Text = "Cliente";
+            // 
+            // representanteToolStripMenuItem
+            // 
+            this.representanteToolStripMenuItem.Name = "representanteToolStripMenuItem";
+            this.representanteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.representanteToolStripMenuItem.Text = "Representante";
+            // 
+            // contratoToolStripMenuItem
+            // 
+            this.contratoToolStripMenuItem.Name = "contratoToolStripMenuItem";
+            this.contratoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.contratoToolStripMenuItem.Text = "Contrato";
+            // 
+            // visitaToolStripMenuItem
+            // 
+            this.visitaToolStripMenuItem.Name = "visitaToolStripMenuItem";
+            this.visitaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.visitaToolStripMenuItem.Text = "Visita";
+            // 
+            // fornecedorToolStripMenuItem1
+            // 
+            this.fornecedorToolStripMenuItem1.Name = "fornecedorToolStripMenuItem1";
+            this.fornecedorToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.fornecedorToolStripMenuItem1.Text = "Fornecedor";
+            // 
+            // horarioToolStripMenuItem
+            // 
+            this.horarioToolStripMenuItem.Name = "horarioToolStripMenuItem";
+            this.horarioToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.horarioToolStripMenuItem.Text = "Horario";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,5 +345,13 @@
         private System.Windows.Forms.ToolStripMenuItem custosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tipoLitragemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tipoCustoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cRMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem parceiroToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clienteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem representanteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem contratoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem visitaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fornecedorToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem horarioToolStripMenuItem;
     }
 }

@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -133,6 +134,12 @@
     <Compile Include="Telas\Mercadoria\FrmProduto.Designer.cs">
       <DependentUpon>FrmProduto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\Mercadoria\FrmSaida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Mercadoria\FrmSaida.Designer.cs">
+      <DependentUpon>FrmSaida.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\Mercadoria\FrmTipoCusto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -195,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Mercadoria\FrmProduto.resx">
       <DependentUpon>FrmProduto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Mercadoria\FrmSaida.resx">
+      <DependentUpon>FrmSaida.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Mercadoria\FrmTipoCusto.resx">
       <DependentUpon>FrmTipoCusto.cs</DependentUpon>

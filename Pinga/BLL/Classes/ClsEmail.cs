@@ -10,6 +10,12 @@ namespace BLL.Classes
         public ClsEmailDominio emailDominioIdemailDominio { get; set; }
         public ClsEmailLocalidade emailLocalidadeIdemailLocalidade { get; set; }
 
+        public ClsEmail()
+        {
+            emailDominioIdemailDominio = new ClsEmailDominio();
+            emailLocalidadeIdemailLocalidade = new ClsEmailLocalidade();
+        }
+
         public void Inserir()
         { }
 
