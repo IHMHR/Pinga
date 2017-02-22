@@ -105,6 +105,9 @@ ALTER DATABASE pingaDB ADD LOG FILE
 (NAME = 'pingaDB_LOG2', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB2.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB)
 GO
 
+ALTER DATABASE pingaDB MODIFY FILEGROUP Pinga_FileGroup DEFAULT
+GO
+
 USE pingaDB;
 GO
 
@@ -368,6 +371,7 @@ CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
 BEGIN
+	ALTER TABLE Pinga.entrada SET (SYSTEM_VERSIONING = OFF);
     DROP TABLE Pinga.entrada;
 END
 
@@ -607,7 +611,8 @@ FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcel
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'itens_saida')
 BEGIN
-    DROP TABLE Pinga.itens_saida;
+    ALTER TABLE Pinga.itens_saida SET (SYSTEM_VERSIONING = OFF);
+	DROP TABLE Pinga.itens_saida;
 END
 
 CREATE TABLE Pinga.itens_saida (
@@ -622,13 +627,13 @@ PERIOD FOR SYSTEM_TIME (created, modified),
 
 CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
 FOREIGN KEY (saida_idsaida) REFERENCES Pinga.saida(idsaida),
-FOREIGN KEY (entrada_identrada) REFERENCES Pinga.produto(idproduto),
-FOREIGN KEY (produto_idproduto) REFERENCES Pinga.saida(idsaida)
+FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
 ) ON Pinga_FileGroup
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.itens_saida));
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estoque')
 BEGIN
+	ALTER TABLE Pinga.estoque SET (SYSTEM_VERSIONING = OFF);
     DROP TABLE Pinga.estoque;
 END
 
@@ -2278,6 +2283,7 @@ CONSTRAINT pk_excecoes PRIMARY KEY NONCLUSTERED (idexcecoes)
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'agenda')
 BEGIN
+	ALTER TABLE Pinga.agenda SET (SYSTEM_VERSIONING = OFF);
 	DROP TABLE Pinga.agenda;
 END
 

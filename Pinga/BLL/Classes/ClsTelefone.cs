@@ -13,6 +13,13 @@ namespace BLL.Classes
         public Nullable<DateTime> created { get; set; }
         public Nullable<DateTime> modified { get; set; }
 
+        public ClsTelefone()
+        {
+            cidadeDDD = new ClsCidade();
+            tipoTelefoneIdtipoTelefone = new ClsTipoTelefone();
+            operadoraIdoperadora = new ClsOperadora();
+        }
+
         public void Inserir()
         { }
 

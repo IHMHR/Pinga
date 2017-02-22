@@ -17,6 +17,12 @@ namespace PingaSolution.Telas.Mercadoria
         public FrmSaida()
         {
             InitializeComponent();
+
+            Classes.ClsGlobal.qntProdutos = 1;
+            //Classes.ClsGlobal.pointX = label8.Location.X + 9;
+            //Classes.ClsGlobal.pointY = label8.Location.Y + 150;
+            Classes.ClsGlobal.pointX = label8.Location.X;
+            Classes.ClsGlobal.pointY = label8.Location.Y;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -35,8 +41,7 @@ namespace PingaSolution.Telas.Mercadoria
 
             foreach (var item in bll.saida.Visualizar())
             {
-                string email = item.clienteIdcliente.emailIdemail.email + "@" + item.clienteIdcliente.emailIdemail.emailDominioIdemailDominio.emailDominio + "." + item.clienteIdcliente.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade;
-                dataGridView1.Rows.Add(item.idsaida, item.data, item.parceiroIdparceiro.idparceiro, item.parceiroIdparceiro.nome, item.parceiroIdparceiro.enderecoIdendereco.idendereco, item.parceiroIdparceiro.enderecoIdendereco, item.parceiroIdparceiro.enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro, item.parceiroIdparceiro.enderecoIdendereco.logradouro, item.parceiroIdparceiro.enderecoIdendereco.numero, item.parceiroIdparceiro.enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento, item.parceiroIdparceiro.enderecoIdendereco.complemento, item.parceiroIdparceiro.enderecoIdendereco.pontoReferencia, item.parceiroIdparceiro.enderecoIdendereco.CEP, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.bairro, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente, item.parceiroIdparceiro.telefoneIdtelefone.idtelefone, item.parceiroIdparceiro.telefoneIdtelefone.telefone, item.parceiroIdparceiro.telefoneIdtelefone.operadoraIdoperadora.operadora, item.clienteIdcliente.idcliente, item.clienteIdcliente.nomeRazaoSocial, item.clienteIdcliente.apelidoNomeFantasia, item.clienteIdcliente.inscricaoMunicipal, item.clienteIdcliente.identidadeInscricaoEstadual, item.clienteIdcliente.dataNascimentoFundacao, item.clienteIdcliente.sexo, email);
+                dataGridView1.Rows.Add(item.idsaida, item.data.ToShortDateString(), item.parceiroIdparceiro.idparceiro, item.parceiroIdparceiro.nome, item.parceiroIdparceiro.enderecoIdendereco.idendereco, item.parceiroIdparceiro.enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro, item.parceiroIdparceiro.enderecoIdendereco.logradouro, item.parceiroIdparceiro.enderecoIdendereco.numero, item.parceiroIdparceiro.enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento, item.parceiroIdparceiro.enderecoIdendereco.complemento, item.parceiroIdparceiro.enderecoIdendereco.pontoReferencia, item.parceiroIdparceiro.enderecoIdendereco.CEP, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.bairro, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente, item.parceiroIdparceiro.telefoneIdtelefone.idtelefone, (item.parceiroIdparceiro.telefoneIdtelefone.cidadeDDD.DDD + " " + item.parceiroIdparceiro.telefoneIdtelefone.telefone), item.parceiroIdparceiro.telefoneIdtelefone.operadoraIdoperadora.operadora, item.clienteIdcliente.idcliente, item.clienteIdcliente.nomeRazaoSocial, item.clienteIdcliente.apelidoNomeFantasia, item.clienteIdcliente.inscricaoMunicipal, item.clienteIdcliente.identidadeInscricaoEstadual, item.clienteIdcliente.dataNascimentoFundacao.ToShortDateString(), item.clienteIdcliente.sexo, (item.clienteIdcliente.emailIdemail.email + "@" + item.clienteIdcliente.emailIdemail.emailDominioIdemailDominio.emailDominio + "." + item.clienteIdcliente.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade));
             }
         }
 
@@ -258,17 +263,17 @@ namespace PingaSolution.Telas.Mercadoria
 
                 // popular combo box
                 comboBox1.DataSource = new Bll("Parceiro").parceiro.Visualizar();
-                comboBox1.DisplayMember = "parceiro";
+                comboBox1.DisplayMember = "nome";
                 comboBox1.ValueMember = "idparceiro";
                 comboBox1.SelectedIndex = -1;
 
                 comboBox2.DataSource = new Bll("Cliente").cliente.Visualizar();
-                comboBox2.DisplayMember = "nome";
+                comboBox2.DisplayMember = "nomeRazaoSocial";
                 comboBox2.ValueMember = "idcliente";
                 comboBox2.SelectedIndex = -1;
 
                 comboBox3.DataSource = new Bll("Fase").fase.Visualizar();
-                comboBox3.DisplayMember = "fase";
+                comboBox3.DisplayMember = "Fase";
                 comboBox3.ValueMember = "idfase";
                 comboBox3.SelectedIndex = -1;
 
@@ -281,10 +286,154 @@ namespace PingaSolution.Telas.Mercadoria
                 comboBox5.DisplayMember = "parcelas";
                 comboBox5.ValueMember = "idparcelamento";
                 comboBox5.SelectedIndex = -1;
+
+                Produto1.DataSource = new Bll("Produto").produto.Visualizar();
+                Produto1.DisplayMember = "Produto";
+                Produto1.ValueMember = "idproduto";
+                Produto1.SelectedIndex = -1;
             }
-            catch (Exception erro)
+            catch (Exception)
             {
                 MessageBox.Show("Falha ao popular o grid", "Falha de leitura", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex != -1 && comboBox2.SelectedIndex != -1 && comboBox3.SelectedIndex != -1 && comboBox4.SelectedIndex != -1 && comboBox5.SelectedIndex != -1)
+            {
+                bll.saida.data = dateTimePicker1.Value;
+                bll.saida.parceiroIdparceiro.idparceiro = Guid.Parse(comboBox1.SelectedValue.ToString());
+                bll.saida.clienteIdcliente.idcliente = Guid.Parse(comboBox2.SelectedValue.ToString());
+                bll.saida.faseIdfase.idfase = Guid.Parse(comboBox3.SelectedValue.ToString());
+                bll.saida.formaPagamentoIdformaPagamento.idformaPagamento = Guid.Parse(comboBox4.SelectedValue.ToString());
+                bll.saida.parcelamentoIdparcelamento.idparcelamento = Guid.Parse(comboBox5.SelectedValue.ToString());
+
+                if (button1.Text == "Salvar")
+                {
+                    Guid idSaida = bll.saida.InserirComRetorno();
+
+                    List<Bll> itensSaidaList = new List<Bll>();
+                    int i;
+
+                    Bll bllItensSaida = null;
+                    for (i = 0; i < Classes.ClsGlobal.qntProdutos; i++)
+                    {
+                        bllItensSaida = new Bll("Itens_Saida");
+                        bllItensSaida.itensSaida.saidaIdsaida.idsaida = idSaida;
+
+                        itensSaidaList.Add(bllItensSaida);
+                    }
+
+                    i = 0;
+                    foreach (ComboBox cmb in groupBox2.Controls.OfType<ComboBox>().Where(x => x.Name.StartsWith("Produto")).ToList())
+                    {
+                        itensSaidaList[i++].itensSaida.produtoIdproduto.idproduto = Guid.Parse(cmb.SelectedValue.ToString());
+                    }
+
+                    i = 0;
+                    foreach (TextBox txt in groupBox2.Controls.OfType<TextBox>().Where(x => x.Name.StartsWith("QntI")).ToList())
+                    {
+                        itensSaidaList[i++].itensSaida.quantidade = int.Parse(txt.Text);
+                    }
+
+                    i = 0;
+                    foreach (TextBox txt in groupBox2.Controls.OfType<TextBox>().Where(x => x.Name.StartsWith("preco")).ToList())
+                    {
+                        itensSaidaList[i++].itensSaida.valorSaida = decimal.Parse(txt.Text);
+                    }
+
+                    for (i = 0; i < Classes.ClsGlobal.qntProdutos; i++)
+                    {
+                        itensSaidaList[i++].itensSaida.Inserir();
+                    }
+
+                    fillDataGrid();
+                    MessageBox.Show("Cadastrado nova Saída com sucesso", "Cadastro realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    button1.Text = "Salvar";
+
+                    bll.saida.Alterar();
+                    fillDataGrid();
+                    MessageBox.Show("Alterada Saída com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+
+                Classes.ClsGlobal.ClearForm(groupBox1);
+            }
+            else
+            {
+                MessageBox.Show("Todos os campos devem ser preenchidos", "Preencher campos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void comboBox5_Format(object sender, ListControlConvertEventArgs e)
+        {
+            DateTime dtVencimento = (DateTime)((BLL.Classes.ClsParcelamento)e.ListItem).dataVencimento;
+            DateTime dtPagamento = (DateTime)((BLL.Classes.ClsParcelamento)e.ListItem).dataPagamento;
+            int parcelas = ((BLL.Classes.ClsParcelamento)e.ListItem).parcelas;
+            decimal juros = ((BLL.Classes.ClsParcelamento)e.ListItem).juros;
+            e.Value = string.Format("Dt Venc: {0}, Dt 1º P: {1}, Parcelas: {2}, Juros: {3}", dtVencimento.ToShortDateString(), dtPagamento.ToShortDateString(), parcelas, juros);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (Classes.ClsGlobal.qntProdutos < 8)
+            {
+                groupBox2.SuspendLayout();
+
+                Classes.ClsGlobal.pointY += 22;
+                Classes.ClsGlobal.qntProdutos++;
+
+                Label lbl = new Label();
+                lbl.Text = "Produto" + Classes.ClsGlobal.qntProdutos;
+                lbl.Location = new Point(Classes.ClsGlobal.pointX, Classes.ClsGlobal.pointY);
+                lbl.Width = 55;
+                groupBox2.Controls.Add(lbl);
+
+                ComboBox cmb = new ComboBox();
+                cmb.Name = "Produto" + Classes.ClsGlobal.qntProdutos;
+                cmb.Location = new Point(Classes.ClsGlobal.pointX + 55, Classes.ClsGlobal.pointY);
+                cmb.DropDownStyle = ComboBoxStyle.DropDownList;
+                cmb.Width = 171;
+                cmb.DataSource = new Bll("Produto").produto.Visualizar();
+                cmb.DisplayMember = "Produto";
+                cmb.ValueMember = "idproduto";
+                groupBox2.Controls.Add(cmb);
+                cmb.SelectedIndex = -1;
+
+                Label lblQnt = new Label();
+                lblQnt.Text = "Quantidade";
+                lblQnt.Width = 62;
+                lblQnt.Location = new Point(Classes.ClsGlobal.pointX + 230, Classes.ClsGlobal.pointY);
+                groupBox2.Controls.Add(lblQnt);
+
+                TextBox txt = new TextBox();
+                txt.Name = "QntItem" + Classes.ClsGlobal.qntProdutos;
+                txt.Text = String.Empty;
+                txt.Width = 45;
+                txt.Location = new Point(Classes.ClsGlobal.pointX + 300, Classes.ClsGlobal.pointY);
+                groupBox2.Controls.Add(txt);
+
+                Label lblPreco = new Label();
+                lblPreco.Text = "Preço Unidade";
+                lblPreco.Width = 78;
+                lblPreco.Location = new Point(Classes.ClsGlobal.pointX + 350, Classes.ClsGlobal.pointY);
+                groupBox2.Controls.Add(lblPreco);
+
+                TextBox txtPreco = new TextBox();
+                txtPreco.Name = "precoUnidade" + Classes.ClsGlobal.qntProdutos;
+                txtPreco.Text = String.Empty;
+                txtPreco.Width = 57;
+                txtPreco.Location = new Point(Classes.ClsGlobal.pointX + 435, Classes.ClsGlobal.pointY);
+                groupBox2.Controls.Add(txtPreco);
+
+                groupBox2.ResumeLayout(false);
+            }
+            else
+            {
+                button4.Visible = false;
             }
         }
     }

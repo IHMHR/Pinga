@@ -20,7 +20,6 @@ namespace BLL.Classes
 
         public ClsSaida()
         {
-            
             parceiroIdparceiro = new ClsParceiro();
             clienteIdcliente = new ClsCliente();
             faseIdfase = new ClsFase();
@@ -28,8 +27,113 @@ namespace BLL.Classes
             parcelamentoIdparcelamento = new ClsParcelamento();
         }
 
+        public Guid InserirComRetorno()
+        {
+            if (string.IsNullOrEmpty(data.ToString()))
+            {
+                throw new ArgumentNullException("Por favor informe a data.");
+            }
+            else if (parceiroIdparceiro == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parceiro.");
+            }
+            else if (clienteIdcliente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o cliente.");
+            }
+            else if (faseIdfase == null)
+            {
+                throw new ArgumentNullException("Por favor informe a fase.");
+            }
+            else if (formaPagamentoIdformaPagamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe a forma pagamento.");
+            }
+            else if (parcelamentoIdparcelamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parcelamento.");
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.CommandText = "Pinga.usp_InserirNovaSaidaRetorno";
+                    com.Parameters.AddWithValue("@data", data);
+                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro);
+                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente);
+                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase);
+                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento);
+
+                    con.Open();
+                    var ret = com.ExecuteScalar();
+                    con.Close();
+
+                    return Guid.Parse(ret.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public void Inserir()
-        { }
+        {
+            if (string.IsNullOrEmpty(data.ToString()))
+            {
+                throw new ArgumentNullException("Por favor informe a data.");
+            }
+            else if (parceiroIdparceiro == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parceiro.");
+            }
+            else if (clienteIdcliente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o cliente.");
+            }
+            else if (faseIdfase == null)
+            {
+                throw new ArgumentNullException("Por favor informe a fase.");
+            }
+            else if (formaPagamentoIdformaPagamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe a forma pagamento.");
+            }
+            else if (parcelamentoIdparcelamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parcelamento.");
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.CommandText = "Pinga.usp_InserirNovaSaida";
+                    com.Parameters.AddWithValue("@data", data);
+                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro);
+                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente);
+                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase);
+                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento);
+
+                    con.Open();
+                    com.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public void Alterar()
         { }
@@ -78,9 +182,14 @@ namespace BLL.Classes
                         s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
                         s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
                         s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                        s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
                         s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.fusoHorario = read["fuso_horario"].ToString();
                         s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
                         s.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                        s.parceiroIdparceiro.telefoneIdtelefone.idtelefone = Guid.Parse(read["idtelefone"].ToString());
+                        s.parceiroIdparceiro.telefoneIdtelefone.cidadeDDD.DDD = read["ddd"].ToString();
+                        s.parceiroIdparceiro.telefoneIdtelefone.telefone = read["telefone"].ToString();
+                        s.parceiroIdparceiro.telefoneIdtelefone.operadoraIdoperadora.operadora = read["operadora"].ToString();
                         s.clienteIdcliente.idcliente = Guid.Parse(read["idcliente"].ToString());
                         s.clienteIdcliente.cpfCnpj = read["cpf_cnpj"].ToString();
                         s.clienteIdcliente.identidadeInscricaoEstadual = read["identidade_inscricao_estadual"].ToString();

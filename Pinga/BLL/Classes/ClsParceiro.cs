@@ -38,7 +38,7 @@ namespace BLL.Classes
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
                 {
                     SqlCommand com = new SqlCommand();
-                    com.CommandText = "SELECT p.idparceiro, p.nome, p.status, p.created, p.modified, pve.idendereco, pve.tipo_logradouro, pve.logradouro, pve.numero, pve.tipo_complemento, pve.complemento, pve.CEP, pve.ponto_referencia, pve.bairro, pve.uf, pve.estado, pve.sigla, pve.DDI, pve.pais, pve.fuso_horario, pve.continente, pvt.idtelefone, pvt.ddd, pvt.telefone, pvt.operadora FROM Pinga.parceiro p INNER JOIN Pinga.uvw_VisualizarEndereco pve ON p.endereco_idendereco = pve.idendereco INNER JOIN Pinga.uvw_VisualizarTelefone pvt ON p.telefone_idtelefone = pvt.idtelefone;";
+                    com.CommandText = "SELECT p.idparceiro, p.nome, p.status, p.created, p.modified, pve.idendereco, pve.tipo_logradouro, pve.logradouro, pve.numero, pve.tipo_complemento, pve.complemento, pve.CEP, pve.ponto_referencia, pve.bairro, pve.cidade, pve.uf, pve.estado, pve.sigla, pve.DDI, pve.pais, pve.fuso_horario, pve.continente, pvt.idtelefone, pvt.ddd, pvt.telefone, pvt.operadora FROM Pinga.parceiro p INNER JOIN Pinga.uvw_VisualizarEndereco pve ON p.endereco_idendereco = pve.idendereco INNER JOIN Pinga.uvw_VisualizarTelefone pvt ON p.telefone_idtelefone = pvt.idtelefone;";
                     con.Open();
                     com.Connection = con;
 
@@ -50,7 +50,7 @@ namespace BLL.Classes
                         p.nome = read["nome"].ToString();
                         p.status = (bool)read["status"];
                         p.created = DateTime.Parse(read["created"].ToString());
-                        if (!string.IsNullOrEmpty(read["created"].ToString()))
+                        if (!string.IsNullOrEmpty(read["modified"].ToString()))
                         {
                             p.modified = DateTime.Parse(read["modified"].ToString());
                         }
@@ -66,7 +66,7 @@ namespace BLL.Classes
                         p.enderecoIdendereco.complemento = read["complemento"].ToString();
                         p.enderecoIdendereco.pontoReferencia = read["ponto_referencia"].ToString();
                         p.enderecoIdendereco.CEP = read["CEP"].ToString();
-                        p.enderecoIdendereco.bairroIdbairro.bairro= read["bairro"].ToString();
+                        p.enderecoIdendereco.bairroIdbairro.bairro = read["bairro"].ToString();
                         p.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
                         p.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
                         p.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();

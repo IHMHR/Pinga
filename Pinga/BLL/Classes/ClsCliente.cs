@@ -46,7 +46,7 @@ namespace BLL.Classes
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
                 {
                     SqlCommand com = new SqlCommand();
-                    com.CommandText = "SELECT idcliente, cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, idemail, email, idendereco, tipo_logradouro, logradouro, numero, tipo_complemento, complemento, ponto_referencia, CEP, bairro, DDD, cidade, capital, estado, uf, pais, sigla, continente, idtelefone, telefone, telefone_DDD, operadora, telefone_cidade, tipo_telefone FROM Pinga.uvw_VisualizarInfoCliente;";
+                    com.CommandText = "SELECT idcliente, cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, idemail, email, idendereco, tipo_logradouro, logradouro, numero, tipo_complemento, complemento, ponto_referencia, CEP, bairro, DDD, cidade, capital, estado, uf, pais, sigla, continente, idtelefone, telefone, telefone_DDD, operadora, telefone_cidade, tipo_telefone FROM Pinga.uvw_VisualizarInfoCliente;";
                     con.Open();
                     com.Connection = con;
 
@@ -57,17 +57,17 @@ namespace BLL.Classes
                         c.idcliente = Guid.Parse(read["idcliente"].ToString());
                         c.nomeRazaoSocial = read["nome_razao_social"].ToString();
                         c.apelidoNomeFantasia = read["apelido_nome_fantasia"].ToString();
-                        c.sexo = (char)read["sexo"];
+                        c.sexo = char.Parse(read["sexo"].ToString());
                         c.inscricaoMunicipal = read["inscricao_municipal"].ToString();
                         c.identidadeInscricaoEstadual = read["identidade_inscricao_estadual"].ToString();
                         c.dataNascimentoFundacao = DateTime.Parse(read["data_nascimento_fundacao"].ToString());
-                        c.created = DateTime.Parse(read["created"].ToString());
+                        /*c.created = DateTime.Parse(read["created"].ToString());
                         if (!string.IsNullOrEmpty(read["modified"].ToString()))
                         {
                             c.created = DateTime.Parse(read["modified"].ToString());
-                        }
+                        }*/
                         MailAddress email = new MailAddress(read["email"].ToString());
-                        c.emailIdemail.idemail = Guid.Parse(read["email"].ToString());
+                        c.emailIdemail.idemail = Guid.Parse(read["idemail"].ToString());
                         c.emailIdemail.emailDominioIdemailDominio.emailDominio = email.Host.Substring(0, email.Host.IndexOf('.'));
                         c.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade = email.Host.Substring(email.Host.IndexOf('.'));
                         c.telefoneIdtelefone.idtelefone = Guid.Parse(read["idtelefone"].ToString());
