@@ -1960,6 +1960,32 @@ BEGIN
 	END CATCH
 END;
 
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoItenSaida
+	@saidaIdsaida UNIQUEIDENTIFIER,
+	@produtoIdproduto UNIQUEIDENTIFIER,
+	@quantidade INT,
+	@valorSaida DECIMAL(9,2)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET NOCOUNT ON;
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.itens_saida (saida_idsaida, produto_idproduto, quantidade, valor_saida)
+			VALUES (@saidaIdsaida, @produtoIdproduto, @quantidade, @valorSaida);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+PRINT @err;
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert do item saida.', 1;
+	END CATCH
+END;
 
 /* TRIGGER's PARA VALIDAÇÃO */
 CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
