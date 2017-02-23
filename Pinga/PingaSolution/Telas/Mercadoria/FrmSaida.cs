@@ -28,6 +28,7 @@ namespace PingaSolution.Telas.Mercadoria
         private void button3_Click(object sender, EventArgs e)
         {
             Classes.ClsGlobal.ClearForm(groupBox1);
+            Classes.ClsGlobal.ClearForm(groupBox2);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -41,7 +42,7 @@ namespace PingaSolution.Telas.Mercadoria
 
             foreach (var item in bll.saida.Visualizar())
             {
-                dataGridView1.Rows.Add(item.idsaida, item.data.ToShortDateString(), item.parceiroIdparceiro.idparceiro, item.parceiroIdparceiro.nome, item.parceiroIdparceiro.enderecoIdendereco.idendereco, item.parceiroIdparceiro.enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro, item.parceiroIdparceiro.enderecoIdendereco.logradouro, item.parceiroIdparceiro.enderecoIdendereco.numero, item.parceiroIdparceiro.enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento, item.parceiroIdparceiro.enderecoIdendereco.complemento, item.parceiroIdparceiro.enderecoIdendereco.pontoReferencia, item.parceiroIdparceiro.enderecoIdendereco.CEP, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.bairro, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente, item.parceiroIdparceiro.telefoneIdtelefone.idtelefone, (item.parceiroIdparceiro.telefoneIdtelefone.cidadeDDD.DDD + " " + item.parceiroIdparceiro.telefoneIdtelefone.telefone), item.parceiroIdparceiro.telefoneIdtelefone.operadoraIdoperadora.operadora, item.clienteIdcliente.idcliente, item.clienteIdcliente.nomeRazaoSocial, item.clienteIdcliente.apelidoNomeFantasia, item.clienteIdcliente.inscricaoMunicipal, item.clienteIdcliente.identidadeInscricaoEstadual, item.clienteIdcliente.dataNascimentoFundacao.ToShortDateString(), item.clienteIdcliente.sexo, (item.clienteIdcliente.emailIdemail.email + "@" + item.clienteIdcliente.emailIdemail.emailDominioIdemailDominio.emailDominio + "." + item.clienteIdcliente.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade));
+                dataGridView1.Rows.Add(item.idsaida, item.data.ToShortDateString(), item.parceiroIdparceiro.idparceiro, item.parceiroIdparceiro.nome, item.parceiroIdparceiro.enderecoIdendereco.idendereco, item.parceiroIdparceiro.enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro, item.parceiroIdparceiro.enderecoIdendereco.logradouro, item.parceiroIdparceiro.enderecoIdendereco.numero, item.parceiroIdparceiro.enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento, item.parceiroIdparceiro.enderecoIdendereco.complemento, item.parceiroIdparceiro.enderecoIdendereco.pontoReferencia, item.parceiroIdparceiro.enderecoIdendereco.CEP, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.bairro, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla, item.parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente, item.parceiroIdparceiro.telefoneIdtelefone.idtelefone, (item.parceiroIdparceiro.telefoneIdtelefone.cidadeDDD.DDD + " " + item.parceiroIdparceiro.telefoneIdtelefone.telefone), item.parceiroIdparceiro.telefoneIdtelefone.operadoraIdoperadora.operadora, item.clienteIdcliente.idcliente, item.clienteIdcliente.nomeRazaoSocial, item.clienteIdcliente.apelidoNomeFantasia, item.clienteIdcliente.inscricaoMunicipal, item.clienteIdcliente.identidadeInscricaoEstadual, item.clienteIdcliente.dataNascimentoFundacao.ToShortDateString(), item.clienteIdcliente.sexo, (item.clienteIdcliente.emailIdemail.email + "@" + item.clienteIdcliente.emailIdemail.emailDominioIdemailDominio.emailDominio + "." + item.clienteIdcliente.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade), item.faseIdfase.idfase, item.formaPagamentoIdformaPagamento.idformaPagamento, item.parcelamentoIdparcelamento.idparcelamento);
             }
         }
 
@@ -214,6 +215,24 @@ namespace PingaSolution.Telas.Mercadoria
                 columnEmail.Name = "email";
                 columnEmail.DataPropertyName = "email";
 
+                var columnIdfase = new DataGridViewTextBoxColumn();
+                columnIdfase.HeaderText = "ID Fase";
+                columnIdfase.Name = "idfase";
+                columnIdfase.DataPropertyName = "idfase";
+                columnIdfase.Visible = false;
+
+                var columnIdformaPagamento = new DataGridViewTextBoxColumn();
+                columnIdformaPagamento.HeaderText = "ID Forma Pagamento";
+                columnIdformaPagamento.Name = "idformapagamento";
+                columnIdformaPagamento.DataPropertyName = "idformapagamento";
+                columnIdformaPagamento.Visible = false;
+
+                var columnIdparcelamento = new DataGridViewTextBoxColumn();
+                columnIdparcelamento.HeaderText = "ID Parcelamento";
+                columnIdparcelamento.Name = "idparcelamento";
+                columnIdparcelamento.DataPropertyName = "idparcelamento";
+                columnIdparcelamento.Visible = false;
+
                 var columnEditar = new DataGridViewButtonColumn();
                 columnEditar.HeaderText = "Editar";
                 columnEditar.Name = "editarSaida";
@@ -256,6 +275,9 @@ namespace PingaSolution.Telas.Mercadoria
                 dataGridView1.Columns.Add(columnDataNascimento);
                 dataGridView1.Columns.Add(columnSexo);
                 dataGridView1.Columns.Add(columnEmail);
+                dataGridView1.Columns.Add(columnIdfase);
+                dataGridView1.Columns.Add(columnIdformaPagamento);
+                dataGridView1.Columns.Add(columnIdparcelamento);
                 dataGridView1.Columns.Add(columnEditar);
                 dataGridView1.Columns.Add(columnApagar);
 
@@ -312,7 +334,6 @@ namespace PingaSolution.Telas.Mercadoria
                 if (button1.Text == "Salvar")
                 {
                     Guid idSaida = bll.saida.InserirComRetorno();
-
                     List<Bll> itensSaidaList = new List<Bll>();
                     int i;
 
@@ -345,7 +366,7 @@ namespace PingaSolution.Telas.Mercadoria
 
                     for (i = 0; i < Classes.ClsGlobal.qntProdutos; i++)
                     {
-                        itensSaidaList[i++].itensSaida.Inserir();
+                        itensSaidaList[i].itensSaida.Inserir();
                     }
 
                     fillDataGrid();
@@ -353,6 +374,8 @@ namespace PingaSolution.Telas.Mercadoria
                 }
                 else
                 {
+                    bll.saida.idsaida = Guid.Parse(textBox1.Text);
+                    groupBox2.Enabled = true;
                     button1.Text = "Salvar";
 
                     bll.saida.Alterar();
@@ -361,6 +384,7 @@ namespace PingaSolution.Telas.Mercadoria
                 }
 
                 Classes.ClsGlobal.ClearForm(groupBox1);
+                Classes.ClsGlobal.ClearForm(groupBox2);
             }
             else
             {
@@ -434,6 +458,87 @@ namespace PingaSolution.Telas.Mercadoria
             else
             {
                 button4.Visible = false;
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "editarSaida")
+            {
+                button1.Text = "Editar";
+
+                groupBox2.Enabled = false;
+                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells["idsaida"].Value.ToString();
+                dateTimePicker1.Value = DateTime.Parse(dataGridView1.Rows[e.RowIndex].Cells["data"].Value.ToString());
+
+                for (int i = 0; i < comboBox1.Items.Count; i++)
+                {
+                    bll.parceiro = (BLL.Classes.ClsParceiro)comboBox1.Items[i];
+                    if (bll.parceiro.idparceiro.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idparceiro"].Value.ToString())
+                    {
+                        comboBox1.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < comboBox2.Items.Count; i++)
+                {
+                    bll.cliente = (BLL.Classes.ClsCliente)comboBox2.Items[i];
+                    if (bll.cliente.idcliente.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idcliente"].Value.ToString())
+                    {
+                        comboBox2.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < comboBox3.Items.Count; i++)
+                {
+                    bll.fase = (BLL.Classes.ClsFase)comboBox3.Items[i];
+                    if (bll.fase.idfase.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idfase"].Value.ToString())
+                    {
+                        comboBox3.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < comboBox4.Items.Count; i++)
+                {
+                    bll.formaPagamento = (BLL.Classes.ClsFormaPagamento)comboBox4.Items[i];
+                    if (bll.formaPagamento.idformaPagamento.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idformapagamento"].Value.ToString())
+                    {
+                        comboBox4.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < comboBox5.Items.Count; i++)
+                {
+                    bll.parcelamento = (BLL.Classes.ClsParcelamento)comboBox5.Items[i];
+                    if (bll.parcelamento.idparcelamento.ToString() == dataGridView1.Rows[e.RowIndex].Cells["idparcelamento"].Value.ToString())
+                    {
+                        comboBox5.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                // itens_saida LISTA
+            }
+            else if (dataGridView1.Columns[e.ColumnIndex].Name == "apagarSaida")
+            {
+                try
+                {
+                    bll.saida.idsaida = Guid.Parse(dataGridView1.Rows[e.RowIndex].Cells["idsaida"].Value.ToString());
+                    bll.saida.Apagar();
+                    fillDataGrid();
+                    MessageBox.Show("Apagado saída com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                catch (Exception erro)
+                {
+                    if (erro.Message.Contains("FK__itens_sai__saida"))
+                    {
+                        MessageBox.Show("Não é possível realizar a exclusão devido a esta Saída conter itens associados", "Exclusão NÃO realizado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
     }

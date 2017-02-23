@@ -21,6 +21,7 @@ namespace PingaSolution.Classes
             gpb.Controls.OfType<ComboBox>().ToList().ForEach(cmb => cmb.SelectedIndex = -1);
             gpb.Controls.OfType<CheckBox>().ToList().ForEach(chk => chk.Checked = false);
             gpb.Controls.OfType<RadioButton>().ToList().ForEach(rdb => rdb.Checked = false);
+            gpb.Controls.OfType<DateTimePicker>().ToList().ForEach(dtp => dtp.Value = DateTime.Now);
         }
 
         public static bool somenteNumero(object input)

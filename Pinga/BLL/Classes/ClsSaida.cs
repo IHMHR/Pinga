@@ -63,11 +63,11 @@ namespace BLL.Classes
                     com.CommandType = CommandType.StoredProcedure;
                     com.CommandText = "Pinga.usp_InserirNovaSaidaRetorno";
                     com.Parameters.AddWithValue("@data", data);
-                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro);
-                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente);
-                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase);
-                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento);
-                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento);
+                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro.idparceiro);
+                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente.idcliente);
+                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase.idfase);
+                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento.idformaPagamento);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
 
                     con.Open();
                     var ret = com.ExecuteScalar();
@@ -118,11 +118,11 @@ namespace BLL.Classes
                     com.CommandType = CommandType.StoredProcedure;
                     com.CommandText = "Pinga.usp_InserirNovaSaida";
                     com.Parameters.AddWithValue("@data", data);
-                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro);
-                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente);
-                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase);
-                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento);
-                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento);
+                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro.idparceiro);
+                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente.idcliente);
+                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase.idfase);
+                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento.idformaPagamento);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
 
                     con.Open();
                     com.ExecuteNonQuery();
@@ -136,10 +136,90 @@ namespace BLL.Classes
         }
 
         public void Alterar()
-        { }
+        {
+            if(idsaida == null)
+            {
+                throw new ArgumentNullException("Por favor informe id da saida.");
+            }
+            else if (string.IsNullOrEmpty(data.ToString()))
+            {
+                throw new ArgumentNullException("Por favor informe a data.");
+            }
+            else if (parceiroIdparceiro == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parceiro.");
+            }
+            else if (clienteIdcliente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o cliente.");
+            }
+            else if (faseIdfase == null)
+            {
+                throw new ArgumentNullException("Por favor informe a fase.");
+            }
+            else if (formaPagamentoIdformaPagamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe a forma pagamento.");
+            }
+            else if (parcelamentoIdparcelamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parcelamento.");
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.Text;
+                    com.CommandText = "UPDATE Pinga.saida SET data = @data, parceiro_idparceiro = @parceiroIdparceiro, cliente_idcliente = @clienteIdcliente, fase_idfase = @faseIdfase, forma_pagamento_idforma_pagamento = @formaPagamentoIdformaPagamento, parcelamento_idparcelamento = @parcelamentoIdparcelamento WHERE idsaida = @id";
+                    com.Parameters.AddWithValue("@data", data);
+                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro.idparceiro);
+                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente.idcliente);
+                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase.idfase);
+                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento.idformaPagamento);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
+                    com.Parameters.AddWithValue("@id", idsaida);
+
+                    con.Open();
+                    com.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public void Apagar()
-        { }
+        {
+            if (idsaida == null)
+            {
+                throw new ArgumentNullException("Por favor informe id da saida.");
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.Text;
+                    com.CommandText = "DELETE FROM Pinga.saida WHERE idsaida = @id";
+                    com.Parameters.AddWithValue("@id", idsaida);
+
+                    con.Open();
+                    com.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public List<ClsSaida> Visualizar()
         {
