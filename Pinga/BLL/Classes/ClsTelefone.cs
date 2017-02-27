@@ -27,22 +27,7 @@ namespace BLL.Classes
         #region CRUD Functions
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(telefone))
-            {
-                throw new ArgumentNullException("Por favor informe o Telefone");
-            }
-            else if (cidadeDDD == null)
-            {
-                throw new ArgumentNullException("Por favor informe o DDD");
-            }
-            else if (tipoTelefoneIdtipoTelefone == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Telefnoe");
-            }
-            else if (operadoraIdoperadora == null)
-            {
-                throw new ArgumentNullException("Por favor informe a Operadora");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -70,26 +55,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (string.IsNullOrEmpty(idtelefone.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Telefone");
-            }
-            else if (string.IsNullOrEmpty(telefone))
-            {
-                throw new ArgumentNullException("Por favor informe o Telefone");
-            }
-            else if (cidadeDDD == null)
-            {
-                throw new ArgumentNullException("Por favor informe o DDD");
-            }
-            else if (tipoTelefoneIdtipoTelefone == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Telefnoe");
-            }
-            else if (operadoraIdoperadora == null)
-            {
-                throw new ArgumentNullException("Por favor informe a Operadora");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -118,10 +84,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (string.IsNullOrEmpty(idtelefone.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Telefone");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -192,14 +155,34 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(telefone))
+                {
+                    throw new ArgumentNullException("Por favor informe o Telefone");
+                }
+                else if (cidadeDDD.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o DDD");
+                }
+                else if (tipoTelefoneIdtipoTelefone.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Telefnoe");
+                }
+                else if (operadoraIdoperadora.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe a Operadora");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idtelefone.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Telefone");
+                }
             }
             else
             {

@@ -73,7 +73,8 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {

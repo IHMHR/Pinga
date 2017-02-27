@@ -23,34 +23,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(pais.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o pais.");
-            }
-            else if (string.IsNullOrEmpty(idioma.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o idioma.");
-            }
-            else if (string.IsNullOrEmpty(colacao.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a colação.");
-            }
-            else if (string.IsNullOrEmpty(sigla.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a sigla.");
-            }
-            else if (string.IsNullOrEmpty(fusoHorario.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o fuso horário.");
-            }
-            else if (string.IsNullOrEmpty(DDI.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o contDDIinente.");
-            }
-            else if (continenteIdcontinete == null)
-            {
-                throw new ArgumentNullException("Por favor informe o tipo continente.");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -81,38 +54,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if(idpais == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do pais.");
-            }
-            else if (string.IsNullOrEmpty(pais.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o pais.");
-            }
-            else if (string.IsNullOrEmpty(idioma.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o idioma.");
-            }
-            else if (string.IsNullOrEmpty(colacao.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a colação.");
-            }
-            else if (string.IsNullOrEmpty(sigla.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a sigla.");
-            }
-            else if (string.IsNullOrEmpty(fusoHorario.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o fuso horário.");
-            }
-            else if (string.IsNullOrEmpty(DDI.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o contDDIinente.");
-            }
-            else if (continenteIdcontinete == null)
-            {
-                throw new ArgumentNullException("Por favor informe o tipo continente.");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -144,10 +86,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idpais == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do pais.");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -214,14 +153,46 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(pais.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o pais.");
+                }
+                else if (string.IsNullOrEmpty(idioma.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o idioma.");
+                }
+                else if (string.IsNullOrEmpty(colacao.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe a colação.");
+                }
+                else if (string.IsNullOrEmpty(sigla.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe a sigla.");
+                }
+                else if (string.IsNullOrEmpty(fusoHorario.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o fuso horário.");
+                }
+                else if (string.IsNullOrEmpty(DDI.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o contDDIinente.");
+                }
+                else if (continenteIdcontinete.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo continente.");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idpais.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do pais.");
+                }
             }
             else
             {

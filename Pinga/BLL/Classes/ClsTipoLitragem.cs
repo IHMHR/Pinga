@@ -15,10 +15,7 @@ namespace BLL.Classes
         #region CRUD Functions
         public void Inserir()
         {
-            if(string.IsNullOrEmpty(tipoLitragem))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Litragem");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -43,14 +40,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if(idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Litragem");
-            }
-            else if (string.IsNullOrEmpty(tipoLitragem))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Litragem");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -76,10 +66,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Litragem");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -140,14 +127,22 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(tipoLitragem))
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Litragem");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Tipo Litragem");
+                }
             }
             else
             {

@@ -19,18 +19,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(bairro))
-            {
-                throw new ArgumentNullException("Por favor informe o bairro");
-            }
-            else if (string.IsNullOrEmpty(regiao))
-            {
-                throw new ArgumentNullException("Por favor informe a região");
-            }
-            else if (cidadeIdcidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID da Cidade");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -57,22 +46,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if(idbairro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do bairro");
-            }
-            else if (string.IsNullOrEmpty(bairro))
-            {
-                throw new ArgumentNullException("Por favor informe o bairro");
-            }
-            else if (string.IsNullOrEmpty(regiao))
-            {
-                throw new ArgumentNullException("Por favor informe a região");
-            }
-            else if (cidadeIdcidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID da Cidade");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -100,10 +74,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idbairro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do bairro");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -179,14 +150,30 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(bairro))
+                {
+                    throw new ArgumentNullException("Por favor informe o bairro");
+                }
+                else if (string.IsNullOrEmpty(regiao))
+                {
+                    throw new ArgumentNullException("Por favor informe a região");
+                }
+                else if (cidadeIdcidade == null)
+                {
+                    throw new ArgumentNullException("Por favor informe o ID da Cidade");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idbairro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do bairro");
+                }
             }
             else
             {

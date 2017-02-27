@@ -20,22 +20,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(estado))
-            {
-                throw new ArgumentNullException("Por favor informe o estado");
-            }
-            else if (string.IsNullOrEmpty(uf))
-            {
-                throw new ArgumentNullException("Por favor informe a UF");
-            }
-            else if (capital != true && capital != false)
-            {
-                throw new ArgumentNullException("Por favor informe o estado é capital");
-            }
-            else if (paisIdpais == null)
-            {
-                throw new ArgumentNullException("Por favor informe o pais");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -63,26 +48,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idestado == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do estado");
-            }
-            else if (string.IsNullOrEmpty(estado))
-            {
-                throw new ArgumentNullException("Por favor informe o estado");
-            }
-            else if (string.IsNullOrEmpty(uf))
-            {
-                throw new ArgumentNullException("Por favor informe a UF");
-            }
-            else if (capital != true && capital != false)
-            {
-                throw new ArgumentNullException("Por favor informe o estado é capital");
-            }
-            else if (paisIdpais == null)
-            {
-                throw new ArgumentNullException("Por favor informe o pais");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -111,10 +77,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idestado == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do estado");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -181,14 +144,34 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(estado))
+                {
+                    throw new ArgumentNullException("Por favor informe o estado");
+                }
+                else if (string.IsNullOrEmpty(uf))
+                {
+                    throw new ArgumentNullException("Por favor informe a UF");
+                }
+                else if (capital != true && capital != false)
+                {
+                    throw new ArgumentNullException("Por favor informe o estado é capital");
+                }
+                else if (paisIdpais.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o pais");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idestado.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do estado");
+                }
             }
             else
             {

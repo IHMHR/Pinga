@@ -25,26 +25,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(data.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Data");
-            }
-            else if (string.IsNullOrEmpty(litragem.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Litragem");
-            }
-            else if (custoIdcusto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Custo");
-            }
-            else if (parcelamentoIdparcelamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Parcelametno");
-            }
-            else if (tipoLitragemIdtipoLitragem == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Litragem");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -126,10 +107,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (identrada == null)
-            {
-                throw new ArgumentNullException("Por favor informe a ID da Entrada");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -205,14 +183,38 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(data.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Data");
+                }
+                else if (string.IsNullOrEmpty(litragem.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Litragem");
+                }
+                else if (custoIdcusto == null)
+                {
+                    throw new ArgumentNullException("Por favor informe o Custo");
+                }
+                else if (parcelamentoIdparcelamento.idparcelamento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o Parcelametno");
+                }
+                else if (tipoLitragemIdtipoLitragem.idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000"))
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Litragem");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (identrada.ToString() == "00000000-0000-0000-0000-000000000000"))
+            {
+                    throw new ArgumentNullException("Por favor informe a ID da Entrada");
+                }
             }
             else
             {

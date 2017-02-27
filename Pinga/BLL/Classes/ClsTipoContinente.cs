@@ -16,10 +16,7 @@ namespace BLL.Classes
         #region CRUD Functions
         public void Inserir()
         {
-            if(string.IsNullOrEmpty(tipoContinente.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o tipo de continente.");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -45,18 +42,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoContinente.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
-            }
-            else if (string.IsNullOrEmpty(tipoContinente.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o tipo de continente.");
-            }
-            else if(ativo != false && ativo != true)
-            {
-                throw new ArgumentNullException("Por favor informe se o tipo de continente está ativo.");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -83,10 +69,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoContinente.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -146,14 +129,22 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(tipoContinente.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo de continente.");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idtipoContinente.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
+                }
             }
             else
             {

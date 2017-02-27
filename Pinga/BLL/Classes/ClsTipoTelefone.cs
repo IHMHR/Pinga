@@ -15,11 +15,6 @@ namespace BLL.Classes
         #region CRUD Function
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(tipoTelefone))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Telefone");
-            }
-
             try
             {
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
@@ -43,14 +38,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoTelefone.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID Tipo Telefone");
-            }
-            else if (string.IsNullOrEmpty(tipoTelefone))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Telefone");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -76,10 +64,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoTelefone.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID Tipo Telefone");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -138,14 +123,22 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(tipoTelefone))
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Telefone");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idtipoTelefone.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID Tipo Telefone");
+                }
             }
             else
             {

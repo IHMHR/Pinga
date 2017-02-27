@@ -14,10 +14,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(formaPagamento))
-            {
-                throw new ArgumentNullException("Por favor informe a Forma Pagamento");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -42,14 +39,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idformaPagamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID da Forma de Pagamento");
-            }
-            else if (string.IsNullOrEmpty(formaPagamento))
-            {
-                throw new ArgumentNullException("Por favor informe a Forma de Pagamento");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -75,10 +65,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idformaPagamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID da Forma de Pagamento");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -142,14 +129,22 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(formaPagamento))
+                {
+                    throw new ArgumentNullException("Por favor informe a Forma Pagamento");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idformaPagamento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID da Forma de Pagamento");
+                }
             }
             else
             {

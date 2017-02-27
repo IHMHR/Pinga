@@ -15,10 +15,7 @@ namespace BLL.Classes
         #region CRUD Functions
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(tipoLogradouro))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Logradouro");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -43,14 +40,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Logradouro");
-            }
-            else if (string.IsNullOrEmpty(tipoLogradouro))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Logradouro");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -76,10 +66,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Logradouro");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -138,14 +125,22 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(tipoLogradouro))
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Logradouro");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Tipo Logradouro");
+                }
             }
             else
             {
