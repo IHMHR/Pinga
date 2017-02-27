@@ -128,6 +128,12 @@
     <Compile Include="Telas\Mercadoria\FrmFormaPagamento.Designer.cs">
       <DependentUpon>FrmFormaPagamento.cs</DependentUpon>
     </Compile>
+    <Compile Include="Telas\Mercadoria\FrmFornecedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Telas\Mercadoria\FrmFornecedor.Designer.cs">
+      <DependentUpon>FrmFornecedor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Telas\Mercadoria\FrmProduto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -199,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Mercadoria\FrmFormaPagamento.resx">
       <DependentUpon>FrmFormaPagamento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Telas\Mercadoria\FrmFornecedor.resx">
+      <DependentUpon>FrmFornecedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Telas\Mercadoria\FrmProduto.resx">
       <DependentUpon>FrmProduto.cs</DependentUpon>

@@ -137,5 +137,24 @@ namespace BLL.Classes
 
             return retorno;
         }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+            }
+            else if (crud == CRUD.update)
+            {
+
+            }
+            else if (crud == CRUD.delete)
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
     }
 }

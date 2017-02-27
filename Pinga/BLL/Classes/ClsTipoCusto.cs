@@ -7,9 +7,12 @@ namespace BLL.Classes
 {
     public sealed class ClsTipoCusto : IGeneric<ClsTipoCusto>
     {
+        #region Atributos
         public Guid idtipoCusto { get; set; }
         public string tipoCusto { get; set; }
+        #endregion
 
+        #region CRUD Functions
         public void Inserir()
         {
             if (string.IsNullOrEmpty(tipoCusto))
@@ -40,7 +43,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoCusto == null)
+            if (idtipoCusto.ToString() == "00000000-0000-0000-0000-000000000000")
             {
                 throw new ArgumentNullException("Por favor informe o ID do Tipo Custo");
             }
@@ -73,7 +76,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoCusto == null)
+            if (idtipoCusto.ToString() == "00000000-0000-0000-0000-000000000000")
             {
                 throw new ArgumentNullException("Por favor informe o ID do Tipo Custo");
             }
@@ -130,5 +133,25 @@ namespace BLL.Classes
 
             return retorno;
         }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+            }
+            else if (crud == CRUD.update)
+            {
+
+            }
+            else if (crud == CRUD.delete)
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+        #endregion
     }
 }

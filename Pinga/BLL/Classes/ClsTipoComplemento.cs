@@ -7,9 +7,12 @@ namespace BLL.Classes
 {
     public sealed class ClsTipoComplemento : IGeneric<ClsTipoComplemento>
     {
+        #region Atributos
         public Guid idtipoComplemento { get; set; }
         public string tipoComplemento { get; set; }
+        #endregion
 
+        #region CRUD Functions
         public void Inserir()
         {
             if (string.IsNullOrEmpty(tipoComplemento))
@@ -40,7 +43,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoComplemento == null)
+            if (idtipoComplemento.ToString() == "00000000-0000-0000-0000-000000000000")
             {
                 throw new ArgumentNullException("Por favor informe o ID do Tipo Complemento");
             }
@@ -130,5 +133,25 @@ namespace BLL.Classes
 
             return retorno;
         }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+            }
+            else if (crud == CRUD.update)
+            {
+
+            }
+            else if (crud == CRUD.delete)
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+        #endregion
     }
 }

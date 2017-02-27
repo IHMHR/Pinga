@@ -8,6 +8,7 @@ namespace BLL.Classes
 {
     public sealed class ClsSaida : IGeneric<ClsSaida>
     {
+        #region Atributos
         public Guid idsaida { get; set; }
         public DateTime data { get; set; }
         public ClsParceiro parceiroIdparceiro { get; set; }
@@ -17,6 +18,7 @@ namespace BLL.Classes
         public ClsParcelamento parcelamentoIdparcelamento { get; set; }
         public Nullable<DateTime> created { get; set; }
         public Nullable<DateTime> modified { get; set; }
+        #endregion
 
         public ClsSaida()
         {
@@ -27,61 +29,7 @@ namespace BLL.Classes
             parcelamentoIdparcelamento = new ClsParcelamento();
         }
 
-        public Guid InserirComRetorno()
-        {
-            if (string.IsNullOrEmpty(data.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a data.");
-            }
-            else if (parceiroIdparceiro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parceiro.");
-            }
-            else if (clienteIdcliente == null)
-            {
-                throw new ArgumentNullException("Por favor informe o cliente.");
-            }
-            else if (faseIdfase == null)
-            {
-                throw new ArgumentNullException("Por favor informe a fase.");
-            }
-            else if (formaPagamentoIdformaPagamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe a forma pagamento.");
-            }
-            else if (parcelamentoIdparcelamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parcelamento.");
-            }
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
-                {
-                    SqlCommand com = new SqlCommand();
-                    com.Connection = con;
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.CommandText = "Pinga.usp_InserirNovaSaidaRetorno";
-                    com.Parameters.AddWithValue("@data", data);
-                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro.idparceiro);
-                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente.idcliente);
-                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase.idfase);
-                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento.idformaPagamento);
-                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
-
-                    con.Open();
-                    var ret = com.ExecuteScalar();
-                    con.Close();
-
-                    return Guid.Parse(ret.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
+        #region CRUD Funtions
         public void Inserir()
         {
             if (string.IsNullOrEmpty(data.ToString()))
@@ -303,6 +251,81 @@ namespace BLL.Classes
             }
 
             return retorno;
+        }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+            }
+            else if (crud == CRUD.update)
+            {
+
+            }
+            else if (crud == CRUD.delete)
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+        #endregion
+
+        public Guid InserirComRetorno()
+        {
+            if (string.IsNullOrEmpty(data.ToString()))
+            {
+                throw new ArgumentNullException("Por favor informe a data.");
+            }
+            else if (parceiroIdparceiro == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parceiro.");
+            }
+            else if (clienteIdcliente == null)
+            {
+                throw new ArgumentNullException("Por favor informe o cliente.");
+            }
+            else if (faseIdfase == null)
+            {
+                throw new ArgumentNullException("Por favor informe a fase.");
+            }
+            else if (formaPagamentoIdformaPagamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe a forma pagamento.");
+            }
+            else if (parcelamentoIdparcelamento == null)
+            {
+                throw new ArgumentNullException("Por favor informe o parcelamento.");
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.CommandText = "Pinga.usp_InserirNovaSaidaRetorno";
+                    com.Parameters.AddWithValue("@data", data);
+                    com.Parameters.AddWithValue("@parceiroIdparceiro", parceiroIdparceiro.idparceiro);
+                    com.Parameters.AddWithValue("@clienteIdcliente", clienteIdcliente.idcliente);
+                    com.Parameters.AddWithValue("@faseIdfase", faseIdfase.idfase);
+                    com.Parameters.AddWithValue("@formaPagamentoIdformaPagamento", formaPagamentoIdformaPagamento.idformaPagamento);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
+
+                    con.Open();
+                    var ret = com.ExecuteScalar();
+                    con.Close();
+
+                    return Guid.Parse(ret.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

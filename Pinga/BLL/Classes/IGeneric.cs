@@ -2,7 +2,7 @@
 
 namespace BLL.Classes
 {
-    interface IGeneric<T>
+    public interface IGeneric<T>
     {
         void Inserir();
 
@@ -11,5 +11,14 @@ namespace BLL.Classes
         void Apagar();
 
         List<T> Visualizar();
+
+        void ValidarClasse(CRUD crud);
+    }
+
+    public enum CRUD
+    {
+        insert,
+        delete,
+        update
     }
 }

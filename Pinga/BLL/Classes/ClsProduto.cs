@@ -7,6 +7,7 @@ namespace BLL.Classes
 {
     public sealed class ClsProduto : IGeneric<ClsProduto>
     {
+        #region Atributos
         public Guid idproduto { get; set; }
         public string produto { get; set; }
         public ClsTipoLitragem tipoLitragemIdtipoLitragem { get; set; }
@@ -16,6 +17,7 @@ namespace BLL.Classes
         public ClsProdutoQuantidade produtoQuantidadeIdprodutoQuantidade { get; set; }
         public Nullable<DateTime> created { get; set; }
         public Nullable<DateTime> modified { get; set; }
+        #endregion
 
         public ClsProduto()
         {
@@ -23,6 +25,7 @@ namespace BLL.Classes
             produtoQuantidadeIdprodutoQuantidade = new ClsProdutoQuantidade();
         }
 
+        #region CRUD Functions
         public void Inserir()
         {
             if (string.IsNullOrEmpty(produto))
@@ -200,5 +203,25 @@ namespace BLL.Classes
 
             return retorno;
         }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+            }
+            else if (crud == CRUD.update)
+            {
+
+            }
+            else if (crud == CRUD.delete)
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+        #endregion
     }
 }

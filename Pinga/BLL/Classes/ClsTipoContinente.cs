@@ -45,7 +45,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (string.IsNullOrEmpty(idtipoContinente.ToString()))
+            if (idtipoContinente.ToString() == "00000000-0000-0000-0000-000000000000")
             {
                 throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
             }
@@ -83,7 +83,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (string.IsNullOrEmpty(idtipoContinente.ToString()))
+            if (idtipoContinente.ToString() == "00000000-0000-0000-0000-000000000000")
             {
                 throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
             }
@@ -140,6 +140,25 @@ namespace BLL.Classes
             }
 
             return retorno;
+        }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+            }
+            else if (crud == CRUD.update)
+            {
+
+            }
+            else if (crud == CRUD.delete)
+            {
+
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
         }
         #endregion
     }
