@@ -28,26 +28,7 @@ namespace BLL.Classes
         #region CRUD Functions
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(produto))
-            {
-                throw new ArgumentNullException("Por favor informe o Produto");
-            }
-            else if (tipoLitragemIdtipoLitragem == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Litragem");
-            }
-            else if (vendendo != true && vendendo != false)
-            {
-                throw new ArgumentNullException("Por favor informe o produto esta a venda");
-            }
-            else if (string.IsNullOrEmpty(valorUnitario.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o Valor Unitário");
-            }
-            else if(produtoQuantidadeIdprodutoQuantidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Produto Quantidade");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -77,30 +58,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if(idproduto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Produto");
-            }
-            else if (string.IsNullOrEmpty(produto))
-            {
-                throw new ArgumentNullException("Por favor informe o Produto");
-            }
-            else if (tipoLitragemIdtipoLitragem == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Litragem");
-            }
-            else if (vendendo != true && vendendo != false)
-            {
-                throw new ArgumentNullException("Por favor informe o produto esta a venda");
-            }
-            else if (string.IsNullOrEmpty(valorUnitario.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o Valor Unitário");
-            }
-            else if (produtoQuantidadeIdprodutoQuantidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Produto Quantidade");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -131,10 +89,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idproduto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Produto");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -208,14 +163,38 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(produto))
+                {
+                    throw new ArgumentNullException("Por favor informe o Produto");
+                }
+                else if (tipoLitragemIdtipoLitragem.idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Litragem");
+                }
+                else if (vendendo != true && vendendo != false)
+                {
+                    throw new ArgumentNullException("Por favor informe o produto esta a venda");
+                }
+                else if (string.IsNullOrEmpty(valorUnitario.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe o Valor Unitário");
+                }
+                else if (produtoQuantidadeIdprodutoQuantidade.idprodutoQuantidade.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o Produto Quantidade");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idproduto.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Produto");
+                }
             }
             else
             {

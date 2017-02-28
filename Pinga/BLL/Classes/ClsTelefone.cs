@@ -159,15 +159,15 @@ namespace BLL.Classes
                 {
                     throw new ArgumentNullException("Por favor informe o Telefone");
                 }
-                else if (cidadeDDD.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (cidadeDDD.idcidade.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o DDD");
                 }
-                else if (tipoTelefoneIdtipoTelefone.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (tipoTelefoneIdtipoTelefone.idtipoTelefone.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o Tipo Telefnoe");
                 }
-                else if (operadoraIdoperadora.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (operadoraIdoperadora.idoperadora.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe a Operadora");
                 }

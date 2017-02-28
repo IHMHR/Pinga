@@ -20,14 +20,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(valor.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o valor");
-            }
-            else if(tipoCustoIdtipoCusto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o tipo custo");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -53,18 +46,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idcusto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do custo");
-            }
-            else if (string.IsNullOrEmpty(valor.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o valor");
-            }
-            else if (tipoCustoIdtipoCusto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o tipo custo");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -91,10 +73,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idcusto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do custo");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -160,6 +139,14 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(valor.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe o valor");
+                }
+                else if (tipoCustoIdtipoCusto.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo custo");
+                }
             }
             else if (crud == CRUD.update)
             {
@@ -168,7 +155,10 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idcusto.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do custo");
+                }
             }
             else
             {

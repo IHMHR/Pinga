@@ -109,14 +109,54 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(cpfCnpj.Trim()))
+                {
+                    throw new ArgumentNullException(@"Por favor informe o CPF\CNPJ do cliente");
+                }
+                else if (string.IsNullOrEmpty(nomeRazaoSocial.Trim()))
+                {
+                    throw new ArgumentNullException(@"Por favor informe o Nome\Razão Social do cliente");
+                }
+                else if(string.IsNullOrEmpty(apelidoNomeFantasia.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o apelido do cliente");
+                }
+                else if (string.IsNullOrEmpty(identidadeInscricaoEstadual.Trim()))
+                {
+                    throw new ArgumentNullException(@"Por favor informe a Identidade\Inscrição Estadual do cliente");
+                }
+                else if (dataNascimentoFundacao.ToString() == "01/01/0001 00:00:00")
+                {
+                    throw new ArgumentNullException(@"Por favor informe a Data de Nascimento\Fundação do cliente");
+                }
+                else if (sexo != 'M' && sexo != 'F' && sexo.ToString() != string.Empty)
+                {
+                    throw new ArgumentNullException(@"Por favor informe o sexo do cliente");
+                }
+                else if (emailIdemail.idemail.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o email do cliente");
+                }
+                else if (enderecoIdendereco.idendereco.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o endereço do cliente");
+                }
+                else if (telefoneIdtelefone.idtelefone.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o telefone do cliente");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idcliente.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do cliente");
+                }
             }
             else
             {

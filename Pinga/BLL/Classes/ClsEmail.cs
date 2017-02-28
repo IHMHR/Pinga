@@ -34,6 +34,18 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(email.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o email");
+                }
+                else if (emailDominioIdemailDominio.idemailDominio.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o dominio do email");
+                }
+                else if (emailLocalidadeIdemailLocalidade.idemailLocalidade.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe a localidade do email");
+                }
             }
             else if (crud == CRUD.update)
             {
@@ -42,7 +54,10 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idemail.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do email");
+                }
             }
             else
             {

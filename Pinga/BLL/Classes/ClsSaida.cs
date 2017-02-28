@@ -32,30 +32,7 @@ namespace BLL.Classes
         #region CRUD Funtions
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(data.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a data.");
-            }
-            else if (parceiroIdparceiro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parceiro.");
-            }
-            else if (clienteIdcliente == null)
-            {
-                throw new ArgumentNullException("Por favor informe o cliente.");
-            }
-            else if (faseIdfase == null)
-            {
-                throw new ArgumentNullException("Por favor informe a fase.");
-            }
-            else if (formaPagamentoIdformaPagamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe a forma pagamento.");
-            }
-            else if (parcelamentoIdparcelamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parcelamento.");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -85,34 +62,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if(idsaida == null)
-            {
-                throw new ArgumentNullException("Por favor informe id da saida.");
-            }
-            else if (string.IsNullOrEmpty(data.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a data.");
-            }
-            else if (parceiroIdparceiro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parceiro.");
-            }
-            else if (clienteIdcliente == null)
-            {
-                throw new ArgumentNullException("Por favor informe o cliente.");
-            }
-            else if (faseIdfase == null)
-            {
-                throw new ArgumentNullException("Por favor informe a fase.");
-            }
-            else if (formaPagamentoIdformaPagamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe a forma pagamento.");
-            }
-            else if (parcelamentoIdparcelamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parcelamento.");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -143,10 +93,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idsaida == null)
-            {
-                throw new ArgumentNullException("Por favor informe id da saida.");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -257,14 +204,42 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(data.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a data.");
+                }
+                else if (parceiroIdparceiro.idparceiro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o parceiro.");
+                }
+                else if (clienteIdcliente.idcliente.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o cliente.");
+                }
+                else if (faseIdfase.idfase.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe a fase.");
+                }
+                else if (formaPagamentoIdformaPagamento.idformaPagamento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe a forma pagamento.");
+                }
+                else if (parcelamentoIdparcelamento.idparcelamento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o parcelamento.");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idsaida.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe id da saida.");
+                }
             }
             else
             {
@@ -275,30 +250,7 @@ namespace BLL.Classes
 
         public Guid InserirComRetorno()
         {
-            if (string.IsNullOrEmpty(data.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a data.");
-            }
-            else if (parceiroIdparceiro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parceiro.");
-            }
-            else if (clienteIdcliente == null)
-            {
-                throw new ArgumentNullException("Por favor informe o cliente.");
-            }
-            else if (faseIdfase == null)
-            {
-                throw new ArgumentNullException("Por favor informe a fase.");
-            }
-            else if (formaPagamentoIdformaPagamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe a forma pagamento.");
-            }
-            else if (parcelamentoIdparcelamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o parcelamento.");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
