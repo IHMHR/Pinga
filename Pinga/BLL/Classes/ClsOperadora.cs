@@ -28,14 +28,30 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(operadora.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe a operadora.");
+                }
+                else if (string.IsNullOrEmpty(razaoSocial.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Razão Social.");
+                }
+                else if (status != true && status != false)
+                {
+                    throw new ArgumentNullException("Por favor informe o Status.");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idoperadora.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID da Operadora.");
+                }
             }
             else
             {

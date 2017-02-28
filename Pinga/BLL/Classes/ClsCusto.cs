@@ -143,7 +143,7 @@ namespace BLL.Classes
                 {
                     throw new ArgumentNullException("Por favor informe o valor");
                 }
-                else if (tipoCustoIdtipoCusto.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (tipoCustoIdtipoCusto.idtipoCusto.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o tipo custo");
                 }

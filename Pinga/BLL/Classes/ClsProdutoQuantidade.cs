@@ -17,22 +17,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(quantidadeMinima.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Minima");
-            }
-            else if (string.IsNullOrEmpty(quantidadeMaxima.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Máxima");
-            }
-            else if (string.IsNullOrEmpty(quantidadeRecomendaEstoque.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Recomendada");
-            }
-            else if (string.IsNullOrEmpty(quantidadeSolicitarCompra.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Solicitar Compra");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -60,26 +45,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idprodutoQuantidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Produto Quantidade");
-            }
-            else if (string.IsNullOrEmpty(quantidadeMinima.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Minima");
-            }
-            else if (string.IsNullOrEmpty(quantidadeMaxima.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Máxima");
-            }
-            else if (string.IsNullOrEmpty(quantidadeRecomendaEstoque.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Recomendada");
-            }
-            else if (string.IsNullOrEmpty(quantidadeSolicitarCompra.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Quantidade Solicitar Compra");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -108,10 +74,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if(idprodutoQuantidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Produto Quantidade");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -175,14 +138,34 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(quantidadeMinima.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Quantidade Minima");
+                }
+                else if (string.IsNullOrEmpty(quantidadeMaxima.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Quantidade Máxima");
+                }
+                else if (string.IsNullOrEmpty(quantidadeRecomendaEstoque.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Quantidade Recomendada");
+                }
+                else if (string.IsNullOrEmpty(quantidadeSolicitarCompra.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe a Quantidade Solicitar Compra");
+                }
             }
             else if (crud == CRUD.update)
             {
-
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idprodutoQuantidade.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID da Quantidade do Produto");
+                }
             }
             else
             {

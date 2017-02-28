@@ -136,7 +136,7 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-                if (iditensSaida == null)
+                if (iditensSaida.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o ID do item saida.");
                 }

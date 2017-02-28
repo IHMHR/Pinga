@@ -156,7 +156,7 @@ namespace BLL.Classes
                 {
                     throw new ArgumentNullException("Por favor informe o estado é capital");
                 }
-                else if (paisIdpais.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (paisIdpais.idpais.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o pais");
                 }

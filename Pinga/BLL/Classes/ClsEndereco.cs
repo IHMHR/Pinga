@@ -94,6 +94,34 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (tipoLogradouroIdtipoLogradouro.idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo logradouro");
+                }
+                else if (string.IsNullOrEmpty(logradouro.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o logradouro");
+                }
+                else if (tipoComplementoIdtipoComplemento.idtipoComplemento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo complemento");
+                }
+                else if (string.IsNullOrEmpty(complemento.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o complemento");
+                }
+                else if (string.IsNullOrEmpty(CEP.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o CEP");
+                }
+                else if (string.IsNullOrEmpty(pontoReferencia.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o ponto de referência");
+                }
+                else if (bairroIdbairro.idbairro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o bairro");
+                }
             }
             else if (crud == CRUD.update)
             {

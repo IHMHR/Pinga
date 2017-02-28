@@ -70,6 +70,14 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(parcelas.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe o número de parcelas.");
+                }
+                else if (string.IsNullOrEmpty(juros.ToString()))
+                {
+                    throw new ArgumentNullException("Por favor informe o juros.");
+                }
             }
             else if (crud == CRUD.update)
             {
@@ -78,7 +86,10 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idparcelamento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID d Parcelamento.");
+                }
             }
             else
             {

@@ -158,7 +158,7 @@ namespace BLL.Classes
                 {
                     throw new ArgumentNullException("Por favor informe a região");
                 }
-                else if (cidadeIdcidade == null)
+                else if (cidadeIdcidade.idcidade.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o ID da Cidade");
                 }

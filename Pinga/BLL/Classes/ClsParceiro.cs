@@ -88,6 +88,22 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
+                if (string.IsNullOrEmpty(nome.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o nome.");
+                }
+                else if (enderecoIdendereco.idendereco.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o endereço.");
+                }
+                else if (status != true && status != false)
+                {
+                    throw new ArgumentNullException("Por favor informe o status.");
+                }
+                else if (telefoneIdtelefone.idtelefone.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o telefone.");
+                }
             }
             else if (crud == CRUD.update)
             {
@@ -96,7 +112,10 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-
+                if (idparceiro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Parceiro.");
+                }
             }
             else
             {

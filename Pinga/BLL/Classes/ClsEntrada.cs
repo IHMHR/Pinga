@@ -199,7 +199,7 @@ namespace BLL.Classes
                 {
                     throw new ArgumentNullException("Por favor informe o Parcelametno");
                 }
-                else if (tipoLitragemIdtipoLitragem.idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000"))
+                else if (tipoLitragemIdtipoLitragem.idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o Tipo Litragem");
                 }
@@ -211,8 +211,8 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-                if (identrada.ToString() == "00000000-0000-0000-0000-000000000000"))
-            {
+                if (identrada.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
                     throw new ArgumentNullException("Por favor informe a ID da Entrada");
                 }
             }
