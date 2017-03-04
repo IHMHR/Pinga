@@ -369,6 +369,47 @@ modified SMALLDATETIME NULL,
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 ) ON Pinga_FileGroup;
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
+BEGIN
+	ALTER TABLE Pinga.entrada SET (SYSTEM_VERSIONING = OFF);
+    DROP TABLE Pinga.entrada;
+END
+
+CREATE TABLE Pinga.entrada (
+identrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+data DATE NOT NULL DEFAULT GETDATE(),
+custo_idcusto UNIQUEIDENTIFIER NOT NULL,
+fornecedor_idfornecedor UNIQUEIDENTIFIER NOT NULL,
+fase_idfase UNIQUEIDENTIFIER NOT NULL,
+forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
+desconto DECIMAL(9,2) NOT NULL DEFAULT 0.0,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
+PERIOD FOR SYSTEM_TIME(created, modified),
+
+CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
+FOREIGN KEY (custo_idcusto) REFERENCES Pinga.custo(idcusto),
+FOREIGN KEY (fornecedor_idfornecedor) REFERENCES Pinga.fornecedor(idfornecedor),
+FOREIGN KEY (fase_idfase) REFERENCES Pinga.fase(idfase),
+FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+) ON Pinga_FileGroup
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.entrada));
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada_has_item')
+BEGIN
+	DROP TABLE Pinga.entrada_has_item;
+END
+
+CREATE TABLE Pinga.entrada_has_item (
+identrada_has_produto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+entrada_identrada UNIQUEIDENTIFIER NOT NULL,
+item_iditem UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_entrada_has_produto PRIMARY KEY NONCLUSTERED (identrada_has_produto),
+FOREIGN KEY (entrada_identrada) REFERENCES Pinga.entrada(identrada),
+FOREIGN KEY (item_iditem) REFERENCES Pinga.item(iditem)
+) ON Pinga_FileGroup;
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'fornecedor')
 BEGIN
     DROP TABLE Pinga.fornecedor;
@@ -408,54 +449,13 @@ END
 CREATE TABLE Pinga.forma_pagamento (
 idforma_pagamento UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 forma_pagamento VARCHAR(45) NOT NULL,
+parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
 created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento),
-CONSTRAINT unq_forma_pagamento UNIQUE (forma_pagamento)
-) ON Pinga_FileGroup;
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
-BEGIN
-	ALTER TABLE Pinga.entrada SET (SYSTEM_VERSIONING = OFF);
-    DROP TABLE Pinga.entrada;
-END
-
-CREATE TABLE Pinga.entrada (
-identrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-data DATE NOT NULL DEFAULT GETDATE(),
-custo_idcusto UNIQUEIDENTIFIER NOT NULL,
-parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-fornecedor_idfornecedor UNIQUEIDENTIFIER NOT NULL,
-created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
-PERIOD FOR SYSTEM_TIME(created, modified),
-
-CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
-FOREIGN KEY (custo_idcusto) REFERENCES Pinga.custo(idcusto),
-FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento),
-FOREIGN KEY (fornecedor_idfornecedor) REFERENCES Pinga.fornecedor(idfornecedor)
-) ON Pinga_FileGroup
-WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.entrada));
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'itens_entrada')
-BEGIN
-    DROP TABLE Pinga.itens_entrada;
-END
-
-CREATE TABLE Pinga.itens_entrada (
-iditens_entrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-entrada_identrada UNIQUEIDENTIFIER NOT NULL,
-produto_idproduto UNIQUEIDENTIFIER NOT NULL,
-quantidade INT NOT NULL,
-valor_entrada DECIMAL(9,2) NOT NULL,
-porcentagem_desconto DECIMAL(8,5) NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
-
-CONSTRAINT pk_itens_entrada PRIMARY KEY NONCLUSTERED (iditens_entrada),
-FOREIGN KEY (entrada_identrada) REFERENCES Pinga.entrada(identrada),
-FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
+CONSTRAINT unq_forma_pagamento UNIQUE (forma_pagamento),
+FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
 ) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_localidade')
@@ -585,6 +585,22 @@ FOREIGN KEY (produto_quantidade_idproduto_quantidade) REFERENCES Pinga.produto_q
 CONSTRAINT unq_produto UNIQUE (produto)
 ) ON Pinga_FileGroup;
 
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'item')
+BEGIN
+	DROP TABLE Pinga.item;
+END
+
+CREATE TABLE Pinga.item (
+iditem UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+item VARCHAR(20) NOT NULL,
+produto_idproduto UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_item PRIMARY KEY NONCLUSTERED (iditem),
+FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
+) ON Pinga_FileGroup;
+
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro')
 BEGIN
     DROP TABLE Pinga.parceiro;
@@ -606,6 +622,7 @@ FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone)
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'saida')
 BEGIN
+	ALTER TABLE Pinga.saida SET (SYSTEM_VERSIONING = OFF);
     DROP TABLE Pinga.saida;
 END
 
@@ -616,40 +633,32 @@ parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 fase_idfase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
-parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
+desconto DECIMAL(9,2) NOT NULL DEFAULT 0.0,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (fase_idfase) REFERENCES Pinga.fase(idfase),
-FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento),
-FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
-) ON Pinga_FileGroup;
+FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+) ON Pinga_FileGroup
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.saida));
 
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'itens_saida')
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'saida_has_item')
 BEGIN
-    ALTER TABLE Pinga.itens_saida SET (SYSTEM_VERSIONING = OFF);
-	DROP TABLE Pinga.itens_saida;
+	DROP TABLE Pinga.saida_has_item;
 END
 
-CREATE TABLE Pinga.itens_saida (
-iditens_saida UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+CREATE TABLE Pinga.saida_has_item (
+idsaida_has_item UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 saida_idsaida UNIQUEIDENTIFIER NOT NULL,
-produto_idproduto UNIQUEIDENTIFIER NOT NULL,
-quantidade INT NOT NULL,
-valor_saida DECIMAL(9,2) NOT NULL,
-porcentagem_desconto DECIMAL(8,5) NULL,
-created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
-PERIOD FOR SYSTEM_TIME (created, modified),
+item_iditem UNIQUEIDENTIFIER NOT NULL,
 
-CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
+CONSTRAINT pk_saida_has_item PRIMARY KEY NONCLUSTERED (idsaida_has_item),
 FOREIGN KEY (saida_idsaida) REFERENCES Pinga.saida(idsaida),
-FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
-) ON Pinga_FileGroup
-WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.itens_saida));
+FOREIGN KEY (item_iditem) REFERENCES Pinga.item(iditem)
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estoque')
 BEGIN
@@ -940,7 +949,7 @@ login_idlogin UNIQUEIDENTIFIER NOT NULL,
 created DATETIME NOT NULL DEFAULT GETDATE(),
 modified DATETIME NULL,
 
-CONSTRAINT pk_parceiro_has_login PRIMARY KEY (idparceiro_has_login),
+CONSTRAINT pk_parceiro_has_login PRIMARY KEY NONCLUSTERED (idparceiro_has_login),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
 FOREIGN KEY (login_idlogin) REFERENCES adm.login(idlogin)
 ) ON Adm_FileGroup;
