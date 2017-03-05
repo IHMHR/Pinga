@@ -57,6 +57,7 @@
     <Compile Include="Classes\ClsFormaPagamento.cs" />
     <Compile Include="Classes\ClsFornecedor.cs" />
     <Compile Include="Classes\ClsInformacoesCliente.cs" />
+    <Compile Include="Classes\ClsItem.cs" />
     <Compile Include="Classes\ClsItensSaida.cs" />
     <Compile Include="Classes\ClsLogin.cs" />
     <Compile Include="Classes\ClsOperadora.cs" />

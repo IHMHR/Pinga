@@ -40,6 +40,7 @@ namespace BLL
         public Classes.ClsProdutoQuantidade produtoQuantidade = null;
         public Classes.ClsSaida saida = null;
         public Classes.ClsTelefone telefone = null;
+        public Classes.ClsItem item = null;
 
         public Bll(string classe)
         {
@@ -173,6 +174,10 @@ namespace BLL
 
                     case "Estoque":
                         estoque = new Classes.ClsEstoque();
+                        break;
+
+                    case "Item":
+                        item = new Classes.ClsItem();
                         break;
                 }
             }

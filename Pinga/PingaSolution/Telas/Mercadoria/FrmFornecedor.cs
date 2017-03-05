@@ -177,10 +177,10 @@ namespace PingaSolution.Telas.Mercadoria
                 comboBox1.ValueMember = "idendereco";
                 comboBox1.SelectedIndex = -1;
 
-                comboBox1.DataSource = new Bll("Telefone").telefone.Visualizar();
-                comboBox1.DisplayMember = "telefone";
-                comboBox1.ValueMember = "idtelefone";
-                comboBox1.SelectedIndex = -1;
+                comboBox2.DataSource = new Bll("Telefone").telefone.Visualizar();
+                comboBox2.DisplayMember = "telefone";
+                comboBox2.ValueMember = "idtelefone";
+                comboBox2.SelectedIndex = -1;
             }
             catch (Exception error)
             {
@@ -234,6 +234,57 @@ namespace PingaSolution.Telas.Mercadoria
                 fillDataGrid();
                 MessageBox.Show("Apagado fornecedor com sucesso", "Exclusão realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox2.Text.Trim()) && comboBox1.SelectedIndex != -1 && comboBox2.SelectedIndex != -1)
+            {
+                bll.fornecedor.nome = textBox2.Text.Trim();
+                bll.fornecedor.enderecoIdendereco.idendereco = Guid.Parse(comboBox1.SelectedValue.ToString());
+                bll.fornecedor.telefoneIdtelefone.idtelefone = Guid.Parse(comboBox2.SelectedValue.ToString());
+                if (!string.IsNullOrEmpty(textBox1.Text))
+                {
+                    bll.fornecedor.idfornecedor = Guid.Parse(textBox1.Text);
+                }
+
+                if (button1.Text == "Salvar")
+                {
+                    bll.fornecedor.Inserir();
+                    fillDataGrid();
+                    MessageBox.Show("Cadastrado novo Fornecedor com sucesso", "Cadastro realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    button1.Text = "Salvar";
+
+                    bll.fornecedor.Alterar();
+                    fillDataGrid();
+                    MessageBox.Show("Alterado Fornecedor com sucesso", "Alteração realizado", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Todos os campos devem ser preenchidos", "Preencher campos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void comboBox1_Format(object sender, ListControlConvertEventArgs e)
+        {
+            string tipoLogradouro = ((BLL.Classes.ClsEndereco)e.ListItem).tipoLogradouroIdtipoLogradouro.tipoLogradouro;
+            string Logradouro = ((BLL.Classes.ClsEndereco)e.ListItem).logradouro;
+            int numero = (int)((BLL.Classes.ClsEndereco)e.ListItem).numero;
+            string bairro = ((BLL.Classes.ClsEndereco)e.ListItem).bairroIdbairro.bairro;
+            string cidade = ((BLL.Classes.ClsEndereco)e.ListItem).bairroIdbairro.cidadeIdcidade.cidade;
+            string uf = ((BLL.Classes.ClsEndereco)e.ListItem).bairroIdbairro.cidadeIdcidade.estadoIdestado.uf;
+            e.Value = string.Format("{0} {1}, {2} - {3} {4} - {5}", tipoLogradouro, Logradouro, numero, bairro, cidade, uf);
+        }
+
+        private void comboBox2_Format(object sender, ListControlConvertEventArgs e)
+        {
+            string ddd = ((BLL.Classes.ClsTelefone)e.ListItem).cidadeDDD.DDD;
+            string telefone = ((BLL.Classes.ClsTelefone)e.ListItem).telefone;
+            e.Value = string.Format("({0}) {1}", ddd, telefone);
         }
     }
 }

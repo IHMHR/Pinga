@@ -140,5 +140,10 @@ namespace BLL.Classes
                 throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
             }
         }
+
+        public ClsEndereco BuscaPeloId(Guid rowGuidCol)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

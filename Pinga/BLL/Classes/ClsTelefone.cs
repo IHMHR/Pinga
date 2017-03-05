@@ -131,7 +131,7 @@ namespace BLL.Classes
                         {
                             tel.modified = DateTime.Parse(read["modified"].ToString());
                         }
-                        tel.tipoTelefoneIdtipoTelefone.idtipoTelefone = Guid.Parse(read["idtipotelefone"].ToString());
+                        tel.tipoTelefoneIdtipoTelefone.idtipoTelefone = Guid.Parse(read["idtipo_telefone"].ToString());
                         tel.tipoTelefoneIdtipoTelefone.tipoTelefone = read["tipo_telefone"].ToString();
                         tel.operadoraIdoperadora.idoperadora = Guid.Parse(read["idoperadora"].ToString());
                         tel.operadoraIdoperadora.operadora = read["operadora"].ToString();
@@ -188,6 +188,11 @@ namespace BLL.Classes
             {
                 throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
             }
+        }
+
+        public ClsTelefone BuscaPeloId(Guid rowGuidCol)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
@@ -11,6 +12,8 @@ namespace BLL.Classes
         void Apagar();
 
         List<T> Visualizar();
+
+        T BuscaPeloId(Guid rowGuidCol);
 
         void ValidarClasse(CRUD crud);
     }

@@ -151,5 +151,10 @@ namespace BLL.Classes
                 throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
             }
         }
+
+        public ClsFormaPagamento BuscaPeloId(Guid rowGuidCol)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -279,5 +279,10 @@ namespace BLL.Classes
                 throw new Exception(e.Message);
             }
         }
+
+        public ClsSaida BuscaPeloId(Guid rowGuidCol)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
