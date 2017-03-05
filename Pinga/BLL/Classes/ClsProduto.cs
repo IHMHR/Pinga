@@ -204,7 +204,44 @@ namespace BLL.Classes
 
         public ClsProduto BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT p.idproduto, p.produto, p.litragem, p.vendendo, p.valor_unitario, p.created, p.modified, tl.idtipo_litragem, tl.tipo_litragem, pq.idproduto_quantidade, pq.quantidade_minima, pq.quantidade_maxima, pq.quantidade_recomenda_estoque, pq.quantidade_solicitar_compra FROM Pinga.produto p INNER JOIN Pinga.tipo_litragem tl ON p.tipo_litragem_idtipo_litragem = tl.idtipo_litragem INNER JOIN Pinga.produto_quantidade pq ON p.produto_quantidade_idproduto_quantidade = pq.idproduto_quantidade WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idproduto = Guid.Parse(read["idproduto"].ToString());
+                    produto = read["produto"].ToString();
+                    vendendo = (bool)read["vendendo"];
+                    litragem = (int)read["litragem"];
+                    valorUnitario = (decimal)read["valor_unitario"];
+                    created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        modified = DateTime.Parse(read["modified"].ToString());
+                    }
+                    tipoLitragemIdtipoLitragem.idtipoLitragem = Guid.Parse(read["idtipo_litragem"].ToString());
+                    tipoLitragemIdtipoLitragem.tipoLitragem = read["tipo_litragem"].ToString();
+                    produtoQuantidadeIdprodutoQuantidade.idprodutoQuantidade = Guid.Parse(read["idproduto_quantidade"].ToString());
+                    produtoQuantidadeIdprodutoQuantidade.quantidadeMinima = (int)read["quantidade_minima"];
+                    produtoQuantidadeIdprodutoQuantidade.quantidadeMaxima = (int)read["quantidade_maxima"];
+                    produtoQuantidadeIdprodutoQuantidade.quantidadeRecomendaEstoque = (int)read["quantidade_recomenda_estoque"];
+                    produtoQuantidadeIdprodutoQuantidade.quantidadeSolicitarCompra = (int)read["quantidade_solicitar_compra"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
         #endregion
     }

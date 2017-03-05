@@ -152,7 +152,31 @@ namespace BLL.Classes
 
         public ClsTipoLitragem BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.Text;
+                    com.CommandText = "SELECT idtipo_litragem, tipo_litragem FROM Pinga.tipo_litragem WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idtipoLitragem = Guid.Parse(read["idtipo_litragem"].ToString());
+                    tipoLitragem = read["tipo_litragem"].ToString();
+
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
         #endregion
     }

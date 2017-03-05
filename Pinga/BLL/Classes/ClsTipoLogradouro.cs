@@ -150,7 +150,29 @@ namespace BLL.Classes
 
         public ClsTipoLogradouro BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idtipo_logradouro, tipo_logradouro FROM Pinga.tipo_logradouro WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idtipoLogradouro = Guid.Parse(read["idtipo_logradouro"].ToString());
+                    tipoLogradouro = read["tipo_logradouro"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
         #endregion
     }

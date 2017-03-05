@@ -127,7 +127,7 @@ namespace BLL.Classes
                         tel.idtelefone = Guid.Parse(read["idtelefone"].ToString());
                         tel.telefone = read["telefone"].ToString();
                         tel.created = DateTime.Parse(read["created"].ToString());
-                        if(!string.IsNullOrEmpty(read["modified"].ToString()))
+                        if (!string.IsNullOrEmpty(read["modified"].ToString()))
                         {
                             tel.modified = DateTime.Parse(read["modified"].ToString());
                         }
@@ -192,7 +192,41 @@ namespace BLL.Classes
 
         public ClsTelefone BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idtelefone, telefone, idcidade, cidade, DDD, idtipo_telefone, tipo_telefone, idoperadora, operadora, created, modified FROM Pinga.telefone t INNER JOIN Pinga.cidade c ON t.cidade_ddd = c.idcidade INNER JOIN Pinga.tipo_telefone tt ON t.tipo_telefone_idtipo_telefone = tt.idtipo_telefone INNER JOIN Pinga.operadora o ON t.operadora_idoperadora = o.idoperadora WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idtelefone = Guid.Parse(read["idtelefone"].ToString());
+                    telefone = read["telefone"].ToString();
+                    created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        modified = DateTime.Parse(read["modified"].ToString());
+                    }
+                    tipoTelefoneIdtipoTelefone.idtipoTelefone = Guid.Parse(read["idtipo_telefone"].ToString());
+                    tipoTelefoneIdtipoTelefone.tipoTelefone = read["tipo_telefone"].ToString();
+                    operadoraIdoperadora.idoperadora = Guid.Parse(read["idoperadora"].ToString());
+                    operadoraIdoperadora.operadora = read["operadora"].ToString();
+                    cidadeDDD.idcidade = Guid.Parse(read["idcidade"].ToString());
+                    cidadeDDD.DDD = read["DDD"].ToString();
+                    cidadeDDD.cidade = read["cidade"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
         #endregion
     }

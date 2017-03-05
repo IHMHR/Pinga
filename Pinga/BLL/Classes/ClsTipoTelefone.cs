@@ -153,7 +153,8 @@ namespace BLL.Classes
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
                 {
                     SqlCommand com = new SqlCommand();
-                    com.CommandText = "SELECT idtipo_telefone, tipo_telefone FROM Pinga.tipo_telefone";
+                    com.CommandText = "SELECT idtipo_telefone, tipo_telefone FROM Pinga.tipo_telefone WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
                     con.Open();
                     com.Connection = con;
 
@@ -161,6 +162,7 @@ namespace BLL.Classes
                     read.Read();
                     idtipoTelefone = Guid.Parse(read["idtipo_telefone"].ToString());
                     tipoTelefone = read["tipo_telefone"].ToString();
+                    con.Close();
                 }
             }
             catch (Exception e)

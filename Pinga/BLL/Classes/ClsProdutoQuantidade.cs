@@ -175,7 +175,34 @@ namespace BLL.Classes
 
         public ClsProdutoQuantidade BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.Text;
+                    com.CommandText = "SELECT idproduto_quantidade, quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra FROM Pinga.produto_quantidade WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+
+                    con.Open();
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idprodutoQuantidade = Guid.Parse(read["idproduto_quantidade"].ToString());
+                    quantidadeMinima = (int)read["quantidade_minima"];
+                    quantidadeMaxima = (int)read["quantidade_maxima"];
+                    quantidadeRecomendaEstoque = (int)read["quantidade_recomenda_estoque"];
+                    quantidadeSolicitarCompra = (int)read["quantidade_solicitar_compra"];
+
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

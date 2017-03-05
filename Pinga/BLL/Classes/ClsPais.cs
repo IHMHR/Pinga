@@ -202,7 +202,39 @@ namespace BLL.Classes
 
         public ClsPais BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT p.idpais, p.pais, p.idioma, p.colacao, p.DDI, p.sigla, p.fuso_horario, c.idcontinente, c.continente, tc.idtipo_continente, tc.tipo_continente, tc.ativo FROM Pinga.pais p INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE rowguidcol = @id ORDER BY p.pais ASC, tc.ativo DESC;";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idpais = Guid.Parse(read["idpais"].ToString());
+                    pais = read["pais"].ToString();
+                    idioma = read["idioma"].ToString();
+                    colacao = read["colacao"].ToString();
+                    DDI = read["DDI"].ToString();
+                    sigla = read["sigla"].ToString();
+                    fusoHorario = read["fuso_horario"].ToString();
+                    continenteIdcontinete.idcontinente = Guid.Parse(read["idcontinente"].ToString());
+                    continenteIdcontinete.continente = read["continente"].ToString();
+                    continenteIdcontinete.tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(read["idtipo_continente"].ToString());
+                    continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    continenteIdcontinete.tipoContinenteIdtipoContinente.ativo = (bool)read["ativo"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
@@ -21,7 +22,36 @@ namespace BLL.Classes
 
         public List<ClsOperadora> Visualizar()
         {
-            return null;
+            List<ClsOperadora> retorno = new List<ClsOperadora>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idoperadora, operadora, razao_social, [status] FROM Pinga.operadora";
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    while (read.Read())
+                    {
+                        ClsOperadora op = new ClsOperadora();
+                        op.idoperadora = Guid.Parse(read["idoperadora"].ToString());
+                        op.operadora = read["operadora"].ToString();
+                        op.razaoSocial = read["razao_social"].ToString();
+                        op.status = (bool)read["status"];
+
+                        retorno.Add(op);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return retorno;
         }
 
         public void ValidarClasse(CRUD crud)
@@ -61,7 +91,31 @@ namespace BLL.Classes
 
         public ClsOperadora BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idoperadora, operadora, razao_social, [status] FROM Pinga.operadora WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idoperadora = Guid.Parse(read["idoperadora"].ToString());
+                    operadora = read["operadora"].ToString();
+                    razaoSocial = read["razao_social"].ToString();
+                    status = (bool)read["status"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

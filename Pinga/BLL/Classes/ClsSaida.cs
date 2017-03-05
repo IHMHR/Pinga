@@ -246,6 +246,84 @@ namespace BLL.Classes
                 throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
             }
         }
+
+        public ClsSaida BuscaPeloId(Guid rowGuidCol)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = con;
+                    com.CommandType = CommandType.Text;
+                    com.CommandText = "SELECT s.idsaida, s.data, s.created, s.modified, p.idparceiro, p.nome, pve.idendereco, pve.tipo_logradouro, pve.logradouro, pve.numero, pve.tipo_complemento, pve.complemento, pve.CEP, pve.ponto_referencia, pve.bairro, pve.uf, pve.estado, pve.sigla, pve.DDI, pve.pais, pve.fuso_horario, pve.tipo_continente, pve.continente, pvt.idtelefone, pvt.ddd, pvt.telefone, pvt.operadora, pvt.cidade, cvic.idcliente, cvic.cpf_cnpj, cvic.nome_razao_social, cvic.apelido_nome_fantasia, cvic.inscricao_municipal, cvic.identidade_inscricao_estadual, cvic.data_nascimento_fundacao, cvic.sexo, cvic.email, f.idfase, f.fase, fp.idforma_pagamento, fp.forma_pagamento, par.idparcelamento, par.data_pagamento, par.data_vencimento, par.parcelas, par.juros FROM Pinga.saida s INNER JOIN Pinga.parceiro p ON s.parceiro_idparceiro = p.idparceiro INNER JOIN Pinga.uvw_VisualizarEndereco pve ON pve.idendereco = p.endereco_idendereco INNER JOIN Pinga.uvw_VisualizarTelefone pvt ON pvt.idtelefone = p.telefone_idtelefone INNER JOIN Pinga.uvw_VisualizarInfoCliente cvic ON cvic.idcliente = s.cliente_idcliente INNER JOIN Pinga.fase f ON f.idfase = s.fase_idfase INNER JOIN Pinga.forma_pagamento fp ON fp.idforma_pagamento = s.forma_pagamento_idforma_pagamento INNER JOIN Pinga.parcelamento par ON par.idparcelamento = s.parcelamento_idparcelamento WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+
+                    con.Open();
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idsaida = Guid.Parse(read["idsaida"].ToString());
+                    data = DateTime.Parse(read["data"].ToString());
+                    created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        modified = DateTime.Parse(read["modified"].ToString());
+                    }
+                    parceiroIdparceiro.idparceiro = Guid.Parse(read["idparceiro"].ToString());
+                    parceiroIdparceiro.nome = read["nome"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.idendereco = Guid.Parse(read["idendereco"].ToString());
+                    parceiroIdparceiro.enderecoIdendereco.logradouro = read["logradouro"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.numero = (int)read["numero"];
+                    parceiroIdparceiro.enderecoIdendereco.complemento = read["complemento"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.CEP = read["CEP"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.pontoReferencia = read["ponto_referencia"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento = read["tipo_complemento"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro = read["tipo_logradouro"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.bairro = read["bairro"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.DDD = read["DDD"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.fusoHorario = read["fuso_horario"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    parceiroIdparceiro.enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    parceiroIdparceiro.telefoneIdtelefone.idtelefone = Guid.Parse(read["idtelefone"].ToString());
+                    parceiroIdparceiro.telefoneIdtelefone.cidadeDDD.DDD = read["ddd"].ToString();
+                    parceiroIdparceiro.telefoneIdtelefone.telefone = read["telefone"].ToString();
+                    parceiroIdparceiro.telefoneIdtelefone.operadoraIdoperadora.operadora = read["operadora"].ToString();
+                    clienteIdcliente.idcliente = Guid.Parse(read["idcliente"].ToString());
+                    clienteIdcliente.cpfCnpj = read["cpf_cnpj"].ToString();
+                    clienteIdcliente.identidadeInscricaoEstadual = read["identidade_inscricao_estadual"].ToString();
+                    clienteIdcliente.inscricaoMunicipal = read["inscricao_municipal"].ToString();
+                    clienteIdcliente.nomeRazaoSocial = read["nome_razao_social"].ToString();
+                    clienteIdcliente.apelidoNomeFantasia = read["apelido_nome_fantasia"].ToString();
+                    clienteIdcliente.dataNascimentoFundacao = DateTime.Parse(read["data_nascimento_fundacao"].ToString());
+                    clienteIdcliente.sexo = char.Parse(read["sexo"].ToString());
+                    MailAddress email = new MailAddress(read["email"].ToString());
+                    clienteIdcliente.emailIdemail.email = email.User;
+                    clienteIdcliente.emailIdemail.emailDominioIdemailDominio.emailDominio = email.Host.Substring(0, email.Host.IndexOf('.'));
+                    clienteIdcliente.emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade = email.Host.Substring(email.Host.IndexOf('.') + 1);
+                    faseIdfase.idfase = Guid.Parse(read["idfase"].ToString());
+                    faseIdfase.fase = read["fase"].ToString();
+                    formaPagamentoIdformaPagamento.idformaPagamento = Guid.Parse(read["idforma_pagamento"].ToString());
+                    formaPagamentoIdformaPagamento.formaPagamento = read["forma_pagamento"].ToString();
+                    parcelamentoIdparcelamento.idparcelamento = Guid.Parse(read["idparcelamento"].ToString());
+                    parcelamentoIdparcelamento.dataPagamento = DateTime.Parse(read["data_pagamento"].ToString());
+                    parcelamentoIdparcelamento.dataVencimento = DateTime.Parse(read["data_vencimento"].ToString());
+                    parcelamentoIdparcelamento.parcelas = (int)read["parcelas"];
+                    parcelamentoIdparcelamento.juros = (decimal)read["juros"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
+        }
         #endregion
 
         public Guid InserirComRetorno()
@@ -278,11 +356,6 @@ namespace BLL.Classes
             {
                 throw new Exception(e.Message);
             }
-        }
-
-        public ClsSaida BuscaPeloId(Guid rowGuidCol)
-        {
-            throw new NotImplementedException();
-        }
+        }        
     }
 }
