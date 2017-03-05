@@ -964,8 +964,8 @@ END
 
 CREATE TABLE adm.log_erros (
 idlog_erros UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-usuario VARCHAR(30) NOT NULL DEFAULT SYSTEM_USER,
-erro VARCHAR(100) NOT NULL,
+usuario VARCHAR(50) NOT NULL DEFAULT SYSTEM_USER,
+erro VARCHAR(200) NOT NULL,
 horario SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 procedimento VARCHAR(80) NOT NULL,
 possivel_causa VARCHAR(80) NULL,
@@ -2100,6 +2100,29 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoItem
+	@item VARCHAR(20),
+	@produtoIdproduto UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.item (item, produto_idproduto, created)
+			VALUES (@item, @produtoIdproduto, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert do item apenas.', 1;
+	END CATCH
+END
+GO
 
 /* TRIGGER's PARA VALIDAÇÃO */
 CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
