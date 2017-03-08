@@ -108,7 +108,7 @@ namespace BLL.Classes
                         fp.idformaPagamento = Guid.Parse(read["idforma_pagamento"].ToString());
                         fp.formaPagamento = read["forma_pagamento"].ToString();
                         fp.created = DateTime.Parse(read["created"].ToString());
-                        if(!string.IsNullOrEmpty(read["modified"].ToString()))
+                        if (!string.IsNullOrEmpty(read["modified"].ToString()))
                         {
                             fp.modified = DateTime.Parse(read["modified"].ToString());
                         }
@@ -154,7 +154,34 @@ namespace BLL.Classes
 
         public ClsFormaPagamento BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idforma_pagamento, forma_pagamento, created, modified FROM Pinga.forma_pagamento WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idformaPagamento = Guid.Parse(read["idforma_pagamento"].ToString());
+                    formaPagamento = read["forma_pagamento"].ToString();
+                    created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        modified = DateTime.Parse(read["modified"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

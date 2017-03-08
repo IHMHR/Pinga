@@ -92,7 +92,34 @@ namespace BLL.Classes
 
         public ClsFase BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idfase, fase, created, modified FROM Pinga.fase WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idfase = Guid.Parse(read["idfase"].ToString());
+                    fase = read["fase"].ToString();
+                    created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        modified = DateTime.Parse(read["modified"].ToString());
+                    }
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

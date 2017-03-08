@@ -181,7 +181,38 @@ namespace BLL.Classes
 
         public ClsEstado BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT e.idestado, e.estado, e.uf, e.capital, p.idpais, p.pais, p.idioma, p.DDI, p.sigla, p.fuso_horario, c.continente, tc.tipo_continente FROM Pinga.estado e INNER JOIN Pinga.pais p ON e.pais_idpais = p.idpais INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idestado = Guid.Parse(read["idestado"].ToString());
+                    estado = read["estado"].ToString();
+                    uf = read["uf"].ToString();
+                    capital = (bool)read["capital"];
+                    paisIdpais.idpais = Guid.Parse(read["idpais"].ToString());
+                    paisIdpais.pais = read["pais"].ToString();
+                    paisIdpais.idioma = read["idioma"].ToString();
+                    paisIdpais.DDI = read["DDI"].ToString();
+                    paisIdpais.sigla = read["sigla"].ToString();
+                    paisIdpais.fusoHorario = read["fuso_horario"].ToString();
+                    paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return this;
         }
     }
 }

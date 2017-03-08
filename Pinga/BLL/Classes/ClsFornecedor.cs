@@ -109,7 +109,49 @@ namespace BLL.Classes
 
         public ClsFornecedor BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idfornecedor, f.nome, endereco_idendereco, tipo_logradouro, logradouro, numero, tipo_complemento, complemento, CEP, ponto_referencia, bairro, vef.cidade, uf, estado, pais, continente, idtelefone, telefone, vtf.DDD, operadora, tipo_telefone FROM Pinga.fornecedor f INNER JOIN Pinga.uvw_VisualizarEndereco vef ON f.endereco_idendereco = vef.idendereco INNER JOIN Pinga.uvw_VisualizarTelefone vtf ON f.telefone_idtelefone = vtf.idtelefone WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idfornecedor = Guid.Parse(read["idfornecedor"].ToString());
+                    nome = read["nome"].ToString();
+                    telefoneIdtelefone.idtelefone = Guid.Parse(read["idtelefone"].ToString());
+                    telefoneIdtelefone.telefone = read["telefone"].ToString();
+                    telefoneIdtelefone.operadoraIdoperadora.operadora = read["operadora"].ToString();
+                    telefoneIdtelefone.tipoTelefoneIdtipoTelefone.tipoTelefone = read["tipo_telefone"].ToString();
+                    telefoneIdtelefone.cidadeDDD.DDD = read["DDD"].ToString();
+                    telefoneIdtelefone.cidadeDDD.cidade = read["cidade"].ToString();
+                    enderecoIdendereco.idendereco = Guid.Parse(read["idendereco"].ToString());
+                    enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro = read["tipo_logradouro"].ToString();
+                    enderecoIdendereco.logradouro = read["logradouro"].ToString();
+                    enderecoIdendereco.numero = int.Parse(read["numero"].ToString());
+                    enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento = read["tipo_complemento"].ToString();
+                    enderecoIdendereco.complemento = read["complemento"].ToString();
+                    enderecoIdendereco.pontoReferencia = read["ponto_referencia"].ToString();
+                    enderecoIdendereco.CEP = read["CEP"].ToString();
+                    enderecoIdendereco.bairroIdbairro.bairro = read["bairro"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

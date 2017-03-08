@@ -146,7 +146,33 @@ namespace BLL.Classes
 
         public ClsContinente BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT c.idcontinente, c.continente, tc.idtipo_continente, tc.tipo_continente, tc.ativo "
+                                    + "FROM Pinga.continente c INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE ROWGUIDCOL = @id"
+                                    + "ORDER BY c.continente ASC, tc.ativo DESC;";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idcontinente = Guid.Parse(read["idcontinente"].ToString());
+                    continente = read["continente"].ToString();
+                    tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(read["idtipo_continente"].ToString());
+                    tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    tipoContinenteIdtipoContinente.ativo = (bool)read["ativo"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return this;
         }
     }
 }

@@ -183,7 +183,46 @@ namespace BLL.Classes
 
         public ClsBairro BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT b.idbairro, b.bairro, b.regiao, ci.idcidade, ci.cidade, ci.DDD, ci.capital, e.idestado, e.estado, e.uf, e.capital AS capitalEstado, p.idpais, p.pais, p.idioma, p.DDI, p.sigla, p.fuso_horario, c.continente, tc.tipo_continente FROM Pinga.bairro b INNER JOIN Pinga.cidade ci ON b.cidade_idcidade = ci.idcidade INNER JOIN Pinga.estado e ON ci.estado_idestado = e.idestado INNER JOIN Pinga.pais p ON e.pais_idpais = p.idpais INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idbairro = Guid.Parse(read["idbairro"].ToString());
+                    bairro = read["bairro"].ToString();
+                    regiao = read["regiao"].ToString();
+                    cidadeIdcidade.idcidade = Guid.Parse(read["idcidade"].ToString());
+                    cidadeIdcidade.cidade = read["cidade"].ToString();
+                    cidadeIdcidade.DDD = read["DDD"].ToString();
+                    cidadeIdcidade.capital = (bool)read["capital"];
+                    cidadeIdcidade.estadoIdestado.idestado = Guid.Parse(read["idestado"].ToString());
+                    cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
+                    cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
+                    cidadeIdcidade.estadoIdestado.capital = (bool)read["capitalEstado"];
+                    cidadeIdcidade.estadoIdestado.paisIdpais.idpais = Guid.Parse(read["idpais"].ToString());
+                    cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                    cidadeIdcidade.estadoIdestado.paisIdpais.idioma = read["idioma"].ToString();
+                    cidadeIdcidade.estadoIdestado.paisIdpais.DDI = read["DDI"].ToString();
+                    cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
+                    cidadeIdcidade.estadoIdestado.paisIdpais.fusoHorario = read["fuso_horario"].ToString();
+                    cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

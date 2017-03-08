@@ -115,7 +115,7 @@ namespace BLL.Classes
                         ClsCusto cus = new ClsCusto();
                         cus.idcusto = Guid.Parse(read["idcusto"].ToString());
                         cus.created = DateTime.Parse(read["created"].ToString());
-                        if(!string.IsNullOrEmpty(read["modified"].ToString()))
+                        if (!string.IsNullOrEmpty(read["modified"].ToString()))
                         {
                             cus.modified = DateTime.Parse(read["modified"].ToString());
                         }
@@ -168,7 +168,36 @@ namespace BLL.Classes
 
         public ClsCusto BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT c.idcusto, c.valor, c.created, c.modified, tc.idtipo_custo, tc.tipo_custo FROM Pinga.custo c INNER JOIN Pinga.tipo_custo tc ON c.tipo_custo_idtipo_custo = tc.idtipo_custo WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idcusto = Guid.Parse(read["idcusto"].ToString());
+                    created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        modified = DateTime.Parse(read["modified"].ToString());
+                    }
+                    valor = (decimal)read["valor"];
+                    tipoCustoIdtipoCusto.idtipoCusto = Guid.Parse(read["idtipo_custo"].ToString());
+                    tipoCustoIdtipoCusto.tipoCusto = read["tipo_custo"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

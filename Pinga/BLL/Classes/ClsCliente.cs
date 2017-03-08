@@ -117,7 +117,7 @@ namespace BLL.Classes
                 {
                     throw new ArgumentNullException(@"Por favor informe o Nome\Razão Social do cliente");
                 }
-                else if(string.IsNullOrEmpty(apelidoNomeFantasia.Trim()))
+                else if (string.IsNullOrEmpty(apelidoNomeFantasia.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o apelido do cliente");
                 }
@@ -166,7 +166,65 @@ namespace BLL.Classes
 
         public ClsCliente BuscaPeloId(Guid rowGuidCol)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idcliente, cpf_cnpj, nome_razao_social, apelido_nome_fantasia, inscricao_municipal, identidade_inscricao_estadual, data_nascimento_fundacao, sexo, idemail, email, idendereco, tipo_logradouro, logradouro, numero, tipo_complemento, complemento, ponto_referencia, CEP, bairro, DDD, cidade, capital, estado, uf, pais, sigla, continente, idtelefone, telefone, telefone_DDD, operadora, telefone_cidade, tipo_telefone FROM Pinga.uvw_VisualizarInfoCliente WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idcliente = Guid.Parse(read["idcliente"].ToString());
+                    nomeRazaoSocial = read["nome_razao_social"].ToString();
+                    apelidoNomeFantasia = read["apelido_nome_fantasia"].ToString();
+                    sexo = char.Parse(read["sexo"].ToString());
+                    inscricaoMunicipal = read["inscricao_municipal"].ToString();
+                    identidadeInscricaoEstadual = read["identidade_inscricao_estadual"].ToString();
+                    dataNascimentoFundacao = DateTime.Parse(read["data_nascimento_fundacao"].ToString());
+                    /*c.created = DateTime.Parse(read["created"].ToString());
+                    if (!string.IsNullOrEmpty(read["modified"].ToString()))
+                    {
+                        c.created = DateTime.Parse(read["modified"].ToString());
+                    }*/
+                    MailAddress email = new MailAddress(read["email"].ToString());
+                    emailIdemail.idemail = Guid.Parse(read["idemail"].ToString());
+                    emailIdemail.emailDominioIdemailDominio.emailDominio = email.Host.Substring(0, email.Host.IndexOf('.'));
+                    emailIdemail.emailLocalidadeIdemailLocalidade.emailLocalidade = email.Host.Substring(email.Host.IndexOf('.'));
+                    telefoneIdtelefone.idtelefone = Guid.Parse(read["idtelefone"].ToString());
+                    telefoneIdtelefone.telefone = read["telefone"].ToString();
+                    telefoneIdtelefone.cidadeDDD.DDD = read["DDD"].ToString();
+                    telefoneIdtelefone.operadoraIdoperadora.operadora = read["operadora"].ToString();
+                    telefoneIdtelefone.cidadeDDD.cidade = read["telefone_cidade"].ToString();
+                    telefoneIdtelefone.tipoTelefoneIdtipoTelefone.tipoTelefone = read["tipo_telefone"].ToString();
+                    enderecoIdendereco.idendereco = Guid.Parse(read["idendereco"].ToString());
+                    enderecoIdendereco.tipoLogradouroIdtipoLogradouro.tipoLogradouro = read["tipo_logradouro"].ToString();
+                    enderecoIdendereco.logradouro = read["logradouro"].ToString();
+                    enderecoIdendereco.numero = int.Parse(read["numero"].ToString());
+                    enderecoIdendereco.tipoComplementoIdtipoComplemento.tipoComplemento = read["tipo_complemento"].ToString();
+                    enderecoIdendereco.complemento = read["complemento"].ToString();
+                    enderecoIdendereco.pontoReferencia = read["ponto_referencia"].ToString();
+                    enderecoIdendereco.CEP = read["CEP"].ToString();
+                    enderecoIdendereco.bairroIdbairro.bairro = read["bairro"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.DDD = read["DDD"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
+                    enderecoIdendereco.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }
