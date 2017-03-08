@@ -51,6 +51,7 @@
     <Compile Include="Classes\ClsEmailLocalidade.cs" />
     <Compile Include="Classes\ClsEndereco.cs" />
     <Compile Include="Classes\ClsEntrada.cs" />
+    <Compile Include="Classes\ClsEntradaHasItem.cs" />
     <Compile Include="Classes\ClsEstado.cs" />
     <Compile Include="Classes\ClsEstoque.cs" />
     <Compile Include="Classes\ClsFase.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Classes\ClsProduto.cs" />
     <Compile Include="Classes\ClsProdutoQuantidade.cs" />
     <Compile Include="Classes\ClsSaida.cs" />
+    <Compile Include="Classes\ClsSaidaHasItem.cs" />
     <Compile Include="Classes\ClsTelefone.cs" />
     <Compile Include="Classes\ClsTipoComplemento.cs" />
     <Compile Include="Classes\ClsTipoContinente.cs" />
