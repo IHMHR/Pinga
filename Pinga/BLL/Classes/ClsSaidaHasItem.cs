@@ -10,9 +10,11 @@ namespace BLL.Classes
 {
     public sealed class ClsSaidaHasItem : IGeneric<ClsSaidaHasItem>
     {
+        #region Atributos
         public Guid idsaida_has_item { get; set; }
         public ClsSaida saida_idsaida { get; set; }
         public ClsItem item_iditem { get; set; }
+        #endregion
 
         public ClsSaidaHasItem()
         {
@@ -20,6 +22,7 @@ namespace BLL.Classes
             item_iditem = new ClsItem();
         }
 
+        #region CRUD Functions
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);
@@ -190,5 +193,6 @@ namespace BLL.Classes
 
             return this;
         }
+        #endregion
     }
 }
