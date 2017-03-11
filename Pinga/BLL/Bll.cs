@@ -41,6 +41,8 @@ namespace BLL
         public Classes.ClsSaida saida = null;
         public Classes.ClsTelefone telefone = null;
         public Classes.ClsItem item = null;
+        public Classes.ClsEntradaHasItem entradaHasItem = null;
+        public Classes.ClsSaidaHasItem saidaHasItem = null;
 
         public Bll(string classe)
         {
@@ -169,7 +171,16 @@ namespace BLL
                         break;
 
                     case "Itens_Saida":
-                        itensSaida = new Classes.ClsItensSaida();
+                        //itensSaida = new Classes.ClsItensSaida();
+                        semUsabilidade();
+                        break;
+
+                    case "Entrada_Has_Item":
+                        entradaHasItem = new Classes.ClsEntradaHasItem();
+                        break;
+
+                    case "Saida_Has_Item":
+                        saidaHasItem = new Classes.ClsSaidaHasItem();
                         break;
 
                     case "Estoque":
@@ -185,6 +196,11 @@ namespace BLL
             {
                 throw new ArgumentNullException("O argumento deve ser informado.");
             }
+        }
+
+        private void semUsabilidade()
+        {
+            throw new ArgumentException("Funcionalidade não deve ser usada.");
         }
     }
 }

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace BLL.Classes
 {
-    class ClsEntradaHasItem : IGeneric<ClsEntradaHasItem>
+    public sealed class ClsEntradaHasItem : IGeneric<ClsEntradaHasItem>
     {
         public Guid identrada_has_item { get; set; }
-        public ClsEntradaHasItem entrada_identrada { get; set; }
+        public ClsEntrada entrada_identrada { get; set; }
         public ClsItem item_iditem { get; set; }
 
         public ClsEntradaHasItem()
         {
-            entrada_identrada = new ClsEntradaHasItem();
+            entrada_identrada = new ClsEntrada();
             item_iditem = new ClsItem();
         }
 
@@ -43,7 +43,7 @@ namespace BLL.Classes
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
                 {
                     SqlCommand com = new SqlCommand();
-                    com.CommandText = "";
+                    com.CommandText = "SELECT ehi.identrada_has_item, ehi.entrada_identrada, ehi.item_iditem FROM Pinga.entrada_has_item ehi INNER JOIN Pinga.entrada e ON ehi.entrada_identrada = e.identrada INNER JOIN Pinga.item i ON ehi.item_iditem = i.iditem";
                     con.Open();
                     com.Connection = con;
 
@@ -51,7 +51,9 @@ namespace BLL.Classes
                     while (read.Read())
                     {
                         ClsEntradaHasItem ehi = new ClsEntradaHasItem();
-
+                        ehi.identrada_has_item = Guid.Parse(read["identrada_has_item"].ToString());
+                        ehi.entrada_identrada = new ClsEntrada().BuscaPeloId(Guid.Parse(read["entrada_identrada"].ToString()));
+                        ehi.item_iditem = new ClsItem().BuscaPeloId(Guid.Parse(read["item_iditem"].ToString()));
 
                         retorno.Add(ehi);
                     }
@@ -69,7 +71,7 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
-                if (entrada_identrada.identrada_has_item.ToString() == "00000000-0000-0000-0000-000000000000")
+                if (entrada_identrada.identrada.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe a entrada.");
                 }

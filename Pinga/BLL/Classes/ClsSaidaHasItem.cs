@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Classes
 {
-    class ClsSaidaHasItem : IGeneric<ClsSaidaHasItem>
+    public sealed class ClsSaidaHasItem : IGeneric<ClsSaidaHasItem>
     {
         public Guid idsaida_has_item { get; set; }
         public ClsSaida saida_idsaida { get; set; }
@@ -43,7 +43,7 @@ namespace BLL.Classes
                 using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
                 {
                     SqlCommand com = new SqlCommand();
-                    com.CommandText = "";
+                    com.CommandText = "SELECT shi.idsaida_has_item, shi.saida_idsaida, shi.item_iditem FROM Pinga.saida_has_item shi INNER JOIN Pinga.saida s ON shi.saida_idsaida = s.idsaida INNER JOIN Pinga.item i ON shi.item_iditem = i.iditem";
                     con.Open();
                     com.Connection = con;
 
@@ -51,7 +51,9 @@ namespace BLL.Classes
                     while (read.Read())
                     {
                         ClsSaidaHasItem shi = new ClsSaidaHasItem();
-
+                        shi.idsaida_has_item = Guid.Parse(read["idsaida_has_item"].ToString());
+                        shi.saida_idsaida = new ClsSaida().BuscaPeloId(Guid.Parse(read["saida_idsaida"].ToString()));
+                        shi.item_iditem = new ClsItem().BuscaPeloId(Guid.Parse(read["item_iditem"].ToString()));
 
                         retorno.Add(shi);
                     }
