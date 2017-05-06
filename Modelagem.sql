@@ -1,4 +1,4 @@
-parUSE master;
+USE master;
 GO
 
 sp_configure 'contained database authentication', 1;
@@ -12,11 +12,15 @@ BEGIN
 END
 
 CREATE DATABASE pingaDB CONTAINMENT = PARTIAL
-ON (NAME = 'pingaDB', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 10% )
-LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 20%)
+ON (NAME = 'pingaDB', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 2MB )
+LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 1MB)
 COLLATE Latin1_General_CS_AS;
 GO
-par
+/*
+ON (NAME = 'pingaDB', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 2MB )
+LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 1MB))
+*/
+
 ALTER DATABASE pingaDB SET OFFLINE
 GO
 
@@ -74,6 +78,40 @@ GO
 ALTER DATABASE pingaDB SET COMPATIBILITY_LEVEL = 130
 GO
 
+ALTER DATABASE pingaDB ADD FILEGROUP Pinga_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILE 
+(NAME = 'pingaDB_File1', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File1.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
+(NAME = 'pingaDB_File2', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File2.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
+(NAME = 'pingaDB_File3', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File3.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB )
+TO FILEGROUP Pinga_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILEGROUP Adm_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILE
+(NAME = 'pingaDB_File4', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File4.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB),
+(NAME = 'pingaDB_File5', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File5.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB)
+TO FILEGROUP Adm_FileGroup
+
+ALTER DATABASE pingaDB ADD FILEGROUP Legado_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD FILE
+(NAME = 'pingaDB_File6', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File6.ndf', SIZE = 50MB, MAXSIZE = 150MB, FILEGROWTH = 10MB)
+TO FILEGROUP Legado_FileGroup
+GO
+
+ALTER DATABASE pingaDB ADD LOG FILE
+(NAME = 'pingaDB_LOG1', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB1.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB),
+(NAME = 'pingaDB_LOG2', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB2.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB)
+GO
+
+ALTER DATABASE pingaDB MODIFY FILEGROUP Pinga_FileGroup DEFAULT
+GO
+
 USE pingaDB;
 GO
 
@@ -91,10 +129,10 @@ END
 CREATE TABLE Pinga.tipo_continente (
 idtipo_continente UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 tipo_continente VARCHAR(20) NOT NULL,
-ativo BIT NOT NULL DEFAULT 0, -- Validar na aplicação que somente 1 possa ser verdadeiro
+ativo BIT NOT NULL DEFAULT 0, -- Validar na aplica��o que somente 1 possa spingaer verdadeiro
 
 CONSTRAINT pk_tipo_continente PRIMARY KEY NONCLUSTERED (idtipo_continente)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'continente')
 BEGIN
@@ -108,7 +146,7 @@ tipo_continente_idtipo_continente UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_continente PRIMARY KEY NONCLUSTERED (idcontinente),
 FOREIGN KEY (tipo_continente_idtipo_continente) REFERENCES Pinga.tipo_continente(idtipo_continente)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'pais')
 BEGIN
@@ -128,7 +166,7 @@ continente_idcontinente UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_pais PRIMARY KEY NONCLUSTERED (idpais),
 FOREIGN KEY (continente_idcontinente) REFERENCES Pinga.continente(idcontinente),
 CONSTRAINT unq_pais UNIQUE (pais, sigla, DDI)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estado')
 BEGIN
@@ -145,8 +183,7 @@ pais_idpais UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_estado PRIMARY KEY NONCLUSTERED (idestado),
 FOREIGN KEY (pais_idpais) REFERENCES Pinga.pais(idpais),
 CONSTRAINT unq_estado UNIQUE (uf)
-);
-
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cidade')
 BEGIN
@@ -162,7 +199,7 @@ estado_idestado UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_cidade PRIMARY KEY NONCLUSTERED (idcidade),
 FOREIGN KEY (estado_idestado) REFERENCES Pinga.estado(idestado)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'bairro')
 BEGIN
@@ -177,7 +214,7 @@ cidade_idcidade UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_bairro PRIMARY KEY NONCLUSTERED (idbairro),
 FOREIGN KEY (cidade_idcidade) REFERENCES Pinga.cidade(idcidade)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_logradouro')
 BEGIN
@@ -190,7 +227,7 @@ tipo_logradouro VARCHAR(35) NOT NULL,
 
 CONSTRAINT pk_tipo_logradouro PRIMARY KEY NONCLUSTERED (idtipo_logradouro),
 CONSTRAINT unq_tipo_logradouro UNIQUE (tipo_logradouro)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_complemento')
 BEGIN
@@ -203,7 +240,7 @@ tipo_complemento VARCHAR(35) NOT NULL,
 
 CONSTRAINT pk_tipo_complemento PRIMARY KEY NONCLUSTERED (idtipo_complemento),
 CONSTRAINT unq_tipo_complemento UNIQUE (tipo_complemento)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'endereco')
 BEGIN
@@ -227,7 +264,7 @@ CONSTRAINT pk_endereco PRIMARY KEY NONCLUSTERED (idendereco),
 FOREIGN KEY (tipo_logradouro_idtipo_logradouro) REFERENCES Pinga.tipo_logradouro(idtipo_logradouro),
 FOREIGN KEY (tipo_complemento_idtipo_complemento) REFERENCES Pinga.tipo_complemento(idtipo_complemento),
 FOREIGN KEY (bairro_idbairro) REFERENCES Pinga.bairro(idbairro)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone_tipo')
 BEGIN
@@ -255,7 +292,7 @@ razao_social VARCHAR(40) NOT NULL,
 
 CONSTRAINT pk_operadora PRIMARY KEY NONCLUSTERED (idoperadora),
 CONSTRAINT unq_operadora UNIQUE (operadora)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'telefone')
 BEGIN
@@ -275,7 +312,7 @@ CONSTRAINT pk_telefone PRIMARY KEY NONCLUSTERED (idtelefone),
 FOREIGN KEY (cidade_ddd) REFERENCES Pinga.cidade(idcidade),
 FOREIGN KEY (tipo_telefone_idtipo_telefone) REFERENCES Pinga.tipo_telefone(idtipo_telefone),
 FOREIGN KEY (operadora_idoperadora) REFERENCES Pinga.operadora(idoperadora)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_litragem')
 BEGIN
@@ -288,7 +325,7 @@ tipo_litragem VARCHAR(35) NOT NULL,
 
 CONSTRAINT pk_tipo_litragem PRIMARY KEY NONCLUSTERED (idtipo_litragem),
 CONSTRAINT unq_tipo_litragem UNIQUE (tipo_litragem)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_custo')
 BEGIN
@@ -301,7 +338,7 @@ tipo_custo VARCHAR(60) NOT NULL,
 
 CONSTRAINT pk_tipo_custo PRIMARY KEY NONCLUSTERED (idtipo_custo),
 CONSTRAINT unq_tipo_custo UNIQUE (tipo_custo)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'custo')
 BEGIN
@@ -317,7 +354,7 @@ modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_custo PRIMARY KEY NONCLUSTERED (idcusto),
 FOREIGN KEY (tipo_custo_idtipo_custo) REFERENCES Pinga.tipo_custo(idtipo_custo)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parcelamento')
 BEGIN
@@ -334,31 +371,7 @@ created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
-BEGIN
-    DROP TABLE Pinga.entrada;
-END
-
-CREATE TABLE Pinga.entrada (
-identrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-data DATE NOT NULL DEFAULT GETDATE(),
-litragem INT NOT NULL,
-tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
-valor DECIMAL(9,2) NOT NULL,
-custo_idcusto UNIQUEIDENTIFIER NOT NULL,
-parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
-PERIOD FOR SYSTEM_TIME(created, modified),
-
-CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
-FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
-FOREIGN KEY (custo_idcusto) REFERENCES Pinga.custo(idcusto),
-FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
-)
-WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.entrada));
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'fornecedor')
 BEGIN
@@ -374,7 +387,7 @@ telefone_idtelefone UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_fornecedor PRIMARY KEY NONCLUSTERED (idfornecedor),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
 FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'fase')
 BEGIN
@@ -389,7 +402,7 @@ modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_fase PRIMARY KEY NONCLUSTERED (idfase),
 CONSTRAINT unq_fase UNIQUE (fase)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'forma_pagamento')
 BEGIN
@@ -399,12 +412,110 @@ END
 CREATE TABLE Pinga.forma_pagamento (
 idforma_pagamento UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 forma_pagamento VARCHAR(45) NOT NULL,
+parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
 created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento),
-CONSTRAINT unq_forma_pagamento UNIQUE (forma_pagamento)
-);
+CONSTRAINT unq_forma_pagamento UNIQUE (forma_pagamento),
+FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
+) ON Pinga_FileGroup;
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
+BEGIN
+	ALTER TABLE Pinga.entrada SET (SYSTEM_VERSIONING = OFF);
+    DROP TABLE Pinga.entrada;
+END
+
+CREATE TABLE Pinga.entrada (
+identrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+data DATE NOT NULL DEFAULT GETDATE(),
+custo_idcusto UNIQUEIDENTIFIER NOT NULL,
+fornecedor_idfornecedor UNIQUEIDENTIFIER NOT NULL,
+fase_idfase UNIQUEIDENTIFIER NOT NULL,
+forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
+desconto DECIMAL(9,2) NOT NULL DEFAULT 0.0,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
+PERIOD FOR SYSTEM_TIME(created, modified),
+
+CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
+FOREIGN KEY (custo_idcusto) REFERENCES Pinga.custo(idcusto),
+FOREIGN KEY (fornecedor_idfornecedor) REFERENCES Pinga.fornecedor(idfornecedor),
+FOREIGN KEY (fase_idfase) REFERENCES Pinga.fase(idfase),
+FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+) ON Pinga_FileGroup
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.entrada));
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'produto_quantidade')
+BEGIN
+    DROP TABLE Pinga.produto_quantidade;
+END
+
+CREATE TABLE Pinga.produto_quantidade (
+idproduto_quantidade UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+quantidade_minima INT NOT NULL,
+quantidade_maxima INT NOT NULL,
+quantidade_recomenda_estoque INT NOT NULL,
+quantidade_solicitar_compra INT NOT NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
+
+CONSTRAINT pk_idproduto_quantidade PRIMARY KEY NONCLUSTERED (idproduto_quantidade)
+) ON Pinga_FileGroup;
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'produto')
+BEGIN
+    DROP TABLE Pinga.produto;
+END
+
+CREATE TABLE Pinga.produto (
+idproduto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+produto VARCHAR(30) NOT NULL,
+tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
+litragem INT NULL,
+vendendo BIT NOT NULL DEFAULT 0,
+valor_unitario DECIMAL(9,2) NULL,
+produto_quantidade_idproduto_quantidade UNIQUEIDENTIFIER NOT NULL,
+created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
+modified SMALLDATETIME NULL,
+
+CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
+FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
+FOREIGN KEY (produto_quantidade_idproduto_quantidade) REFERENCES Pinga.produto_quantidade(idproduto_quantidade),
+CONSTRAINT unq_produto UNIQUE (produto)
+) ON Pinga_FileGroup;
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'item')
+BEGIN
+	DROP TABLE Pinga.item;
+END
+
+CREATE TABLE Pinga.item (
+iditem UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+item VARCHAR(20) NOT NULL,
+produto_idproduto UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_item PRIMARY KEY NONCLUSTERED (iditem),
+FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
+) ON Pinga_FileGroup;
+
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada_has_item')
+BEGIN
+	DROP TABLE Pinga.entrada_has_item;
+END
+
+CREATE TABLE Pinga.entrada_has_item (
+identrada_has_item UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+entrada_identrada UNIQUEIDENTIFIER NOT NULL,
+item_iditem UNIQUEIDENTIFIER NOT NULL,
+
+CONSTRAINT pk_entrada_has_produto PRIMARY KEY NONCLUSTERED (identrada_has_item),
+FOREIGN KEY (entrada_identrada) REFERENCES Pinga.entrada(identrada),
+FOREIGN KEY (item_iditem) REFERENCES Pinga.item(iditem)
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_localidade')
 BEGIN
@@ -417,7 +528,7 @@ email_localidade VARCHAR(10) NOT NULL,
 [status] BIT NOT NULL DEFAULT 0,
 	
 CONSTRAINT pk_email_localidade PRIMARY KEY NONCLUSTERED (idemail_localidade)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_dominio')
 BEGIN
@@ -430,7 +541,7 @@ email_dominio VARCHAR(20) NOT NULL,
 [status] BIT NOT NULL DEFAULT 0,
 	
 CONSTRAINT pk_email_dominio PRIMARY KEY NONCLUSTERED (idemail_dominio)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email')
 BEGIN
@@ -446,7 +557,7 @@ email_localidade_idemail_localidade UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_email PRIMARY KEY NONCLUSTERED (idemail),
 FOREIGN KEY (email_dominio_idemail_dominio) REFERENCES Pinga.email_dominio(idemail_dominio),
 FOREIGN KEY (email_localidade_idemail_localidade) REFERENCES Pinga.email_localidade(idemail_localidade)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente')
 BEGIN
@@ -474,7 +585,7 @@ FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone),
 FOREIGN KEY (email_idemail) REFERENCES Pinga.email(idemail),
 CONSTRAINT chk_sexo CHECK (sexo IN ('M', 'F')),
 CONSTRAINT unq_cpf_cnpj UNIQUE NONCLUSTERED (cpf_cnpj)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'informacoes_cliente')
 BEGIN
@@ -492,46 +603,7 @@ modified SMALLDATETIME NULL,
 CONSTRAINT pk_informacoes_cliente PRIMARY KEY NONCLUSTERED (idinformacoes_cliente),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 CONSTRAINT chk_tipo_cliente CHECK (tipo_cliente IN ('PF', 'PJ'))
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'produto_quantidade')
-BEGIN
-    DROP TABLE Pinga.produto_quantidade;
-END
-
-CREATE TABLE Pinga.produto_quantidade (
-idproduto_quantidade UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-quantidade_minima INT NOT NULL,
-quantidade_maxima INT NOT NULL,
-quantidade_recomenda_estoque INT NOT NULL,
-quantidade_solicitar_compra INT NOT NULL,
-created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
-
-CONSTRAINT pk_idproduto_quantidade PRIMARY KEY NONCLUSTERED (idproduto_quantidade)
-);
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'produto')
-BEGIN
-    DROP TABLE Pinga.produto;
-END
-
-CREATE TABLE Pinga.produto (
-idproduto UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-produto VARCHAR(30) NOT NULL,
-tipo_litragem_idtipo_litragem UNIQUEIDENTIFIER NOT NULL,
-litragem INT NULL,
-vendendo BIT NOT NULL DEFAULT 0,
-valor_unitario DECIMAL(9,2) NULL,
-produto_quantidade_idproduto_quantidade UNIQUEIDENTIFIER NOT NULL,
-created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
-
-CONSTRAINT pk_produto PRIMARY KEY NONCLUSTERED (idproduto),
-FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtipo_litragem),
-FOREIGN KEY (produto_quantidade_idproduto_quantidade) REFERENCES Pinga.produto_quantidade(idproduto_quantidade),
-CONSTRAINT unq_produto UNIQUE (produto)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro')
 BEGIN
@@ -550,10 +622,11 @@ modified SMALLDATETIME NULL,
 CONSTRAINT pk_parceiro PRIMARY KEY NONCLUSTERED (idparceiro),
 FOREIGN KEY (endereco_idendereco) REFERENCES Pinga.endereco(idendereco),
 FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'saida')
 BEGIN
+	ALTER TABLE Pinga.saida SET (SYSTEM_VERSIONING = OFF);
     DROP TABLE Pinga.saida;
 END
 
@@ -564,42 +637,37 @@ parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
 cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 fase_idfase UNIQUEIDENTIFIER NOT NULL,
 forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
-parcelamento_idparcelamento UNIQUEIDENTIFIER NOT NULL,
-created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
-modified SMALLDATETIME NULL,
+desconto DECIMAL(9,2) NOT NULL DEFAULT 0.0,
+created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
+modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
+PERIOD FOR SYSTEM_TIME(created, modified),
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (fase_idfase) REFERENCES Pinga.fase(idfase),
-FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento),
-FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
-);
+FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
+) ON Pinga_FileGroup
+WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.saida));
 
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'itens_saida')
+IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'saida_has_item')
 BEGIN
-    DROP TABLE Pinga.itens_saida;
+	DROP TABLE Pinga.saida_has_item;
 END
 
-CREATE TABLE Pinga.itens_saida (
-iditens_saida UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
+CREATE TABLE Pinga.saida_has_item (
+idsaida_has_item UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 saida_idsaida UNIQUEIDENTIFIER NOT NULL,
-produto_idproduto UNIQUEIDENTIFIER NOT NULL,
-quantidade INT NOT NULL,
-valor_saida DECIMAL(9,2) NOT NULL,
-created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
-PERIOD FOR SYSTEM_TIME (created, modified),
+item_iditem UNIQUEIDENTIFIER NOT NULL,
 
-CONSTRAINT pk_itens_saida PRIMARY KEY NONCLUSTERED (iditens_saida),
+CONSTRAINT pk_saida_has_item PRIMARY KEY NONCLUSTERED (idsaida_has_item),
 FOREIGN KEY (saida_idsaida) REFERENCES Pinga.saida(idsaida),
-FOREIGN KEY (entrada_identrada) REFERENCES Pinga.produto(idproduto),
-FOREIGN KEY (produto_idproduto) REFERENCES Pinga.saida(idsaida)
-)
-WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.itens_saida));
+FOREIGN KEY (item_iditem) REFERENCES Pinga.item(iditem)
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'estoque')
 BEGIN
+	ALTER TABLE Pinga.estoque SET (SYSTEM_VERSIONING = OFF);
     DROP TABLE Pinga.estoque;
 END
 
@@ -613,7 +681,7 @@ PERIOD FOR SYSTEM_TIME (created, modified),
 
 CONSTRAINT pk_estoque PRIMARY KEY NONCLUSTERED (idestoque),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
-)
+) ON Pinga_FileGroup
 WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.estoque));
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'students')
@@ -634,7 +702,7 @@ created SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_login PRIMARY KEY NONCLUSTERED (idlogin)
-)
+) ON Adm_FileGroup;
 
 INSERT INTO adm.login (lgn,pwd,[status]) VALUES ('123', '123', 1);
 SELECT * FROM adm.login;
@@ -658,7 +726,7 @@ modified SMALLDATETIME NULL,
 
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'representante')
 BEGIN
@@ -676,7 +744,7 @@ cargo VARCHAR(25) NOT NULL,
 
 CONSTRAINT pk_representante PRIMARY KEY NONCLUSTERED (idrepresentante),
 FOREIGN KEY (telefone_idtelefone) REFERENCES Pinga.telefone(idtelefone)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'cliente_has_representante')
 BEGIN
@@ -691,7 +759,7 @@ responsavel_contrato BIT NOT NULL DEFAULT 0
 
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (representante_idrepresentante) REFERENCES Pinga.representante(idrepresentante)
-);
+) ON Pinga_FileGroup;
 
 /*CREATE TABLE vendedor (
 idvendedor UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
@@ -728,7 +796,7 @@ terminou TIME NULL,
 
 CONSTRAINT pk_visita PRIMARY KEY NONCLUSTERED (idvisita),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro_has_visita')
 BEGIN
@@ -742,7 +810,7 @@ visita_idvisita UNIQUEIDENTIFIER NOT NULL
 
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
 FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita),
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'feedback_visita')
 BEGIN
@@ -761,7 +829,7 @@ modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_feedback_visita PRIMARY KEY NONCLUSTERED (idfeedback_visita),
 FOREIGN KEY (visita_idvisita) REFERENCES Pinga.visita(idvisita)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_periodicidade_entrega')
 BEGIN
@@ -775,7 +843,7 @@ tipo_periodicidade_entrega VARCHAR(15) NOT NULL,
 	
 CONSTRAINT pk_tipo_periodicidade_entrega PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega),
 CONSTRAINT unq_tipo_periodicidade_entrega UNIQUE (tipo_periodicidade_entrega)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'tipo_periodicidade_entrega_dia')
 BEGIN
@@ -785,11 +853,11 @@ END
 CREATE TABLE Pinga.tipo_periodicidade_entrega_dia (
 idtipo_periodicidade_entrega_dia UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 dias VARCHAR(85) NOT NULL,
-dias_uteis BIT NOT NULL DEFAULT 0, -- somente será 1 se todos os dias são uteis
-dia_feriado BIT NOT NULL DEFAULT 0, -- avaliar se é para feriados que são no dia certo ou que são em dias variaveis
+dias_uteis BIT NOT NULL DEFAULT 0, -- somente ser� 1 se todos os dias s�o uteis
+dia_feriado BIT NOT NULL DEFAULT 0, -- avaliar se � para feriados que s�o no dia certo ou que s�o em dias variaveis
 
 CONSTRAINT pk_tipo_periodicidade_entrega_dia PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega_dia)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'periodicidade_entrega')
 BEGIN
@@ -805,7 +873,7 @@ cliente_idcliente UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_periodicidade_entrega PRIMARY KEY NONCLUSTERED (idperiodicidade_entrega),
 FOREIGN KEY (tipo_periodicidade_entrega_idtipo_periodicidade_entrega) REFERENCES Pinga.tipo_periodicidade_entrega(idtipo_periodicidade_entrega),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'periodicidade_has_produto')
 BEGIN
@@ -820,7 +888,7 @@ produto_idproduto UNIQUEIDENTIFIER NOT NULL,
 CONSTRAINT pk_periodicidade_has_produto PRIMARY KEY NONCLUSTERED (idperiodicidade_has_produto),
 FOREIGN KEY (periodicidade_entrega_idperiodicidade_entrega) REFERENCES Pinga.periodicidade_entrega(idperiodicidade_entrega),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto),
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato')
 BEGIN
@@ -843,7 +911,7 @@ CONSTRAINT pk_contrato PRIMARY KEY NONCLUSTERED (idcontrato),
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 FOREIGN KEY (periodicidade_entrega_idperiodicidade_entrega) REFERENCES Pinga.periodicidade_entrega(idperiodicidade_entrega),
 FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'contrato_has_produto')
 BEGIN
@@ -860,7 +928,7 @@ modified SMALLDATETIME NULL,
 CONSTRAINT pk_contrato_has_produto PRIMARY KEY NONCLUSTERED (idcontrato_has_produto),
 FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto),
-);
+) ON Pinga_FileGroup;
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'testemunha')
 BEGIN
@@ -877,7 +945,19 @@ contrato_idcontrato UNIQUEIDENTIFIER NOT NULL,
 
 CONSTRAINT pk_testemunha PRIMARY KEY NONCLUSTERED (idtestemunha),
 FOREIGN KEY (contrato_idcontrato) REFERENCES Pinga.contrato(idcontrato)
-);
+) ON Pinga_FileGroup;
+
+CREATE TABLE adm.parceiro_has_login (
+idparceiro_has_login UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+parceiro_idparceiro UNIQUEIDENTIFIER NOT NULL,
+login_idlogin UNIQUEIDENTIFIER NOT NULL,
+created DATETIME NOT NULL DEFAULT GETDATE(),
+modified DATETIME NULL,
+
+CONSTRAINT pk_parceiro_has_login PRIMARY KEY NONCLUSTERED (idparceiro_has_login),
+FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
+FOREIGN KEY (login_idlogin) REFERENCES adm.login(idlogin)
+) ON Adm_FileGroup;
 
 --ALTER TABLE PingaDB.Pinga.visita ALTER COLUMN endereco UNIQUEIDENTIFIER NULL;
 
@@ -889,8 +969,8 @@ END
 
 CREATE TABLE adm.log_erros (
 idlog_erros UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-usuario VARCHAR(30) NOT NULL DEFAULT SYSTEM_USER,
-erro VARCHAR(100) NOT NULL,
+usuario VARCHAR(50) NOT NULL DEFAULT SYSTEM_USER,
+erro VARCHAR(200) NOT NULL,
 horario SMALLDATETIME NOT NULL DEFAULT GETDATE(),
 procedimento VARCHAR(80) NOT NULL,
 possivel_causa VARCHAR(80) NULL,
@@ -898,7 +978,7 @@ error_comes_from VARCHAR(20) NOT NULL, --database, application
 
 CONSTRAINT pk_log_erros PRIMARY KEY NONCLUSTERED (idlog_erros),
 CONSTRAINT chk_error_from CHECK (error_comes_from IN ('database','application'))
-);
+) ON Adm_FileGroup;
 GO
 
 CREATE OR ALTER PROCEDURE adm.usp_errorLog
@@ -958,7 +1038,7 @@ BEGIN
         THROW 51921, 'Falha ao realizar o insert do tipo continente.', 1;
     END CATCH
 END;
-
+GO
 
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoPais
 	@pais VARCHAR(40),
@@ -985,7 +1065,7 @@ BEGIN
 												   N'::L ', ERROR_LINE()));
 		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
 		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
-		THROW 51921, 'Falha ao realizar o insert do país.', 1;
+		THROW 51921, 'Falha ao realizar o insert do pa�s.', 1;
 	END CATCH
 END;
 
@@ -1759,7 +1839,345 @@ END;
 GO
 /* USP's INSERIR CONTRATO */
 
-/* TRIGGER's PARA VALIDAÇÃO */
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoLitragem
+    @tipoLitragem VARCHAR(35)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.tipo_litragem (tipo_litragem)
+            VALUES (@tipoLitragem);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do tipo litragem apenas.', 1;
+    END CATCH
+END;
+GO 
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoProdutoQuantidade
+    @quantidadeMinima INT,
+	@quantidadeMaxima INT,
+	@quantidadeRecomendaEstoque INT,
+	@quantidadeSolicitarCompra INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.produto_quantidade (quantidade_minima, quantidade_maxima, quantidade_recomenda_estoque, quantidade_solicitar_compra, created)
+            VALUES (@quantidadeMinima, @quantidadeMaxima, @quantidadeRecomendaEstoque, @quantidadeSolicitarCompra, GETDATE());
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do produto quantidade apenas.', 1;
+    END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoCusto
+    @tipoCusto VARCHAR(60)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.tipo_custo (tipo_custo)
+            VALUES (@tipoCusto);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert do tipo custo apenas.', 1;
+    END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaFormaPagamento
+    @formaPagamento VARCHAR(45)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.forma_pagamento(forma_pagamento, created)
+            VALUES (@formaPagamento, GETDATE());
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da forma de pagamento apenas.', 1;
+    END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaEntrada
+    @data DATE, 
+	@litragem INT,
+	@tipoLitragemIdtipoLitragem UNIQUEIDENTIFIER,
+	@custoIdcusto UNIQUEIDENTIFIER,
+	@parcelamentoIdparcelamento UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET ANSI_NULLS ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+            INSERT INTO Pinga.entrada (data, litragem, tipo_litragem_idtipo_litragem, custo_idcusto, parcelamento_idparcelamento)
+            VALUES (@data, @litragem, @tipoLitragemIdtipoLitragem, @custoIdcusto, @parcelamentoIdparcelamento);
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+                                                   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+                                                   N'::L ', ERROR_LINE()));
+        DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+        EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+        THROW 51921, 'Falha ao realizar o insert da entrada apenas.', 1;
+    END CATCH
+END;
+GO
+
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaSaida
+	@data SMALLDATETIME,
+	@parceiroIdparceiro UNIQUEIDENTIFIER,
+	@clienteIdcliente UNIQUEIDENTIFIER,
+	@faseIdfase UNIQUEIDENTIFIER,
+	@formaPagamentoIdformaPagamento UNIQUEIDENTIFIER,
+	@parcelamentoIdparcelamento UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET NOCOUNT ON;
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.saida (data, parceiro_idparceiro, cliente_idcliente, fase_idfase, forma_pagamento_idforma_pagamento, parcelamento_idparcelamento, created)
+			VALUES (@data, @parceiroIdparceiro, @clienteIdcliente, @faseIdfase, @formaPagamentoIdformaPagamento, @parcelamentoIdparcelamento, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert da saida.', 1;
+	END CATCH
+END;
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaSaidaRetorno
+	@data SMALLDATETIME,
+	@parceiroIdparceiro UNIQUEIDENTIFIER,
+	@clienteIdcliente UNIQUEIDENTIFIER,
+	@faseIdfase UNIQUEIDENTIFIER,
+	@formaPagamentoIdformaPagamento UNIQUEIDENTIFIER,
+	@parcelamentoIdparcelamento UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET NOCOUNT ON;
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.saida (data, parceiro_idparceiro, cliente_idcliente, fase_idfase, forma_pagamento_idforma_pagamento, parcelamento_idparcelamento, created)
+			OUTPUT INSERTED.idsaida
+			VALUES (@data, @parceiroIdparceiro, @clienteIdcliente, @faseIdfase, @formaPagamentoIdformaPagamento, @parcelamentoIdparcelamento, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert da saida com retorno.', 1;
+	END CATCH
+END;
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoItenSaida
+	@saidaIdsaida UNIQUEIDENTIFIER,
+	@produtoIdproduto UNIQUEIDENTIFIER,
+	@quantidade INT,
+	@valorSaida DECIMAL(9,2)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		SET NOCOUNT ON;
+		BEGIN TRANSACTION
+			INSERT INTO Pinga.itens_saida (saida_idsaida, produto_idproduto, quantidade, valor_saida)
+			VALUES (@saidaIdsaida, @produtoIdproduto, @quantidade, @valorSaida);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+PRINT @err;
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert do item saida.', 1;
+	END CATCH
+END;
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTipoTelefone
+	@tipoTelefone VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.tipo_telefone (tipo_telefone)
+			VALUES (@tipoTelefone);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert do tipo telefone.', 1;
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoTelefone
+	@telefone VARCHAR(11),
+	@cidadeDDD UNIQUEIDENTIFIER,
+	@tipoTelefoneIdtipoTelefone UNIQUEIDENTIFIER,
+	@operadoraIdoperadora UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.telefone (telefone, cidade_ddd, tipo_telefone_idtipo_telefone, operadora_idoperadora, created)
+			VALUES (@telefone, @cidadeDDD, @tipoTelefoneIdtipoTelefone, @operadoraIdoperadora, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert do telefone apenas.', 1;
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoItem
+	@item VARCHAR(20),
+	@produtoIdproduto UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.item (item, produto_idproduto, created)
+			VALUES (@item, @produtoIdproduto, GETDATE());
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert do item apenas.', 1;
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaEntradaHasItem
+	@entradaIdentrada UNIQUEIDENTIFIER,
+	@itemIditem UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.entrada_has_item (entrada_identrada, item_iditem)
+			VALUES (@entradaIdentrada, @itemIditem);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert da entrada has item.', 1;
+	END CATCH
+END;
+GO
+
+CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovaSaidaHasItem
+	@saidaIdsaida UNIQUEIDENTIFIER,
+	@itemIditem UNIQUEIDENTIFIER
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+			INSERT INTO Pinga.saida_has_item (saida_idsaida, item_iditem)
+			VALUES (@saidaIdsaida, @itemIditem);
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		DECLARE @err VARCHAR(250) = (SELECT CONCAT(N'ErrorNumber: ', ERROR_NUMBER(),
+												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
+												   N'::L ', ERROR_LINE()));
+		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
+		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
+		THROW 51921, 'Falha ao realizar o insert da saida has item.', 1;
+	END CATCH
+END;
+GO
+
+/* TRIGGER's PARA VALIDA��O */
 CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
 ON Pinga.tipo_continente WITH ENCRYPTION
 AFTER INSERT, UPDATE
@@ -1773,11 +2191,11 @@ AS
 												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
 												   N'::L ', ERROR_LINE()));
 		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER TRIGGER: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
-		EXECUTE adm.usp_errorLog @err, @proc, 'Regra de Negócio', 'database';
+		EXECUTE adm.usp_errorLog @err, @proc, 'Regra de Neg�cio', 'database';
 		THROW 61921, 'Mais de um tipo continente ativo, somente 1 pode ser ativo.', 1;
 	END
 GO
-/* TRIGGER's PARA VALIDAÇÃO */
+/* TRIGGER's PARA VALIDA��O */
 
 /* USP's INSERIR CUSTO */
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoCusto
@@ -2044,10 +2462,10 @@ BEGIN
 	HAVING COUNT(v.[data]) > 0;*/
 
 	-- Identificar o melhor dia para retorno no cliente
-	-- podemos marcar no segundo melhor dia (2º dia mais visitado)
+	-- podemos marcar no segundo melhor dia (2� dia mais visitado)
 	-- Identificar horario disponivel na agenda do parceiro
 	
-	-- Implementações para a v2.0
+	-- Implementa��es para a v2.0
 
 	DECLARE @temp VARCHAR(50) = CONCAT(@proxDiaUtil, ' ', DATEPART(HOUR, @dataAgendada), ':', DATEPART(MINUTE, @dataAgendada));
 	SET @novaVisita = (CONVERT(SMALLDATETIME, @temp));
@@ -2105,6 +2523,7 @@ CONSTRAINT pk_excecoes PRIMARY KEY NONCLUSTERED (idexcecoes)
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'agenda')
 BEGIN
+	ALTER TABLE Pinga.agenda SET (SYSTEM_VERSIONING = OFF);
 	DROP TABLE Pinga.agenda;
 END
 
@@ -2142,8 +2561,8 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		-- Este dia é uma exceção, devemos encontrar o prox dia util
-		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN); -- adicionamos mais um dia e verificados se é fds
+		-- Este dia � uma exce��o, devemos encontrar o prox dia util
+		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN); -- adicionamos mais um dia e verificados se � fds
 		SET @WDAY = DATEPART(WEEKDAY, @DATERETURN);
 		SET @DATERETURN = (
 			SELECT CASE
@@ -2240,14 +2659,14 @@ SELECT * FROM Pinga.uvw_VisualizarInfoCliente WITH (READUNCOMMITTED, NOLOCK)
 SELECT * FROM Pinga.uvw_VisualizarInfoCliente
 
 
-DECLARE @backup_location VARCHAR(100) = CONCAT(N'C:\Users\IHMHR\Documents\SQL Databases\Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_FULL.bak');
-DECLARE @backup_mirror_location VARCHAR(100) = CONCAT(N'C:\Users\IHMHR\Documents\SQL Databases\Backup\Mirror Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_FULL_MIRROR.bak');
+DECLARE @backup_location VARCHAR(100) = CONCAT(N'C:\Users\guii-martinelli\Documents\SQL Databases\Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_FULL.bak');
+DECLARE @backup_mirror_location VARCHAR(100) = CONCAT(N'C:\Users\guii-martinelli\Documents\SQL Databases\Backup\Mirror Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_FULL_MIRROR.bak');
 
 BACKUP DATABASE pingaDB
 	TO DISK = @backup_location
-	--MIRROR TO DISK = @backup_mirror_location --O espelhamento do backup não está disponível nesta edição do SQL Server. Consulte a documentação online para obter mais detalhes sobre o suporte de recursos em diferentes edições do SQL Server.
-	WITH NOINIT /*NÃO SERÁ SOBREESCRITO O ARQUIVO DE BACKUP*/,
-		 SKIP /*NÃO VERIFICAR A VALIDADE DO BACKUP*/,
+	--MIRROR TO DISK = @backup_mirror_location --O espelhamento do backup n�o est� dispon�vel nesta edi��o do SQL Server. Consulte a documenta��o online para obter mais detalhes sobre o suporte de recursos em diferentes edi��es do SQL Server.
+	WITH NOINIT /*N�O SER� SOBREESCRITO O ARQUIVO DE BACKUP*/,
+		 SKIP /*N�O VERIFICAR A VALIDADE DO BACKUP*/,
 		 CHECKSUM,
 		 STOP_ON_ERROR,
 		 DESCRIPTION = N'FULL BACKUP DA BASE DE DADOS pingaDB',
@@ -2256,12 +2675,12 @@ BACKUP DATABASE pingaDB
 			(
 				ALGORITHM = AES_256,
 				SERVER CERTIFICATE = BackupEncryptCert
-			),*/ --BACKUP DATABASE WITH ENCRYPTION não é suportado em Express Edition (64-bit).
+			),*/ --BACKUP DATABASE WITH ENCRYPTION n�o � suportado em Express Edition (64-bit).
 		 STATS = 1,
 		 NOFORMAT;
 GO
 
-DECLARE @backup_log_location VARCHAR(100) = CONCAT(N'C:\Users\IHMHR\Documents\SQL Databases\Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_LOG.bak');
+DECLARE @backup_log_location VARCHAR(100) = CONCAT(N'C:\Users\guii-martinelli\Documents\SQL Databases\Backup\Backup_', REPLACE(CONVERT(CHAR(10), GETDATE(), 103), '/', ''), N'_LOG.bak');
 
 BACKUP LOG pingaDB
 	TO DISK = @backup_log_location
@@ -2269,14 +2688,14 @@ BACKUP LOG pingaDB
 		 SKIP,
 		 CHECKSUM,
 		 STOP_ON_ERROR,
-		 DESCRIPTION = N'FULL BACKUP DA BASE DE DADOS pingaDB',
+		 DESCRIPTION = N'LOG BACKUP DA BASE DE DADOS pingaDB',
 		 NAME = N'Backup pingaDB',
 		 STATS = 1,
 		 NOFORMAT;
 GO
 
 RESTORE DATABASE pingaDB
-FROM DISK = N'C:\Users\IHMHR\Documents\SQL Databases\Backup\Backup_10012017_FULL.bak'
+FROM DISK = N'C:\Users\guii-martinelli\Documents\SQL Databases\Backup\Backup_10012017_FULL.bak'
 WITH RECOVERY,
 	 REPLACE,
 	 CHECKSUM, 
