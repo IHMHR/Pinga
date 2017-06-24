@@ -12,21 +12,10 @@ BEGIN
 END
 
 CREATE DATABASE pingaDB CONTAINMENT = PARTIAL
-<<<<<<< HEAD
-ON (NAME = 'pingaDB', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 2MB )
-LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 1MB)
-COLLATE Latin1_General_CS_AS;
-GO
-/*
-ON (NAME = 'pingaDB', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 2MB )
-LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 1MB))
-*/
-=======
 ON (NAME = 'pingaDB', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.mdf', SIZE = 10MB, MAXSIZE = 25MB, FILEGROWTH = 2MB )
 LOG ON (NAME = 'pingaDB_LOG', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB.ldf', SIZE = 5MB, MAXSIZE = 10MB, FILEGROWTH = 1MB)
 COLLATE Latin1_General_CS_AS;
 GO
->>>>>>> VisualStudioSolution
 
 ALTER DATABASE pingaDB SET OFFLINE
 GO
@@ -89,15 +78,9 @@ ALTER DATABASE pingaDB ADD FILEGROUP Pinga_FileGroup
 GO
 
 ALTER DATABASE pingaDB ADD FILE 
-<<<<<<< HEAD
-(NAME = 'pingaDB_File1', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File1.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
-(NAME = 'pingaDB_File2', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File2.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
-(NAME = 'pingaDB_File3', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File3.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB )
-=======
 (NAME = 'pingaDB_File1', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File1.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
 (NAME = 'pingaDB_File2', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File2.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB ),
 (NAME = 'pingaDB_File3', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File3.ndf', SIZE = 100MB, MAXSIZE = 500MB, FILEGROWTH = 20MB )
->>>>>>> VisualStudioSolution
 TO FILEGROUP Pinga_FileGroup
 GO
 
@@ -105,35 +88,21 @@ ALTER DATABASE pingaDB ADD FILEGROUP Adm_FileGroup
 GO
 
 ALTER DATABASE pingaDB ADD FILE
-<<<<<<< HEAD
-(NAME = 'pingaDB_File4', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File4.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB),
-(NAME = 'pingaDB_File5', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File5.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB)
-=======
 (NAME = 'pingaDB_File4', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File4.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB),
 (NAME = 'pingaDB_File5', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File5.ndf', SIZE = 75MB, MAXSIZE = 400MB, FILEGROWTH = 15MB)
->>>>>>> VisualStudioSolution
 TO FILEGROUP Adm_FileGroup
 
 ALTER DATABASE pingaDB ADD FILEGROUP Legado_FileGroup
 GO
 
 ALTER DATABASE pingaDB ADD FILE
-<<<<<<< HEAD
-(NAME = 'pingaDB_File6', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB_File6.ndf', SIZE = 50MB, MAXSIZE = 150MB, FILEGROWTH = 10MB)
-=======
 (NAME = 'pingaDB_File6', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB_File6.ndf', SIZE = 50MB, MAXSIZE = 150MB, FILEGROWTH = 10MB)
->>>>>>> VisualStudioSolution
 TO FILEGROUP Legado_FileGroup
 GO
 
 ALTER DATABASE pingaDB ADD LOG FILE
-<<<<<<< HEAD
-(NAME = 'pingaDB_LOG1', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB1.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB),
-(NAME = 'pingaDB_LOG2', FILENAME = 'C:\Users\guii-martinelli\Documents\SQL Databases\pingaDB2.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB)
-=======
 (NAME = 'pingaDB_LOG1', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB1.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB),
 (NAME = 'pingaDB_LOG2', FILENAME = 'C:\Users\IHMHR\Documents\SQL Databases\pingaDB2.ldf', SIZE = 150MB, MAXSIZE = 600MB, FILEGROWTH = 25MB)
->>>>>>> VisualStudioSolution
 GO
 
 ALTER DATABASE pingaDB MODIFY FILEGROUP Pinga_FileGroup DEFAULT
@@ -156,11 +125,7 @@ END
 CREATE TABLE Pinga.tipo_continente (
 idtipo_continente UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 tipo_continente VARCHAR(20) NOT NULL,
-<<<<<<< HEAD
-ativo BIT NOT NULL DEFAULT 0, -- Validar na aplicaï¿½ï¿½o que somente 1 possa spingaer verdadeiro
-=======
 ativo BIT NOT NULL DEFAULT 0, -- Validar na aplicação que somente 1 possa spingaer verdadeiro
->>>>>>> VisualStudioSolution
 
 CONSTRAINT pk_tipo_continente PRIMARY KEY NONCLUSTERED (idtipo_continente)
 ) ON Pinga_FileGroup;
@@ -403,35 +368,6 @@ modified SMALLDATETIME NULL,
 
 CONSTRAINT pk_parcelamento PRIMARY KEY NONCLUSTERED (idparcelamento)
 ) ON Pinga_FileGroup;
-<<<<<<< HEAD
-=======
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
-BEGIN
-	ALTER TABLE Pinga.entrada SET (SYSTEM_VERSIONING = OFF);
-    DROP TABLE Pinga.entrada;
-END
-
-CREATE TABLE Pinga.entrada (
-identrada UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-data DATE NOT NULL DEFAULT GETDATE(),
-custo_idcusto UNIQUEIDENTIFIER NOT NULL,
-fornecedor_idfornecedor UNIQUEIDENTIFIER NOT NULL,
-fase_idfase UNIQUEIDENTIFIER NOT NULL,
-forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
-desconto DECIMAL(9,2) NOT NULL DEFAULT 0.0,
-created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
-modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
-PERIOD FOR SYSTEM_TIME(created, modified),
-
-CONSTRAINT pk_entrada PRIMARY KEY NONCLUSTERED (identrada),
-FOREIGN KEY (custo_idcusto) REFERENCES Pinga.custo(idcusto),
-FOREIGN KEY (fornecedor_idfornecedor) REFERENCES Pinga.fornecedor(idfornecedor),
-FOREIGN KEY (fase_idfase) REFERENCES Pinga.fase(idfase),
-FOREIGN KEY (forma_pagamento_idforma_pagamento) REFERENCES Pinga.forma_pagamento(idforma_pagamento)
-) ON Pinga_FileGroup
-WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = Legado.entrada));
->>>>>>> VisualStudioSolution
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada_has_item')
 BEGIN
@@ -495,7 +431,6 @@ CONSTRAINT pk_forma_pagamento PRIMARY KEY NONCLUSTERED (idforma_pagamento),
 CONSTRAINT unq_forma_pagamento UNIQUE (forma_pagamento),
 FOREIGN KEY (parcelamento_idparcelamento) REFERENCES Pinga.parcelamento(idparcelamento)
 ) ON Pinga_FileGroup;
-<<<<<<< HEAD
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada')
 BEGIN
@@ -561,39 +496,6 @@ FOREIGN KEY (tipo_litragem_idtipo_litragem) REFERENCES Pinga.tipo_litragem(idtip
 FOREIGN KEY (produto_quantidade_idproduto_quantidade) REFERENCES Pinga.produto_quantidade(idproduto_quantidade),
 CONSTRAINT unq_produto UNIQUE (produto)
 ) ON Pinga_FileGroup;
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'item')
-BEGIN
-	DROP TABLE Pinga.item;
-END
-
-CREATE TABLE Pinga.item (
-iditem UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-item VARCHAR(20) NOT NULL,
-produto_idproduto UNIQUEIDENTIFIER NOT NULL,
-created DATETIME NOT NULL DEFAULT GETDATE(),
-modified DATETIME NULL,
-
-CONSTRAINT pk_item PRIMARY KEY NONCLUSTERED (iditem),
-FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
-) ON Pinga_FileGroup;
-
-IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'entrada_has_item')
-BEGIN
-	DROP TABLE Pinga.entrada_has_item;
-END
-
-CREATE TABLE Pinga.entrada_has_item (
-identrada_has_item UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
-entrada_identrada UNIQUEIDENTIFIER NOT NULL,
-item_iditem UNIQUEIDENTIFIER NOT NULL,
-
-CONSTRAINT pk_entrada_has_produto PRIMARY KEY NONCLUSTERED (identrada_has_item),
-FOREIGN KEY (entrada_identrada) REFERENCES Pinga.entrada(identrada),
-FOREIGN KEY (item_iditem) REFERENCES Pinga.item(iditem)
-) ON Pinga_FileGroup;
-=======
->>>>>>> VisualStudioSolution
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'email_localidade')
 BEGIN
@@ -682,8 +584,6 @@ CONSTRAINT pk_informacoes_cliente PRIMARY KEY NONCLUSTERED (idinformacoes_client
 FOREIGN KEY (cliente_idcliente) REFERENCES Pinga.cliente(idcliente),
 CONSTRAINT chk_tipo_cliente CHECK (tipo_cliente IN ('PF', 'PJ'))
 ) ON Pinga_FileGroup;
-<<<<<<< HEAD
-=======
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'produto_quantidade')
 BEGIN
@@ -739,7 +639,6 @@ modified DATETIME NULL,
 CONSTRAINT pk_item PRIMARY KEY NONCLUSTERED (iditem),
 FOREIGN KEY (produto_idproduto) REFERENCES Pinga.produto(idproduto)
 ) ON Pinga_FileGroup;
->>>>>>> VisualStudioSolution
 
 IF EXISTS(SELECT 1 FROM sys.tables WHERE name = 'parceiro')
 BEGIN
@@ -776,10 +675,7 @@ forma_pagamento_idforma_pagamento UNIQUEIDENTIFIER NOT NULL,
 desconto DECIMAL(9,2) NOT NULL DEFAULT 0.0,
 created DATETIME2 GENERATED ALWAYS AS ROW START NOT NULL,
 modified DATETIME2 GENERATED ALWAYS AS ROW END NOT NULL,
-<<<<<<< HEAD
 PERIOD FOR SYSTEM_TIME(created, modified),
-=======
->>>>>>> VisualStudioSolution
 
 CONSTRAINT pk_saida PRIMARY KEY NONCLUSTERED (idsaida),
 FOREIGN KEY (parceiro_idparceiro) REFERENCES Pinga.parceiro(idparceiro),
@@ -992,13 +888,8 @@ END
 CREATE TABLE Pinga.tipo_periodicidade_entrega_dia (
 idtipo_periodicidade_entrega_dia UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL DEFAULT NEWID(),
 dias VARCHAR(85) NOT NULL,
-<<<<<<< HEAD
-dias_uteis BIT NOT NULL DEFAULT 0, -- somente serï¿½ 1 se todos os dias sï¿½o uteis
-dia_feriado BIT NOT NULL DEFAULT 0, -- avaliar se ï¿½ para feriados que sï¿½o no dia certo ou que sï¿½o em dias variaveis
-=======
 dias_uteis BIT NOT NULL DEFAULT 0, -- somente será 1 se todos os dias são uteis
 dia_feriado BIT NOT NULL DEFAULT 0, -- avaliar se é para feriados que são no dia certo ou que são em dias variaveis
->>>>>>> VisualStudioSolution
 
 CONSTRAINT pk_tipo_periodicidade_entrega_dia PRIMARY KEY NONCLUSTERED (idtipo_periodicidade_entrega_dia)
 ) ON Pinga_FileGroup;
@@ -1209,11 +1100,7 @@ BEGIN
 												   N'::L ', ERROR_LINE()));
 		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER PROCEDURE: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
 		EXECUTE adm.usp_errorLog @err, @proc, 'Desconhecida', 'database';
-<<<<<<< HEAD
-		THROW 51921, 'Falha ao realizar o insert do paï¿½s.', 1;
-=======
 		THROW 51921, 'Falha ao realizar o insert do país.', 1;
->>>>>>> VisualStudioSolution
 	END CATCH
 END;
 
@@ -2325,11 +2212,8 @@ BEGIN
 END;
 GO
 
-<<<<<<< HEAD
-/* TRIGGER's PARA VALIDAï¿½ï¿½O */
-=======
+
 /* TRIGGER's PARA VALIDAÇÃO */
->>>>>>> VisualStudioSolution
 CREATE OR ALTER TRIGGER Pinga.utr_ValidarTipoContinente
 ON Pinga.tipo_continente WITH ENCRYPTION
 AFTER INSERT, UPDATE
@@ -2343,19 +2227,12 @@ AS
 												   N' - ErrorMessage: ', CONVERT(VARCHAR(200), ERROR_MESSAGE() COLLATE Latin1_General_CS_AS),
 												   N'::L ', ERROR_LINE()));
 		DECLARE @proc VARCHAR(50) = (SELECT CONCAT(N'USER TRIGGER: ', CONVERT(VARCHAR(30), ERROR_PROCEDURE() COLLATE Latin1_General_CS_AS)));
-<<<<<<< HEAD
-		EXECUTE adm.usp_errorLog @err, @proc, 'Regra de Negï¿½cio', 'database';
-		THROW 61921, 'Mais de um tipo continente ativo, somente 1 pode ser ativo.', 1;
-	END
-GO
-/* TRIGGER's PARA VALIDAï¿½ï¿½O */
-=======
+
 		EXECUTE adm.usp_errorLog @err, @proc, 'Regra de Negócio', 'database';
 		THROW 61921, 'Mais de um tipo continente ativo, somente 1 pode ser ativo.', 1;
 	END
 GO
 /* TRIGGER's PARA VALIDAÇÃO */
->>>>>>> VisualStudioSolution
 
 /* USP's INSERIR CUSTO */
 CREATE OR ALTER PROCEDURE Pinga.usp_InserirNovoCusto
@@ -2622,17 +2499,11 @@ BEGIN
 	HAVING COUNT(v.[data]) > 0;*/
 
 	-- Identificar o melhor dia para retorno no cliente
-<<<<<<< HEAD
-	-- podemos marcar no segundo melhor dia (2ï¿½ dia mais visitado)
-	-- Identificar horario disponivel na agenda do parceiro
-	
-	-- Implementaï¿½ï¿½es para a v2.0
-=======
+
 	-- podemos marcar no segundo melhor dia (2º dia mais visitado)
 	-- Identificar horario disponivel na agenda do parceiro
 	
 	-- Implementações para a v2.0
->>>>>>> VisualStudioSolution
 
 	DECLARE @temp VARCHAR(50) = CONCAT(@proxDiaUtil, ' ', DATEPART(HOUR, @dataAgendada), ':', DATEPART(MINUTE, @dataAgendada));
 	SET @novaVisita = (CONVERT(SMALLDATETIME, @temp));
@@ -2728,13 +2599,8 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-<<<<<<< HEAD
-		-- Este dia ï¿½ uma exceï¿½ï¿½o, devemos encontrar o prox dia util
-		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN); -- adicionamos mais um dia e verificados se ï¿½ fds
-=======
 		-- Este dia é uma exceção, devemos encontrar o prox dia util
 		SET @DATERETURN = DATEADD(DAY, 1, @DATERETURN); -- adicionamos mais um dia e verificados se é fds
->>>>>>> VisualStudioSolution
 		SET @WDAY = DATEPART(WEEKDAY, @DATERETURN);
 		SET @DATERETURN = (
 			SELECT CASE
@@ -2836,15 +2702,9 @@ DECLARE @backup_mirror_location VARCHAR(100) = CONCAT(N'C:\Users\guii-martinelli
 
 BACKUP DATABASE pingaDB
 	TO DISK = @backup_location
-<<<<<<< HEAD
-	--MIRROR TO DISK = @backup_mirror_location --O espelhamento do backup nï¿½o estï¿½ disponï¿½vel nesta ediï¿½ï¿½o do SQL Server. Consulte a documentaï¿½ï¿½o online para obter mais detalhes sobre o suporte de recursos em diferentes ediï¿½ï¿½es do SQL Server.
-	WITH NOINIT /*Nï¿½O SERï¿½ SOBREESCRITO O ARQUIVO DE BACKUP*/,
-		 SKIP /*Nï¿½O VERIFICAR A VALIDADE DO BACKUP*/,
-=======
 	--MIRROR TO DISK = @backup_mirror_location --O espelhamento do backup não está disponível nesta edição do SQL Server. Consulte a documentação online para obter mais detalhes sobre o suporte de recursos em diferentes edições do SQL Server.
 	WITH NOINIT /*NÃO SERÁ SOBREESCRITO O ARQUIVO DE BACKUP*/,
 		 SKIP /*NÃO VERIFICAR A VALIDADE DO BACKUP*/,
->>>>>>> VisualStudioSolution
 		 CHECKSUM,
 		 STOP_ON_ERROR,
 		 DESCRIPTION = N'FULL BACKUP DA BASE DE DADOS pingaDB',
@@ -2853,11 +2713,7 @@ BACKUP DATABASE pingaDB
 			(
 				ALGORITHM = AES_256,
 				SERVER CERTIFICATE = BackupEncryptCert
-<<<<<<< HEAD
-			),*/ --BACKUP DATABASE WITH ENCRYPTION nï¿½o ï¿½ suportado em Express Edition (64-bit).
-=======
 			),*/ --BACKUP DATABASE WITH ENCRYPTION não é suportado em Express Edition (64-bit).
->>>>>>> VisualStudioSolution
 		 STATS = 1,
 		 NOFORMAT;
 GO
