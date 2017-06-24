@@ -23,34 +23,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(pais.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o pais.");
-            }
-            else if (string.IsNullOrEmpty(idioma.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o idioma.");
-            }
-            else if (string.IsNullOrEmpty(colacao.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a colação.");
-            }
-            else if (string.IsNullOrEmpty(sigla.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a sigla.");
-            }
-            else if (string.IsNullOrEmpty(fusoHorario.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o fuso horário.");
-            }
-            else if (string.IsNullOrEmpty(DDI.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o contDDIinente.");
-            }
-            else if (continenteIdcontinete == null)
-            {
-                throw new ArgumentNullException("Por favor informe o tipo continente.");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -81,38 +54,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if(idpais == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do pais.");
-            }
-            else if (string.IsNullOrEmpty(pais.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o pais.");
-            }
-            else if (string.IsNullOrEmpty(idioma.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o idioma.");
-            }
-            else if (string.IsNullOrEmpty(colacao.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a colação.");
-            }
-            else if (string.IsNullOrEmpty(sigla.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe a sigla.");
-            }
-            else if (string.IsNullOrEmpty(fusoHorario.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o fuso horário.");
-            }
-            else if (string.IsNullOrEmpty(DDI.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o contDDIinente.");
-            }
-            else if (continenteIdcontinete == null)
-            {
-                throw new ArgumentNullException("Por favor informe o tipo continente.");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -144,10 +86,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idpais == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do pais.");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -208,6 +147,94 @@ namespace BLL.Classes
                 throw new Exception(e.Message);
             }
             return retorno;
+        }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+                if (string.IsNullOrEmpty(pais.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o pais.");
+                }
+                else if (string.IsNullOrEmpty(idioma.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o idioma.");
+                }
+                else if (string.IsNullOrEmpty(colacao.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe a colação.");
+                }
+                else if (string.IsNullOrEmpty(sigla.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe a sigla.");
+                }
+                else if (string.IsNullOrEmpty(fusoHorario.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o fuso horário.");
+                }
+                else if (string.IsNullOrEmpty(DDI.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o contDDIinente.");
+                }
+                else if (continenteIdcontinete.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo continente.");
+                }
+            }
+            else if (crud == CRUD.update)
+            {
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
+            }
+            else if (crud == CRUD.delete)
+            {
+                if (idpais.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do pais.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+
+        public ClsPais BuscaPeloId(Guid rowGuidCol)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT p.idpais, p.pais, p.idioma, p.colacao, p.DDI, p.sigla, p.fuso_horario, c.idcontinente, c.continente, tc.idtipo_continente, tc.tipo_continente, tc.ativo FROM Pinga.pais p INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE rowguidcol = @id ORDER BY p.pais ASC, tc.ativo DESC;";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idpais = Guid.Parse(read["idpais"].ToString());
+                    pais = read["pais"].ToString();
+                    idioma = read["idioma"].ToString();
+                    colacao = read["colacao"].ToString();
+                    DDI = read["DDI"].ToString();
+                    sigla = read["sigla"].ToString();
+                    fusoHorario = read["fuso_horario"].ToString();
+                    continenteIdcontinete.idcontinente = Guid.Parse(read["idcontinente"].ToString());
+                    continenteIdcontinete.continente = read["continente"].ToString();
+                    continenteIdcontinete.tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(read["idtipo_continente"].ToString());
+                    continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    continenteIdcontinete.tipoContinenteIdtipoContinente.ativo = (bool)read["ativo"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

@@ -7,15 +7,15 @@ namespace BLL.Classes
 {
     public sealed class ClsTipoLogradouro : IGeneric<ClsTipoLogradouro>
     {
+        #region Atributos
         public Guid idtipoLogradouro { get; set; }
         public string tipoLogradouro { get; set; }
+        #endregion
 
+        #region CRUD Functions
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(tipoLogradouro))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Logradouro");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -40,14 +40,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoLogradouro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Logradouro");
-            }
-            else if (string.IsNullOrEmpty(tipoLogradouro))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Logradouro");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -73,10 +66,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoLogradouro == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Logradouro");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -130,5 +120,60 @@ namespace BLL.Classes
 
             return retorno;
         }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+                if (string.IsNullOrEmpty(tipoLogradouro))
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Logradouro");
+                }
+            }
+            else if (crud == CRUD.update)
+            {
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
+            }
+            else if (crud == CRUD.delete)
+            {
+                if (idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Tipo Logradouro");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+
+        public ClsTipoLogradouro BuscaPeloId(Guid rowGuidCol)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idtipo_logradouro, tipo_logradouro FROM Pinga.tipo_logradouro WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idtipoLogradouro = Guid.Parse(read["idtipo_logradouro"].ToString());
+                    tipoLogradouro = read["tipo_logradouro"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
+        }
+        #endregion
     }
 }

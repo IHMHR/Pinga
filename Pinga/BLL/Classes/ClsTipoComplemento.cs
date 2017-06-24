@@ -7,15 +7,15 @@ namespace BLL.Classes
 {
     public sealed class ClsTipoComplemento : IGeneric<ClsTipoComplemento>
     {
+        #region Atributos
         public Guid idtipoComplemento { get; set; }
         public string tipoComplemento { get; set; }
+        #endregion
 
+        #region CRUD Functions
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(tipoComplemento))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Complemento");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -40,14 +40,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idtipoComplemento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Complemento");
-            }
-            else if (string.IsNullOrEmpty(tipoComplemento))
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Complemento");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -73,10 +66,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idtipoComplemento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID do Tipo Complemento");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -130,5 +120,60 @@ namespace BLL.Classes
 
             return retorno;
         }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+                if (string.IsNullOrEmpty(tipoComplemento))
+                {
+                    throw new ArgumentNullException("Por favor informe o Tipo Complemento");
+                }
+            }
+            else if (crud == CRUD.update)
+            {
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
+            }
+            else if (crud == CRUD.delete)
+            {
+                if (idtipoComplemento.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do Tipo Complemento");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+
+        public ClsTipoComplemento BuscaPeloId(Guid rowGuidCol)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idtipo_complemento, tipo_complemento FROM Pinga.tipo_complemento WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idtipoComplemento = Guid.Parse(read["idtipo_complemento"].ToString());
+                    tipoComplemento = read["tipo_complemento"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
+        }
+        #endregion
     }
 }

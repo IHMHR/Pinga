@@ -20,22 +20,7 @@ namespace BLL.Classes
 
         public void Inserir()
         {
-            if (string.IsNullOrEmpty(cidade))
-            {
-                throw new ArgumentNullException("Por favor informe a cidade");
-            }
-            else if (string.IsNullOrEmpty(DDD))
-            {
-                throw new ArgumentNullException("Por favor informe o DDD");
-            }
-            else if (capital != true && capital != false)
-            {
-                throw new ArgumentNullException("Por favor informe se é capital");
-            }
-            else if (estadoIdestado == null)
-            {
-                throw new ArgumentNullException("Por favor informe o estado");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -63,26 +48,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (idcidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID da cidade");
-            }
-            else if (string.IsNullOrEmpty(cidade))
-            {
-                throw new ArgumentNullException("Por favor informe a cidade");
-            }
-            else if (string.IsNullOrEmpty(DDD))
-            {
-                throw new ArgumentNullException("Por favor informe o DDD");
-            }
-            else if (capital != true && capital != false)
-            {
-                throw new ArgumentNullException("Por favor informe se é capital");
-            }
-            else if (estadoIdestado == null)
-            {
-                throw new ArgumentNullException("Por favor informe o estado");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -111,10 +77,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (idcidade == null)
-            {
-                throw new ArgumentNullException("Por favor informe o ID da cidade");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -179,6 +142,86 @@ namespace BLL.Classes
                 throw new Exception(e.Message);
             }
             return retorno;
+        }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+                if (string.IsNullOrEmpty(cidade))
+                {
+                    throw new ArgumentNullException("Por favor informe a cidade");
+                }
+                else if (string.IsNullOrEmpty(DDD))
+                {
+                    throw new ArgumentNullException("Por favor informe o DDD");
+                }
+                else if (capital != true && capital != false)
+                {
+                    throw new ArgumentNullException("Por favor informe se é capital");
+                }
+                else if (estadoIdestado.idestado.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o estado");
+                }
+            }
+            else if (crud == CRUD.update)
+            {
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
+            }
+            else if (crud == CRUD.delete)
+            {
+                if (idcidade.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do bairro");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+
+        public ClsCidade BuscaPeloId(Guid rowGuidCol)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT ci.idcidade, ci.cidade, ci.DDD, ci.capital, e.idestado, e.estado, e.uf, e.capital AS capitalEstado, p.idpais, p.pais, p.idioma, p.DDI, p.sigla, p.fuso_horario, c.continente, tc.tipo_continente FROM Pinga.cidade ci INNER JOIN Pinga.estado e ON ci.estado_idestado = e.idestado INNER JOIN Pinga.pais p ON e.pais_idpais = p.idpais INNER JOIN Pinga.continente c ON p.continente_idcontinente = c.idcontinente INNER JOIN Pinga.tipo_continente tc ON c.tipo_continente_idtipo_continente = tc.idtipo_continente WHERE rowguicol = @id";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idcidade = Guid.Parse(read["idcidade"].ToString());
+                    cidade = read["cidade"].ToString();
+                    DDD = read["DDD"].ToString();
+                    capital = (bool)read["capital"];
+                    estadoIdestado.idestado = Guid.Parse(read["idestado"].ToString());
+                    estadoIdestado.estado = read["estado"].ToString();
+                    estadoIdestado.uf = read["uf"].ToString();
+                    estadoIdestado.capital = (bool)read["capitalEstado"];
+                    estadoIdestado.paisIdpais.idpais = Guid.Parse(read["idpais"].ToString());
+                    estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                    estadoIdestado.paisIdpais.idioma = read["idioma"].ToString();
+                    estadoIdestado.paisIdpais.DDI = read["DDI"].ToString();
+                    estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
+                    estadoIdestado.paisIdpais.fusoHorario = read["fuso_horario"].ToString();
+                    estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
     }
 }

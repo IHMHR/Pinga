@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    interface IGeneric<T>
+    public interface IGeneric<T>
     {
         void Inserir();
 
@@ -11,5 +12,16 @@ namespace BLL.Classes
         void Apagar();
 
         List<T> Visualizar();
+
+        T BuscaPeloId(Guid rowGuidCol);
+
+        void ValidarClasse(CRUD crud);
+    }
+
+    public enum CRUD
+    {
+        insert,
+        delete,
+        update
     }
 }

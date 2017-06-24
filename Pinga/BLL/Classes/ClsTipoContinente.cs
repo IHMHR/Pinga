@@ -16,10 +16,7 @@ namespace BLL.Classes
         #region CRUD Functions
         public void Inserir()
         {
-            if(string.IsNullOrEmpty(tipoContinente.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o tipo de continente.");
-            }
+            ValidarClasse(CRUD.insert);
 
             try
             {
@@ -45,18 +42,7 @@ namespace BLL.Classes
 
         public void Alterar()
         {
-            if (string.IsNullOrEmpty(idtipoContinente.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
-            }
-            else if (string.IsNullOrEmpty(tipoContinente.Trim()))
-            {
-                throw new ArgumentNullException("Por favor informe o tipo de continente.");
-            }
-            else if(ativo != false && ativo != true)
-            {
-                throw new ArgumentNullException("Por favor informe se o tipo de continente está ativo.");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -83,10 +69,7 @@ namespace BLL.Classes
 
         public void Apagar()
         {
-            if (string.IsNullOrEmpty(idtipoContinente.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
-            }
+            ValidarClasse(CRUD.delete);
 
             try
             {
@@ -140,6 +123,62 @@ namespace BLL.Classes
             }
 
             return retorno;
+        }
+
+        public void ValidarClasse(CRUD crud)
+        {
+            if (crud == CRUD.insert)
+            {
+                if (string.IsNullOrEmpty(tipoContinente.Trim()))
+                {
+                    throw new ArgumentNullException("Por favor informe o tipo de continente.");
+                }
+            }
+            else if (crud == CRUD.update)
+            {
+                ValidarClasse(CRUD.insert);
+                ValidarClasse(CRUD.delete);
+            }
+            else if (crud == CRUD.delete)
+            {
+                if (idtipoContinente.ToString() == "00000000-0000-0000-0000-000000000000")
+                {
+                    throw new ArgumentNullException("Por favor informe o ID do tipo de continente.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Falha interna do Programar ao informar qual operação deve ser validada.");
+            }
+        }
+
+        public ClsTipoContinente BuscaPeloId(Guid rowGuidCol)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(BLL.Properties.Settings.Default.connStringUserAut))
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "SELECT idtipo_continente AS idtipoContinente, tipo_continente AS tipoContinente, ativo "
+                                    + "FROM Pinga.tipo_continente WHERE rowguicol = @id ORDER BY tipo_continente ASC, ativo DESC;";
+                    com.Parameters.AddWithValue("@id", rowGuidCol);
+                    con.Open();
+                    com.Connection = con;
+
+                    SqlDataReader read = com.ExecuteReader();
+                    read.Read();
+                    idtipoContinente = Guid.Parse(read["idtipoContinente"].ToString());
+                    tipoContinente = read["tipoContinente"].ToString();
+                    ativo = (bool)read["ativo"];
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return this;
         }
         #endregion
     }

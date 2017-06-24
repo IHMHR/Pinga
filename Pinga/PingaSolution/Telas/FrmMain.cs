@@ -154,5 +154,133 @@ namespace PingaSolution.Telas
             newForm.MdiParent = this;
             newForm.Show();
         }
+
+        private void cadastroProdutosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmProduto))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmProduto();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void tipoCustoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmTipoCusto))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmTipoCusto();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void custosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmCusto))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmCusto();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void formaDePagamentoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmFormaPagamento))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmFormaPagamento();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void tipoLitragemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmTipoLitragem))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmTipoLitragem();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void entradaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmEntrada))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmEntrada();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void saidaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmSaida))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmSaida();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
+
+        private void fornecedorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form.GetType() == typeof(Telas.Mercadoria.FrmFornecedor))
+                {
+                    form.Activate();
+                    return;
+                }
+            }
+
+            Form newForm = new Telas.Mercadoria.FrmFornecedor();
+            newForm.MdiParent = this;
+            newForm.Show();
+        }
     }
 }

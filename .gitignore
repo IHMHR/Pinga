@@ -61,3 +61,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Pinga/PingaSolution/Telas/Mercadoria/FrmEntrada.resx
+/Pinga/PingaSolution/Telas/Mercadoria/FrmEntrada.Designer.cs
+/Pinga/PingaSolution/Telas/Mercadoria/FrmEntrada.cs
