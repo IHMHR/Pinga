@@ -2740,7 +2740,3 @@ WITH RECOVERY,
 	 STOP_ON_ERROR,
 	 STATS = 1;
 GO
-
-
-Select * from (select 'a' as a union all select 'b') AS Q;
-
