@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
 namespace BLL.Classes
 {
     public sealed class ClsEmailLocalidade

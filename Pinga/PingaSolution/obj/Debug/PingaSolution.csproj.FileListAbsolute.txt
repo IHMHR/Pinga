@@ -30,3 +30,31 @@ C:\Users\IHMHR\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\BLL.dll.config
 C:\Users\n225519971\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.exe.config
 C:\Users\n225519971\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.exe
 C:\Users\n225519971\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.pdb
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.exe.config
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.exe
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\PingaSolution.pdb
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\BLL.dll
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\bin\Debug\BLL.pdb
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.csprojResolveAssemblyReference.cache
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Properties.Resources.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.FrmMain.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmBairro.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmCidade.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmContinente.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmEstado.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmPais.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoComplemento.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoContinente.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Localizacao.FrmTipoLogradouro.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Login.FrmLogin.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmCusto.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmEntrada.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmFormaPagamento.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmFornecedor.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmProduto.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmSaida.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmTipoCusto.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.Telas.Mercadoria.FrmTipoLitragem.resources
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.csproj.GenerateResource.Cache
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.exe
+C:\Users\Igor Ramos\Source\Repos\Pinga\Pinga\PingaSolution\obj\Debug\PingaSolution.pdb
