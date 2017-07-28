@@ -1,23 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace BLL.Classes
+namespace Logic.Classes
 {
     public sealed class ClsEstado : IGeneric<ClsEstado>
     {
-        public Guid idestado { get; set; }
-        public string estado { get; set; }
-        public string uf { get; set; }
-        public bool capital { get; set; }
-        public ClsPais paisIdpais { get; set; }
-
-        public ClsEstado()
-        {
-            paisIdpais = new ClsPais();
-        }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);

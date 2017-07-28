@@ -1,14 +1,11 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 
-namespace BLL.Classes
+namespace Logic.Classes
 {
-    public sealed class ClsEmailDominio : IGeneric<ClsEmailDominio>
+    public sealed class ClsEmailDominioBO : IGeneric<ClsEmailDominio>
     {
-        public Guid idemailDominio { get; set; }
-        public string emailDominio { get; set; }
-        public bool status { get; set; }
-
         public void Inserir()
         { }
 

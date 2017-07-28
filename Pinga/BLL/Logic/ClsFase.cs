@@ -1,16 +1,12 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace Logic.Classes
 {
-    public sealed class ClsFase : IGeneric<ClsFase>
+    public sealed class ClsFaseBO : IGeneric<ClsFase>
     {
-        public Guid idfase { get; set; }
-        public string fase { get; set; }
-        public DateTime created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);

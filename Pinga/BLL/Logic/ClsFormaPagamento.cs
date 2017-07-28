@@ -1,17 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace Logic.Classes
 {
-    public sealed class ClsFormaPagamento : IGeneric<ClsFormaPagamento>
+    public sealed class ClsFormaPagamentoBO : IGeneric<ClsFormaPagamento>
     {
-        public Guid idformaPagamento { get; set; }
-        public string formaPagamento { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);

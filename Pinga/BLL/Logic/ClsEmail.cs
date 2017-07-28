@@ -1,21 +1,11 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 
-namespace BLL.Classes
+namespace Logic.Classes
 {
-    public sealed class ClsEmail : IGeneric<ClsEmail>
+    public sealed class ClsEmailBO : IGeneric<ClsEmail>
     {
-        public Guid idemail { get; set; }
-        public string email { get; set; }
-        public ClsEmailDominio emailDominioIdemailDominio { get; set; }
-        public ClsEmailLocalidade emailLocalidadeIdemailLocalidade { get; set; }
-
-        public ClsEmail()
-        {
-            emailDominioIdemailDominio = new ClsEmailDominio();
-            emailLocalidadeIdemailLocalidade = new ClsEmailLocalidade();
-        }
-
         public void Inserir()
         { }
 
