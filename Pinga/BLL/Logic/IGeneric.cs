@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BLL.Classes
+namespace Logic.Classes
 {
     public interface IGeneric<T>
     {

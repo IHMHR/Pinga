@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsCusto : IGeneric<ClsCusto>
+    public sealed class ClsCusto
     {
         public Guid idcusto { get; set; }
         public ClsTipoCusto tipoCustoIdtipoCusto { get; set; }

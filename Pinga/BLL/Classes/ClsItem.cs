@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Classes
 {
-    public sealed class ClsItem : IGeneric<ClsItem>
+    public sealed class ClsItem
     {
         public Guid iditem { get; set; }
         public string item { get; set; }

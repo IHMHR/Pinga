@@ -6,7 +6,7 @@ using System.Net.Mail;
 
 namespace BLL.Classes
 {
-    public sealed class ClsSaida : IGeneric<ClsSaida>
+    public sealed class ClsSaida
     {
         #region Atributos
         public Guid idsaida { get; set; }

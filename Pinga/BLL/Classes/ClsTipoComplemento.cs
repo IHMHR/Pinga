@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsTipoComplemento : IGeneric<ClsTipoComplemento>
+    public sealed class ClsTipoComplemento
     {
         #region Atributos
         public Guid idtipoComplemento { get; set; }

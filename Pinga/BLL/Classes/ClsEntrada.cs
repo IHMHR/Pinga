@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEntrada : IGeneric<ClsEntrada>
+    public sealed class ClsEntrada
     {
         public Guid identrada { get; set; }
         public DateTime data { get; set; }

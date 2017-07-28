@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsFornecedor : IGeneric<ClsFornecedor>
+    public sealed class ClsFornecedor
     {
         public Guid idfornecedor { get; set; }
         public string nome { get; set; }

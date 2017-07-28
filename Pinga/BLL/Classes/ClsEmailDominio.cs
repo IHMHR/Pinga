@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEmailDominio : IGeneric<ClsEmailDominio>
+    public sealed class ClsEmailDominio
     {
         public Guid idemailDominio { get; set; }
         public string emailDominio { get; set; }

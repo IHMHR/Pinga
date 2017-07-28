@@ -5,7 +5,7 @@ using System.Net.Mail;
 
 namespace BLL.Classes
 {
-    public sealed class ClsCliente : IGeneric<ClsCliente>
+    public sealed class ClsCliente
     {
         public Guid idcliente { get; set; }
         public string cpfCnpj { get; set; }

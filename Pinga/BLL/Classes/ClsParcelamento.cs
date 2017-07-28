@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsParcelamento : IGeneric<ClsParcelamento>
+    public sealed class ClsParcelamento
     {
         #region Atributos
         public Guid idparcelamento { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEstoque : IGeneric<ClsEstoque>
+    public sealed class ClsEstoque
     {
         public Guid idestoque { get; set; }
         public ClsProduto produtoIdproduto { get; set; }

@@ -5,7 +5,7 @@ using System.Data;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEstado : IGeneric<ClsEstado>
+    public sealed class ClsEstado
     {
         public Guid idestado { get; set; }
         public string estado { get; set; }

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsFormaPagamento : IGeneric<ClsFormaPagamento>
+    public sealed class ClsFormaPagamento
     {
         public Guid idformaPagamento { get; set; }
         public string formaPagamento { get; set; }

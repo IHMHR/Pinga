@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsProdutoQuantidade : IGeneric<ClsProdutoQuantidade>
+    public sealed class ClsProdutoQuantidade
     {
         public Guid idprodutoQuantidade { get; set; }
         public int quantidadeMinima { get; set; }

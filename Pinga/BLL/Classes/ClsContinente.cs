@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BLL.Classes
 {
-    public sealed class ClsContinente : IGeneric<ClsContinente>
+    public sealed class ClsContinente
     {
         public Guid idcontinente { get; set; }
         public string continente { get; set; }

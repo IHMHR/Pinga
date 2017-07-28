@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace BLL.Classes
 {
-    public sealed class ClsBairro : IGeneric<ClsBairro>
+    public sealed class ClsBairro
     {
         public Guid idbairro { get; set; }
         public string bairro { get; set; }

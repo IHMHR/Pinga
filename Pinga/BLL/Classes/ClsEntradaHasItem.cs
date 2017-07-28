@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Classes
 {
-    public sealed class ClsEntradaHasItem : IGeneric<ClsEntradaHasItem>
+    public sealed class ClsEntradaHasItem
     {
         #region Atributos
         public Guid identrada_has_item { get; set; }
