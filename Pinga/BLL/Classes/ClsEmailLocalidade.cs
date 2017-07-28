@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace BLL.Classes
 {
     public sealed class ClsEmailLocalidade
