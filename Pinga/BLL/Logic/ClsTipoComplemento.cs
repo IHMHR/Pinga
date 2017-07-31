@@ -1,17 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsTipoComplemento : IGeneric<ClsTipoComplemento>
+    public sealed class ClsTipoComplementoBO : IGeneric<ClsTipoComplemento>
     {
-        #region Atributos
-        public Guid idtipoComplemento { get; set; }
-        public string tipoComplemento { get; set; }
-        #endregion
-
         #region CRUD Functions
         public void Inserir()
         {

@@ -1,29 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsTelefone : IGeneric<ClsTelefone>
+    public sealed class ClsTelefoneBO : IGeneric<ClsTelefone>
     {
-        #region Atributos
-        public Guid idtelefone { get; set; }
-        public string telefone { get; set; }
-        public ClsCidade cidadeDDD { get; set; }
-        public ClsTipoTelefone tipoTelefoneIdtipoTelefone { get; set; }
-        public ClsOperadora operadoraIdoperadora { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-        #endregion
-
-        public ClsTelefone()
-        {
-            cidadeDDD = new ClsCidade();
-            tipoTelefoneIdtipoTelefone = new ClsTipoTelefone();
-            operadoraIdoperadora = new ClsOperadora();
-        }
-
         #region CRUD Functions
         public void Inserir()
         {

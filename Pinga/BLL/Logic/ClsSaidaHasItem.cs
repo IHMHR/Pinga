@@ -1,27 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsSaidaHasItem : IGeneric<ClsSaidaHasItem>
+    public sealed class ClsSaidaHasItemBO : IGeneric<ClsSaidaHasItem>
     {
-        #region Atributos
-        public Guid idsaida_has_item { get; set; }
-        public ClsSaida saida_idsaida { get; set; }
-        public ClsItem item_iditem { get; set; }
-        #endregion
-
-        public ClsSaidaHasItem()
-        {
-            saida_idsaida = new ClsSaida();
-            item_iditem = new ClsItem();
-        }
-
         #region CRUD Functions
         public void Inserir()
         {

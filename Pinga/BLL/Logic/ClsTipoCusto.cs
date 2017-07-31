@@ -1,17 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsTipoCusto : IGeneric<ClsTipoCusto>
+    public sealed class ClsTipoCustoBO : IGeneric<ClsTipoCusto>
     {
-        #region Atributos
-        public Guid idtipoCusto { get; set; }
-        public string tipoCusto { get; set; }
-        #endregion
-
         #region CRUD Functions
         public void Inserir()
         {

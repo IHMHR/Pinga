@@ -1,20 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsProdutoQuantidade : IGeneric<ClsProdutoQuantidade>
+    public sealed class ClsProdutoQuantidadeBO : IGeneric<ClsProdutoQuantidade>
     {
-        public Guid idprodutoQuantidade { get; set; }
-        public int quantidadeMinima { get; set; }
-        public int quantidadeMaxima { get; set; }
-        public int quantidadeRecomendaEstoque { get; set; }
-        public int quantidadeSolicitarCompra { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);

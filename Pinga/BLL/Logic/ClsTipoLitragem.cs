@@ -1,17 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsTipoLitragem : IGeneric<ClsTipoLitragem>
+    public sealed class ClsTipoLitragemBO : IGeneric<ClsTipoLitragem>
     {
-        #region Atributos
-        public Guid idtipoLitragem { get; set; }
-        public string tipoLitragem { get; set; }
-        #endregion
-
         #region CRUD Functions
         public void Inserir()
         {

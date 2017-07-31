@@ -1,18 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsTipoContinente : IGeneric<ClsTipoContinente>
+    public sealed class ClsTipoContinenteBO : IGeneric<ClsTipoContinente>
     {
-        #region Atributos
-        public Guid idtipoContinente { get; set; }
-        public string tipoContinente { get; set; }
-        public bool ativo { get; set; }
-        #endregion
-
         #region CRUD Functions
         public void Inserir()
         {
