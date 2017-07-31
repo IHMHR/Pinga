@@ -1,24 +1,12 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsParceiro : IGeneric<ClsParceiro>
+    public sealed class ClsParceiroBO : IGeneric<ClsParceiro>
     {
-        public Guid idparceiro { get; set; }
-        public string nome { get; set; }
-        public ClsEndereco enderecoIdendereco { get; set; }
-        public bool status { get; set; }
-        public ClsTelefone telefoneIdtelefone { get; set; }
-        public DateTime created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-
-        public ClsParceiro()
-        {
-            enderecoIdendereco = new ClsEndereco();
-            telefoneIdtelefone = new ClsTelefone();
-        }
 
         public void Inserir()
         { }

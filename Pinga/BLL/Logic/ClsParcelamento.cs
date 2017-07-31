@@ -1,21 +1,12 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsParcelamento : IGeneric<ClsParcelamento>
+    public sealed class ClsParcelamentoBO : IGeneric<ClsParcelamento>
     {
-        #region Atributos
-        public Guid idparcelamento { get; set; }
-        public Nullable<DateTime> dataPagamento { get; set; }
-        public Nullable<DateTime> dataVencimento { get; set; }
-        public int parcelas { get; set; }
-        public decimal juros { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-        #endregion
-
         public void Inserir()
         { }
 

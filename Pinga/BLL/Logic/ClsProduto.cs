@@ -1,30 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsProduto : IGeneric<ClsProduto>
+    public sealed class ClsProdutoBO : IGeneric<ClsProduto>
     {
-        #region Atributos
-        public Guid idproduto { get; set; }
-        public string produto { get; set; }
-        public ClsTipoLitragem tipoLitragemIdtipoLitragem { get; set; }
-        public Nullable<int> litragem { get; set; }
-        public bool vendendo { get; set; }
-        public decimal valorUnitario { get; set; }
-        public ClsProdutoQuantidade produtoQuantidadeIdprodutoQuantidade { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-        #endregion
-
-        public ClsProduto()
-        {
-            tipoLitragemIdtipoLitragem = new ClsTipoLitragem();
-            produtoQuantidadeIdprodutoQuantidade = new ClsProdutoQuantidade();
-        }
-
         #region CRUD Functions
         public void Inserir()
         {

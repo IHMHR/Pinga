@@ -1,16 +1,12 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsOperadora : IGeneric<ClsOperadora>
+    public sealed class ClsOperadoraBO : IGeneric<ClsOperadora>
     {
-        public Guid idoperadora { get; set; }
-        public string operadora { get; set; }
-        public string razaoSocial { get; set; }
-        public bool status { get; set; }
-
         public void Inserir()
         { }
 

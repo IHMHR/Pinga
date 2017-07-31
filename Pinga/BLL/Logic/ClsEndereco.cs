@@ -1,28 +1,22 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsEndereco : IGeneric<ClsEndereco>
+    public sealed class ClsEnderecoBO : IGeneric<ClsEndereco>
     {
-        public Guid idendereco { get; set; }
-        public ClsTipoLogradouro tipoLogradouroIdtipoLogradouro { get; set; }
-        public string logradouro { get; set; }
-        public Nullable<int> numero { get; set; }
-        public ClsTipoComplemento tipoComplementoIdtipoComplemento { get; set; }
-        public string complemento { get; set; }
-        public string CEP { get; set; }
-        public string pontoReferencia { get; set; }
-        public ClsBairro bairroIdbairro { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
+        private static ClsEndereco e = null;
 
-        public ClsEndereco()
+        public ClsEnderecoBO()
         {
-            tipoLogradouroIdtipoLogradouro = new ClsTipoLogradouro();
-            tipoComplementoIdtipoComplemento = new ClsTipoComplemento();
-            bairroIdbairro = new ClsBairro();
+            e = new ClsEndereco();
+        }
+
+        public ClsEnderecoBO(ClsEndereco enderecoClass)
+        {
+            e = enderecoClass ?? new ClsEndereco();
         }
 
         public void Inserir()
@@ -94,31 +88,31 @@ namespace BLL.Classes
         {
             if (crud == CRUD.insert)
             {
-                if (tipoLogradouroIdtipoLogradouro.idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
+                if (e.tipoLogradouroIdtipoLogradouro.idtipoLogradouro.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o tipo logradouro");
                 }
-                else if (string.IsNullOrEmpty(logradouro.Trim()))
+                else if (string.IsNullOrEmpty(e.logradouro.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o logradouro");
                 }
-                else if (tipoComplementoIdtipoComplemento.idtipoComplemento.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (e.tipoComplementoIdtipoComplemento.idtipoComplemento.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o tipo complemento");
                 }
-                else if (string.IsNullOrEmpty(complemento.Trim()))
+                else if (string.IsNullOrEmpty(e.complemento.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o complemento");
                 }
-                else if (string.IsNullOrEmpty(CEP.Trim()))
+                else if (string.IsNullOrEmpty(e.CEP.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o CEP");
                 }
-                else if (string.IsNullOrEmpty(pontoReferencia.Trim()))
+                else if (string.IsNullOrEmpty(e.pontoReferencia.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o ponto de referência");
                 }
-                else if (bairroIdbairro.idbairro.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (e.bairroIdbairro.idbairro.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o bairro");
                 }
@@ -130,7 +124,7 @@ namespace BLL.Classes
             }
             else if (crud == CRUD.delete)
             {
-                if (idendereco.ToString() == "00000000-0000-0000-0000-000000000000")
+                if (e.idendereco.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o ID Endereço");
                 }
@@ -155,32 +149,32 @@ namespace BLL.Classes
 
                     SqlDataReader read = com.ExecuteReader();
                     read.Read();
-                    idendereco = Guid.Parse(read["idendereco"].ToString());
-                    tipoLogradouroIdtipoLogradouro.idtipoLogradouro = Guid.Parse(read["idtipo_logradouro"].ToString());
-                    tipoLogradouroIdtipoLogradouro.tipoLogradouro = read["tipo_logradouro"].ToString();
-                    logradouro = read["logradouro"].ToString();
-                    numero = (int)read["numero"];
-                    tipoComplementoIdtipoComplemento.idtipoComplemento = Guid.Parse(read["idtipo_complemento"].ToString());
-                    tipoComplementoIdtipoComplemento.tipoComplemento = read["tipo_complemento"].ToString();
-                    complemento = read["complemento"].ToString();
-                    pontoReferencia = read["ponto_referencia"].ToString();
-                    CEP = read["CEP"].ToString();
-                    bairroIdbairro.idbairro = Guid.Parse(read["idbairro"].ToString());
-                    bairroIdbairro.bairro = read["bairro"].ToString();
-                    bairroIdbairro.cidadeIdcidade.idcidade = Guid.Parse(read["idcidade"].ToString());
-                    bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
-                    bairroIdbairro.cidadeIdcidade.DDD = read["DDD"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.idestado = Guid.Parse(read["idestado"].ToString());
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.idpais = Guid.Parse(read["idpais"].ToString());
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.fusoHorario = read["fuso_horario"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.idcontinente = Guid.Parse(read["idcontinente"].ToString());
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(read["idtipo_continente"].ToString());
-                    bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
+                    e.idendereco = Guid.Parse(read["idendereco"].ToString());
+                    e.tipoLogradouroIdtipoLogradouro.idtipoLogradouro = Guid.Parse(read["idtipo_logradouro"].ToString());
+                    e.tipoLogradouroIdtipoLogradouro.tipoLogradouro = read["tipo_logradouro"].ToString();
+                    e.logradouro = read["logradouro"].ToString();
+                    e.numero = (int)read["numero"];
+                    e.tipoComplementoIdtipoComplemento.idtipoComplemento = Guid.Parse(read["idtipo_complemento"].ToString());
+                    e.tipoComplementoIdtipoComplemento.tipoComplemento = read["tipo_complemento"].ToString();
+                    e.complemento = read["complemento"].ToString();
+                    e.pontoReferencia = read["ponto_referencia"].ToString();
+                    e.CEP = read["CEP"].ToString();
+                    e.bairroIdbairro.idbairro = Guid.Parse(read["idbairro"].ToString());
+                    e.bairroIdbairro.bairro = read["bairro"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.idcidade = Guid.Parse(read["idcidade"].ToString());
+                    e.bairroIdbairro.cidadeIdcidade.cidade = read["cidade"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.DDD = read["DDD"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.idestado = Guid.Parse(read["idestado"].ToString());
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.estado = read["estado"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.uf = read["uf"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.idpais = Guid.Parse(read["idpais"].ToString());
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.pais = read["pais"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.sigla = read["sigla"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.fusoHorario = read["fuso_horario"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.idcontinente = Guid.Parse(read["idcontinente"].ToString());
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.continente = read["continente"].ToString();
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.idtipoContinente = Guid.Parse(read["idtipo_continente"].ToString());
+                    e.bairroIdbairro.cidadeIdcidade.estadoIdestado.paisIdpais.continenteIdcontinete.tipoContinenteIdtipoContinente.tipoContinente = read["tipo_continente"].ToString();
                     con.Close();
                 }
             }
@@ -189,7 +183,7 @@ namespace BLL.Classes
                 throw new Exception(e.Message);
             }
 
-            return this;
+            return e;
         }
     }
 }

@@ -4,10 +4,22 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
     public sealed class ClsEntradaBO : IGeneric<ClsEntrada>
     {
+        private static ClsEntrada e = null;
+
+        public ClsEntradaBO()
+        {
+            e = new ClsEntrada();
+        }
+
+        public ClsEntradaBO(ClsEntrada entradaClass)
+        {
+            e = entradaClass ?? new ClsEntrada();
+        }
+
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);
@@ -20,11 +32,11 @@ namespace Logic.Classes
                     com.Connection = con;
                     com.CommandType = CommandType.StoredProcedure;
                     com.CommandText = "Pinga.usp_InserirNovaEntrada";
-                    com.Parameters.AddWithValue("@data", data);
-                    com.Parameters.AddWithValue("@litragem", litragem);
-                    com.Parameters.AddWithValue("@tipoLitragemIdtipoLitragem", tipoLitragemIdtipoLitragem.idtipoLitragem);
-                    com.Parameters.AddWithValue("@custoIdcusto", custoIdcusto.idcusto);
-                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
+                    com.Parameters.AddWithValue("@data", e.data);
+                    com.Parameters.AddWithValue("@litragem", e.litragem);
+                    com.Parameters.AddWithValue("@tipoLitragemIdtipoLitragem", e.tipoLitragemIdtipoLitragem.idtipoLitragem);
+                    com.Parameters.AddWithValue("@custoIdcusto", e.custoIdcusto.idcusto);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", e.parcelamentoIdparcelamento.idparcelamento);
 
                     con.Open();
                     com.ExecuteNonQuery();
@@ -39,30 +51,7 @@ namespace Logic.Classes
 
         public void Alterar()
         {
-            if (identrada == null)
-            {
-                throw new ArgumentNullException("Por favor informe a ID da Entrada");
-            }
-            else if (string.IsNullOrEmpty(data.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Data");
-            }
-            else if (string.IsNullOrEmpty(litragem.ToString()))
-            {
-                throw new ArgumentNullException("Por favor informe a Litragem");
-            }
-            else if (custoIdcusto == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Custo");
-            }
-            else if (parcelamentoIdparcelamento == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Parcelametno");
-            }
-            else if (tipoLitragemIdtipoLitragem == null)
-            {
-                throw new ArgumentNullException("Por favor informe o Tipo Litragem");
-            }
+            ValidarClasse(CRUD.update);
 
             try
             {
@@ -72,12 +61,12 @@ namespace Logic.Classes
                     com.Connection = con;
                     com.CommandType = CommandType.Text;
                     com.CommandText = "UPDATE Pinga.entrada SET data = @data, litragem = @litragem, tipo_litragem_idtipo_litragem = @tipoLitragemIdtipoLitragem, custo_idcusto = @custoIdcusto, parcelamento_idparcelamento = @parcelamentoIdparcelamento WHERE identrada = @id";
-                    com.Parameters.AddWithValue("@id", identrada);
-                    com.Parameters.AddWithValue("@data", data);
-                    com.Parameters.AddWithValue("@litragem", litragem);
-                    com.Parameters.AddWithValue("@tipoLitragemIdtipoLitragem", tipoLitragemIdtipoLitragem.idtipoLitragem);
-                    com.Parameters.AddWithValue("@custoIdcusto", custoIdcusto.idcusto);
-                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", parcelamentoIdparcelamento.idparcelamento);
+                    com.Parameters.AddWithValue("@id", e.identrada);
+                    com.Parameters.AddWithValue("@data", e.data);
+                    com.Parameters.AddWithValue("@litragem", e.litragem);
+                    com.Parameters.AddWithValue("@tipoLitragemIdtipoLitragem", e.tipoLitragemIdtipoLitragem.idtipoLitragem);
+                    com.Parameters.AddWithValue("@custoIdcusto", e.custoIdcusto.idcusto);
+                    com.Parameters.AddWithValue("@parcelamentoIdparcelamento", e.parcelamentoIdparcelamento.idparcelamento);
 
                     con.Open();
                     com.ExecuteNonQuery();
@@ -102,7 +91,7 @@ namespace Logic.Classes
                     com.Connection = con;
                     com.CommandType = CommandType.Text;
                     com.CommandText = "DELETE FROM Pinga.entrada WHERE identrada = @id";
-                    com.Parameters.AddWithValue("@id", identrada);
+                    com.Parameters.AddWithValue("@id", e.identrada);
 
                     con.Open();
                     com.ExecuteNonQuery();
@@ -168,23 +157,23 @@ namespace Logic.Classes
         {
             if (crud == CRUD.insert)
             {
-                if (string.IsNullOrEmpty(data.ToString()))
+                if (string.IsNullOrEmpty(e.data.ToString()))
                 {
                     throw new ArgumentNullException("Por favor informe a Data");
                 }
-                else if (string.IsNullOrEmpty(litragem.ToString()))
+                else if (string.IsNullOrEmpty(e.litragem.ToString()))
                 {
                     throw new ArgumentNullException("Por favor informe a Litragem");
                 }
-                else if (custoIdcusto == null)
+                else if (e.custoIdcusto == null)
                 {
                     throw new ArgumentNullException("Por favor informe o Custo");
                 }
-                else if (parcelamentoIdparcelamento.idparcelamento.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (e.parcelamentoIdparcelamento.idparcelamento.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o Parcelametno");
                 }
-                else if (tipoLitragemIdtipoLitragem.idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (e.tipoLitragemIdtipoLitragem.idtipoLitragem.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o Tipo Litragem");
                 }
@@ -196,7 +185,7 @@ namespace Logic.Classes
             }
             else if (crud == CRUD.delete)
             {
-                if (identrada.ToString() == "00000000-0000-0000-0000-000000000000")
+                if (e.identrada.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe a ID da Entrada");
                 }
@@ -221,25 +210,25 @@ namespace Logic.Classes
 
                     SqlDataReader read = com.ExecuteReader();
                     read.Read();
-                    identrada = Guid.Parse(read["identrada"].ToString());
-                    data = DateTime.Parse(read["data"].ToString());
-                    litragem = (int)read["litragem"];
-                    created = DateTime.Parse(read["created"].ToString());
+                    e.identrada = Guid.Parse(read["identrada"].ToString());
+                    e.data = DateTime.Parse(read["data"].ToString());
+                    e.litragem = (int)read["litragem"];
+                    e.created = DateTime.Parse(read["created"].ToString());
                     if (!string.IsNullOrEmpty(read["modified"].ToString()))
                     {
-                        modified = DateTime.Parse(read["modified"].ToString());
+                        e.modified = DateTime.Parse(read["modified"].ToString());
                     }
-                    tipoLitragemIdtipoLitragem.idtipoLitragem = Guid.Parse(read["idtipo_litragem"].ToString());
-                    tipoLitragemIdtipoLitragem.tipoLitragem = read["tipo_litragem"].ToString();
-                    custoIdcusto.idcusto = Guid.Parse(read["idcusto"].ToString());
-                    custoIdcusto.valor = (decimal)read["valorCusto"];
-                    custoIdcusto.tipoCustoIdtipoCusto.idtipoCusto = Guid.Parse(read["idtipo_custo"].ToString());
-                    custoIdcusto.tipoCustoIdtipoCusto.tipoCusto = read["tipo_custo"].ToString();
-                    parcelamentoIdparcelamento.idparcelamento = Guid.Parse(read["idparcelamento"].ToString());
-                    parcelamentoIdparcelamento.dataPagamento = DateTime.Parse(read["data_pagamento"].ToString());
-                    parcelamentoIdparcelamento.dataVencimento = DateTime.Parse(read["data_vencimento"].ToString());
-                    parcelamentoIdparcelamento.juros = (decimal)read["juros"];
-                    parcelamentoIdparcelamento.parcelas = (int)read["parcelas"];
+                    e.tipoLitragemIdtipoLitragem.idtipoLitragem = Guid.Parse(read["idtipo_litragem"].ToString());
+                    e.tipoLitragemIdtipoLitragem.tipoLitragem = read["tipo_litragem"].ToString();
+                    e.custoIdcusto.idcusto = Guid.Parse(read["idcusto"].ToString());
+                    e.custoIdcusto.valor = (decimal)read["valorCusto"];
+                    e.custoIdcusto.tipoCustoIdtipoCusto.idtipoCusto = Guid.Parse(read["idtipo_custo"].ToString());
+                    e.custoIdcusto.tipoCustoIdtipoCusto.tipoCusto = read["tipo_custo"].ToString();
+                    e.parcelamentoIdparcelamento.idparcelamento = Guid.Parse(read["idparcelamento"].ToString());
+                    e.parcelamentoIdparcelamento.dataPagamento = DateTime.Parse(read["data_pagamento"].ToString());
+                    e.parcelamentoIdparcelamento.dataVencimento = DateTime.Parse(read["data_vencimento"].ToString());
+                    e.parcelamentoIdparcelamento.juros = (decimal)read["juros"];
+                    e.parcelamentoIdparcelamento.parcelas = (int)read["parcelas"];
                     con.Close();
                 }
             }
@@ -248,7 +237,7 @@ namespace Logic.Classes
                 throw new Exception(e.Message);
             }
 
-            return this;
+            return e;
         }
     }
 }

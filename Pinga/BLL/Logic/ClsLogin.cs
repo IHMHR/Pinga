@@ -6,14 +6,14 @@ using System.Text;
 
 namespace BLL.Classes
 {
-    public sealed class ClsLogin
+    public sealed class ClsLoginBO
     {
         private static Dictionary<string, object> retorno = new Dictionary<string, object>();
 
         public string usuario { get; set; }
         public string senha { get; set; }
 
-        public ClsLogin()
+        public ClsLoginBO()
         {
             retorno.Add("Acao", false);
             retorno.Add("Mensagem", "Falha no login");

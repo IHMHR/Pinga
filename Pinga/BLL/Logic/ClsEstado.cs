@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsEstado : IGeneric<ClsEstado>
+    public sealed class ClsEstadoBO : IGeneric<ClsEstado>
     {
         public void Inserir()
         {

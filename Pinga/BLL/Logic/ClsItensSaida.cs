@@ -3,24 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsItensSaida : IGeneric<ClsItensSaida>
+    public sealed class ClsItensSaidaBO : IGeneric<ClsItensSaida>
     {
-        public Guid iditensSaida { get; set; }
-        public ClsSaida saidaIdsaida { get; set; }
-        public ClsProduto produtoIdproduto { get; set; }
-        public int quantidade { get; set; }
-        public decimal valorSaida { get; set; }
-        public Nullable<DateTime> created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-
-        public ClsItensSaida()
-        {
-            saidaIdsaida = new ClsSaida();
-            produtoIdproduto = new ClsProduto();
-        }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);

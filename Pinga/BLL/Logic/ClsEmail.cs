@@ -2,10 +2,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
     public sealed class ClsEmailBO : IGeneric<ClsEmail>
     {
+        private static ClsEmail e = null;
+
+        public ClsEmailBO()
+        {
+            e = new ClsEmail();
+        }
+
+        public ClsEmailBO(ClsEmail emailClass)
+        {
+            e = emailClass ?? new ClsEmail();
+        }
         public void Inserir()
         { }
 
@@ -24,15 +35,15 @@ namespace Logic.Classes
         {
             if (crud == CRUD.insert)
             {
-                if (string.IsNullOrEmpty(email.Trim()))
+                if (string.IsNullOrEmpty(e.email.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o email");
                 }
-                else if (emailDominioIdemailDominio.idemailDominio.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (e.emailDominioIdemailDominio.idemailDominio.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o dominio do email");
                 }
-                else if (emailLocalidadeIdemailLocalidade.idemailLocalidade.ToString() == "00000000-0000-0000-0000-000000000000")
+                else if (e.emailLocalidadeIdemailLocalidade.idemailLocalidade.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe a localidade do email");
                 }
@@ -44,7 +55,7 @@ namespace Logic.Classes
             }
             else if (crud == CRUD.delete)
             {
-                if (idemail.ToString() == "00000000-0000-0000-0000-000000000000")
+                if (e.idemail.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o ID do email");
                 }

@@ -1,26 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Data;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsPais : IGeneric<ClsPais>
+    public sealed class ClsPaisBO : IGeneric<ClsPais>
     {
-        public Guid idpais { get; set; }
-        public string pais { get; set; }
-        public string idioma { get; set; }
-        public string colacao { get; set; }
-        public string DDI { get; set; }
-        public string sigla { get; set; }
-        public string fusoHorario { get; set; }
-        public ClsContinente continenteIdcontinete { get; set; }
-
-        public ClsPais()
-        {
-            continenteIdcontinete = new ClsContinente();
-        }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);

@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
     public sealed class ClsFornecedor : IGeneric<ClsFornecedor>
     {
-        public Guid idfornecedor { get; set; }
-        public string nome { get; set; }
-        public ClsEndereco enderecoIdendereco { get; set; }
-        public ClsTelefone telefoneIdtelefone { get; set; }
-
         public void Inserir()
         { }
 

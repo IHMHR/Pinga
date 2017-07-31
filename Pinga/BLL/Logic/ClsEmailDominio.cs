@@ -2,10 +2,22 @@
 using System;
 using System.Collections.Generic;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
     public sealed class ClsEmailDominioBO : IGeneric<ClsEmailDominio>
     {
+        private static ClsEmailDominio e = null;
+
+        public ClsEmailDominioBO()
+        {
+            e = new ClsEmailDominio();
+        }
+
+        public ClsEmailDominioBO(ClsEmailDominio emailDominioClass)
+        {
+            e = emailDominioClass ?? new ClsEmailDominio();
+        }
+
         public void Inserir()
         { }
 
@@ -24,11 +36,11 @@ namespace Logic.Classes
         {
             if (crud == CRUD.insert)
             {
-                if (string.IsNullOrEmpty(emailDominio.Trim()))
+                if (string.IsNullOrEmpty(e.emailDominio.Trim()))
                 {
                     throw new ArgumentNullException("Por favor informe o Dominio do email");
                 }
-                else if (status != true && status != false)
+                else if (e.status != true && e.status != false)
                 {
                     throw new ArgumentNullException("Por favor informe o status do Dominio do email");
                 }
@@ -40,7 +52,7 @@ namespace Logic.Classes
             }
             else if (crud == CRUD.delete)
             {
-                if (idemailDominio.ToString() == "00000000-0000-0000-0000-000000000000")
+                if (e.idemailDominio.ToString() == "00000000-0000-0000-0000-000000000000")
                 {
                     throw new ArgumentNullException("Por favor informe o ID do Dominio do email");
                 }

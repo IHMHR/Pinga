@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
     public sealed class ClsCidadeBO : IGeneric<ClsCidade>
     {

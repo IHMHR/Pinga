@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
     public sealed class ClsFaseBO : IGeneric<ClsFase>
     {

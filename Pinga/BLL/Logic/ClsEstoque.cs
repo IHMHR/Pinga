@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Logic.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsEstoque : IGeneric<ClsEstoque>
+    public sealed class ClsEstoqueBO : IGeneric<ClsEstoque>
     {
         public void Inserir()
         { }

@@ -1,26 +1,13 @@
-﻿using System;
+﻿using BLL.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BLL.Classes
+namespace BLL.Logic
 {
-    public sealed class ClsItem : IGeneric<ClsItem>
+    public sealed class ClsItemBO : IGeneric<ClsItem>
     {
-        public Guid iditem { get; set; }
-        public string item { get; set; }
-        public ClsProduto produtoIdproduto { get; set; }
-        public DateTime created { get; set; }
-        public Nullable<DateTime> modified { get; set; }
-
-        public ClsItem()
-        {
-            produtoIdproduto = new ClsProduto();
-        }
-
         public void Inserir()
         {
             ValidarClasse(CRUD.insert);
